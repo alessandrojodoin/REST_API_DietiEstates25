@@ -13,8 +13,7 @@ public class Immobile {
     private String indirizzo;
     private String citta;
     private String provincia;
-    //private ArrayList<Tag> tag_descrittivi;
-
+    private ArrayList<Tag> tag_descrittivi;
 
 
     public int getId() {return id; }
@@ -38,6 +37,8 @@ public class Immobile {
     public String getProvincia() {return provincia; }
     public void setProvincia(String provincia) {this.provincia = provincia; }
 
+    public ArrayList<Tag> getTags() {return tag_descrittivi; }
+    public void setTags(ArrayList<Tag> tag_descrittivi) {this.tag_descrittivi = tag_descrittivi; }
 
 
 }
