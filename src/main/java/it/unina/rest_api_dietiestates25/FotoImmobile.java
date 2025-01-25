@@ -3,21 +3,19 @@ package it.unina.rest_api_dietiestates25;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
-@Entity
-public abstract class Tag {
+import java.awt.*;
 
+@Entity
+public class FotoImmobile {
+
+
+    @Lob @NotNull
+    private Image image;
 
     @Id
     @GeneratedValue
     private int id;
 
-    @NotNull
-    private String nome;
-
     @ManyToOne(fetch = FetchType.LAZY)
     private Immobile immobile;
-
-    public String getNome() {return nome; }
-    public void setNome(String nome) {this.nome = nome; }
-
 }

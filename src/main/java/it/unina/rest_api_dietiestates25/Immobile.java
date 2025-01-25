@@ -1,20 +1,38 @@
 package it.unina.rest_api_dietiestates25;
 
 
-import java.awt.*;
-import java.util.List;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import java.util.Set;
 
-//@Entity
+@Entity
 public class Immobile {
-
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @NotNull
     private String nome;
+
+    //@NotNull
+    //private posizioneGeografica
+
+    @NotNull
     private String posizioneGeografica;
-    private List<Image> foto;
+
+    @OneToMany(mappedBy = "immobile")
+    private Set<FotoImmobile> foto;
+
+    @NotNull
     private String indirizzo;
+
+    @NotNull
     private String citta;
+
+    @NotNull
     private String provincia;
-    private List<Tag> tagDescrittivi;
+
+    @OneToMany(mappedBy = "immobile")
+    private Set<Tag> tagDescrittivi;
 
 
     public int getId() {return id; }
@@ -26,8 +44,8 @@ public class Immobile {
     public String getPosizioneGeografica() {return posizioneGeografica; }
     public void setPosizioneGeografica(String posizioneGeografica) {this.posizioneGeografica = posizioneGeografica; }
 
-    public List<Image> getFoto() {return foto; }
-    public void setFoto(List<Image> foto) {this.foto = foto; }
+    public Set<FotoImmobile> getFoto() {return foto; }
+    public void setFoto(Set<FotoImmobile> foto) {this.foto = foto; }
 
     public String getIndirizzo() {return indirizzo; }
     public void setIndirizzo(String indirizzo) {this.indirizzo = indirizzo; }
@@ -38,8 +56,8 @@ public class Immobile {
     public String getProvincia() {return provincia; }
     public void setProvincia(String provincia) {this.provincia = provincia; }
 
-    public List<Tag> getTags() {return tagDescrittivi; }
-    public void setTags(List<Tag> tagDescrittivi) {this.tagDescrittivi = tagDescrittivi; }
+    public Set<Tag> getTags() {return tagDescrittivi; }
+    public void setTags(Set<Tag> tagDescrittivi) {this.tagDescrittivi = tagDescrittivi; }
 
 
 }

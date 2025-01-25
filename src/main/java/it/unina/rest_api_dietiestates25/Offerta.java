@@ -1,12 +1,15 @@
 package it.unina.rest_api_dietiestates25;
 
+import jakarta.persistence.Entity;
+
+@Entity
 public class Offerta {
-    private Immobile immobile;
+    private ListinoImmobile listino;
     private Utente utente;
     private RisultatoOfferta risultatoOfferta;
 
-    public Immobile getImmobile(){return immobile;}
-    public void setImmobile(Immobile immobile){this.immobile= immobile;}
+    public ListinoImmobile getListino(){return listino;}
+    public void setListino(ListinoImmobile listino){this.listino= listino;}
 
     public Utente getUtente(){return utente;}
     public void setUtente(Utente utente){this.utente= utente;}
