@@ -1,18 +1,33 @@
 package it.unina.rest_api_dietiestates25;
 
-import java.awt.*;
+import jakarta.persistence.*;
+
 import java.util.ArrayList;
+import java.util.Set;
 
+@Entity
 public class RiepilogoAttivita {
-    private ArrayList<Immobile> immobili_visualizzati;
+
+    @Id
+    private int id;
+
+    @OneToOne(optional = false, mappedBy = "riepilogo")
+    @MapsId
+    private Cliente cliente;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private Set<VisualizzazioneImmobile> immobiliVisualizzati;
+
     //private visite_prenotate
-    private ArrayList<Offerta> offerte_fatte;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private Set<Offerta> offerteFatte;
 
 
-    public ArrayList<Immobile> getImmobili_visualizzati() {return immobili_visualizzati; }
-    public void setImmobili_visualizzati(ArrayList<Immobile> immobili_visualizzati) {this.immobili_visualizzati = immobili_visualizzati; }
+    public Set<VisualizzazioneImmobile> getImmobiliVisualizzati() {return immobiliVisualizzati; }
+    public void setImmobiliVisualizzati(Set<VisualizzazioneImmobile> immobiliVisualizzati) {this.immobiliVisualizzati = immobiliVisualizzati; }
 
-    public ArrayList<Offerta> getOfferte_fatte() {return offerte_fatte; }
-    public void setOfferte_fatte(ArrayList<Offerta> offerte_fatte) {this.offerte_fatte = offerte_fatte; }
+    public Set<Offerta> getOfferteFatte() {return offerteFatte; }
+    public void setOfferteFatte(Set<Offerta> offerteFatte) {this.offerteFatte = offerteFatte; }
 
 }

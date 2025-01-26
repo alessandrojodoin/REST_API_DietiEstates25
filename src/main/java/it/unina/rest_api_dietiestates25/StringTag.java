@@ -1,6 +1,12 @@
 package it.unina.rest_api_dietiestates25;
 
+import jakarta.persistence.Entity;
+import jakarta.validation.constraints.NotNull;
+
+@Entity
 public class StringTag extends Tag{
+
+    @NotNull
     private String valore;
 
     public String getValore() {return valore; }

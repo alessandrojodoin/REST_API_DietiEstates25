@@ -19,7 +19,7 @@ public class ListinoImmobile {
     private int numeroVisualizzazioni;
 
     @NotNull
-    private String tipologia_contratto;
+    private String tipologiaContratto;
 
     @NotNull
     private int speseCondominiali;
@@ -43,8 +43,8 @@ public class ListinoImmobile {
     public int getNumeroVisualizzazioni() {return numeroVisualizzazioni; }
     public void setNumeroVisualizzazioni(int numeroVisualizzazioni) {this.numeroVisualizzazioni = numeroVisualizzazioni; }
 
-    public String getTipologia_contratto() {return tipologia_contratto; }
-    public void setId(int id) {this.tipologia_contratto = tipologia_contratto; }
+    public String getTipologiaContratto() {return tipologiaContratto; }
+    public void setTipologiaContratto(String tipologiaContratto) {this.tipologiaContratto = tipologiaContratto; }
 
     public int getSpeseCondominiali() {return speseCondominiali; }
     public void setSpeseCondominiali(int speseCondominiali) {this.speseCondominiali = speseCondominiali; }

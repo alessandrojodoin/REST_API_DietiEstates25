@@ -6,12 +6,12 @@ public enum RisultatoOfferta {
     InRevisione(3),
     ContropropostaRicevuta(4);
 
-    private final int tipo_offerta;
-    RisultatoOfferta(int tipo_offerta) {
-        this.tipo_offerta = tipo_offerta;
+    private final int tipoOfferta;
+    RisultatoOfferta(int tipoOfferta) {
+        this.tipoOfferta = tipoOfferta;
     }
 
-    public int getTipo_offerta() {
-        return tipo_offerta;
+    public int getTipoOfferta() {
+        return tipoOfferta;
     }
 }

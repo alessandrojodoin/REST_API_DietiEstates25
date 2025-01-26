@@ -1,13 +1,32 @@
 package it.unina.rest_api_dietiestates25;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
+
+@Entity
 public class Utente {
 
+    @Id
     private int id;
+
+    @NotNull
     private String username;
+
+    @NotNull
     private String email;
+
+    @NotNull
     private String nome;
+
+    @NotNull
     private String cognome;
-    private String hashed_password;
+
+    @NotNull
+    private String hashedPassword;
+
+    @NotNull
+    private String numeroTelefonico;
 
     public int getId() {return id; }
     public void setId(int id) {this.id = id; }
@@ -24,7 +43,7 @@ public class Utente {
     public String getCognome() {return cognome; }
     public void setCognome(String cognome) {this.cognome = cognome; }
 
-    public String getHashed_password() {return hashed_password; }
-    public void setHashed_password(String hashed_password) {this.hashed_password = hashed_password; }
+    public String getHashedPassword() {return hashedPassword; }
+    public void setHashedPassword(String hashedPassword) {this.hashedPassword = hashedPassword; }
 
 }

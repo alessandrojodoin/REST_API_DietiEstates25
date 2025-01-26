@@ -1,12 +1,32 @@
 package it.unina.rest_api_dietiestates25;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
+import java.time.LocalDateTime;
 
 @Entity
 public class Offerta {
+
+    @Id
+    @GeneratedValue
+    private int id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     private ListinoImmobile listino;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     private Utente utente;
+
+    @NotNull
     private RisultatoOfferta risultatoOfferta;
+
+    private int cifraInCentesimi;
+
+    private int cifraContropropostaInCentesimi;
+
+    @NotNull
+    private LocalDateTime istanteCreazione;
 
     public ListinoImmobile getListino(){return listino;}
     public void setListino(ListinoImmobile listino){this.listino= listino;}
