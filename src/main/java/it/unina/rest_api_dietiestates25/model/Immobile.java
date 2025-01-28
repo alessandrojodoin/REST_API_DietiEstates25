@@ -1,8 +1,7 @@
 package it.unina.rest_api_dietiestates25.model;
 
 
-import it.unina.rest_api_dietiestates25.FotoImmobile;
-import it.unina.rest_api_dietiestates25.Tag;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.util.Set;

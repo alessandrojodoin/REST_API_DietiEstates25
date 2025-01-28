@@ -1,6 +1,6 @@
 package it.unina.rest_api_dietiestates25.model;
 
-import it.unina.rest_api_dietiestates25.Offerta;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
