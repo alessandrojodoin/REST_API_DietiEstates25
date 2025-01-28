@@ -1,10 +1,11 @@
-package it.unina.rest_api_dietiestates25;
+package it.unina.rest_api_dietiestates25.model;
 
+import it.unina.rest_api_dietiestates25.Tag;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-public class FloatTag extends Tag{
+public class FloatTag extends Tag {
 
     @NotNull
     private float valore;

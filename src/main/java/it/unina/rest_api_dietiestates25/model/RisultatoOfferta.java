@@ -1,4 +1,4 @@
-package it.unina.rest_api_dietiestates25;
+package it.unina.rest_api_dietiestates25.model;
 
 public enum RisultatoOfferta {
     Accettata(1),
