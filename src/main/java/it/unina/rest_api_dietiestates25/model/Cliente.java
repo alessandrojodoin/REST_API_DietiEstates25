@@ -12,4 +12,12 @@ public class Cliente extends Utente {
 
     public RiepilogoAttivita getRiepilogo(){return riepilogo; }
     public void setRiepilogo(RiepilogoAttivita riepilogo){this.riepilogo= riepilogo; }
+
+
+    public Cliente(){}
+
+    public Cliente(int id, String username, String email, String nome, String cognome, String password, String numeroTelefonico){
+        super(id, username, email, nome, cognome, password, numeroTelefonico);
+        setRiepilogo(new RiepilogoAttivita());
+    }
 }

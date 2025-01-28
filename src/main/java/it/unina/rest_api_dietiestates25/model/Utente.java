@@ -4,6 +4,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+
+
+
 @Entity
 public class Utente {
 
@@ -28,22 +35,85 @@ public class Utente {
     @NotNull
     private String numeroTelefonico;
 
-    public int getId() {return id; }
-    public void setId(int id) {this.id = id; }
+    public int getId() {
+        return id;
+    }
 
-    public String getUsername() {return username; }
-    public void setUsername(String username) {this.username = username; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getEmail() {return email; }
-    public void setEmail(String email) {this.email = email; }
+    public String getUsername() {
+        return username;
+    }
 
-    public String getNome() {return nome; }
-    public void setNome(String nome) {this.nome = nome; }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-    public String getCognome() {return cognome; }
-    public void setCognome(String cognome) {this.cognome = cognome; }
+    public String getEmail() {
+        return email;
+    }
 
-    public String getHashedPassword() {return hashedPassword; }
-    public void setHashedPassword(String hashedPassword) {this.hashedPassword = hashedPassword; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getCognome() {
+        return cognome;
+    }
+
+    public void setCognome(String cognome) {
+        this.cognome = cognome;
+    }
+
+    public String getHashedPassword() {
+        return hashedPassword;
+    }
+
+    public void setPassword(String password) {
+
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+            this.hashedPassword = Base64.getEncoder().encodeToString(hash);
+        } catch (NoSuchAlgorithmException e) {
+            System.out.println("Password Hashing Failed");
+        }
+    }
+
+
+    public String getNumeroTelefonico() {
+        return numeroTelefonico;
+    }
+
+    public void setNumeroTelefonico(String numeroTelefonico) {
+        this.numeroTelefonico = numeroTelefonico;
+    }
+
+    public Utente() {
+    }
+
+    public Utente(int id, String username, String email, String nome, String cognome, String password, String numeroTelefonico) {
+        setId(id);
+        setUsername(username);
+        setEmail(email);
+        setNome(nome);
+        setCognome(cognome);
+        setPassword(password);
+        setNumeroTelefonico(numeroTelefonico);
+
+
+    }
 }
+
+
+
