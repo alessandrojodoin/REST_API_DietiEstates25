@@ -8,14 +8,14 @@ public class AuthController {
     private final SessionFactory sessionFactory;
 
     //WIP
-    public void createCliente(String username, String password) {
+    public void createCliente(String username, String email, String nome, String cognome, String password, String numeroTelefonico) {
         sessionFactory.inTransaction(session -> {
-            Cliente cliente = new Cliente();
+            Cliente cliente = new Cliente(username, email, nome, cognome, password, numeroTelefonico);
             session.persist(cliente);
         });
     }
 
-    AuthController(SessionFactory sessionFactory) {
+    public AuthController(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 

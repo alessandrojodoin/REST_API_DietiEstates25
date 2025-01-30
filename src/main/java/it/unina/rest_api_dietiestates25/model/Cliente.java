@@ -1,13 +1,14 @@
 package it.unina.rest_api_dietiestates25.model;
 
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 
 @Entity
 public class Cliente extends Utente {
 
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, cascade = {CascadeType.ALL})
     private RiepilogoAttivita riepilogo;
 
     public RiepilogoAttivita getRiepilogo(){return riepilogo; }
@@ -16,8 +17,8 @@ public class Cliente extends Utente {
 
     public Cliente(){}
 
-    public Cliente(int id, String username, String email, String nome, String cognome, String password, String numeroTelefonico){
-        super(id, username, email, nome, cognome, password, numeroTelefonico);
-        setRiepilogo(new RiepilogoAttivita());
+    public Cliente(String username, String email, String nome, String cognome, String password, String numeroTelefonico){
+        super(username, email, nome, cognome, password, numeroTelefonico);
+        setRiepilogo(new RiepilogoAttivita(this));
     }
 }

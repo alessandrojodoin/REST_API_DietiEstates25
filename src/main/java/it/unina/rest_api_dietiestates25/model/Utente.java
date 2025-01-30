@@ -1,8 +1,11 @@
 package it.unina.rest_api_dietiestates25.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.NaturalId;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -14,7 +17,7 @@ import java.util.Base64;
 @Entity
 public class Utente {
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotNull
@@ -24,6 +27,7 @@ public class Utente {
     private String email;
 
     @NotNull
+    @NaturalId
     private String nome;
 
     @NotNull
@@ -102,8 +106,8 @@ public class Utente {
     public Utente() {
     }
 
-    public Utente(int id, String username, String email, String nome, String cognome, String password, String numeroTelefonico) {
-        setId(id);
+    public Utente(String username, String email, String nome, String cognome, String password, String numeroTelefonico) {
+
         setUsername(username);
         setEmail(email);
         setNome(nome);

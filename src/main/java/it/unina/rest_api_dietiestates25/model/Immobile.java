@@ -20,8 +20,8 @@ public class Immobile {
     @NotNull
     private String posizioneGeografica;
 
-    @OneToMany(mappedBy = "immobile")
-    private Set<FotoImmobile> foto;
+    //@OneToMany(mappedBy = "immobile")
+    //private Set<FotoImmobile> foto;
 
     @NotNull
     private String indirizzo;
@@ -45,8 +45,8 @@ public class Immobile {
     public String getPosizioneGeografica() {return posizioneGeografica; }
     public void setPosizioneGeografica(String posizioneGeografica) {this.posizioneGeografica = posizioneGeografica; }
 
-    public Set<FotoImmobile> getFoto() {return foto; }
-    public void setFoto(Set<FotoImmobile> foto) {this.foto = foto; }
+   // public Set<FotoImmobile> getFoto() {return foto; }
+    //public void setFoto(Set<FotoImmobile> foto) {this.foto = foto; }
 
     public String getIndirizzo() {return indirizzo; }
     public void setIndirizzo(String indirizzo) {this.indirizzo = indirizzo; }

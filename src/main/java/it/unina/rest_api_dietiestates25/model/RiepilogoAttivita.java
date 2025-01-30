@@ -9,11 +9,11 @@ import java.util.Set;
 @Entity
 public class RiepilogoAttivita {
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @OneToOne(optional = false, mappedBy = "riepilogo")
-    @MapsId
+    //@MapsId
     private Cliente cliente;
 
     @OneToMany(fetch = FetchType.LAZY)
@@ -30,5 +30,11 @@ public class RiepilogoAttivita {
 
     public Set<Offerta> getOfferteFatte() {return offerteFatte; }
     public void setOfferteFatte(Set<Offerta> offerteFatte) {this.offerteFatte = offerteFatte; }
+
+    public RiepilogoAttivita() {}
+    public RiepilogoAttivita(Cliente cliente) {
+        this.cliente = cliente;
+        this.id = cliente.getId();
+    }
 
 }
