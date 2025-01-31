@@ -17,7 +17,7 @@ public class HelloResource {
     public static void main(final String[] args){
 
         System.out.println("Hello World");
-
+        
 
         SessionFactory sessionFactory =
                 new Configuration()
@@ -40,7 +40,7 @@ public class HelloResource {
                         .setProperty(AvailableSettings.JAKARTA_JDBC_URL, "jdbc:postgresql://localhost:5432/")
                         // Credentials
                         .setProperty(AvailableSettings.JAKARTA_JDBC_USER, "postgres")
-                        .setProperty(AvailableSettings.JAKARTA_JDBC_PASSWORD, "16021602P")
+                        .setProperty(AvailableSettings.JAKARTA_JDBC_PASSWORD, "")
                         // Automatic schema export
                         .setProperty(AvailableSettings.JAKARTA_HBM2DDL_DATABASE_ACTION,
                                 Action.SPEC_ACTION_DROP_AND_CREATE)
