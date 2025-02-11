@@ -12,9 +12,9 @@ import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.tool.schema.Action;
 
+
 import java.io.IOException;
 import java.net.URI;
-
 
 @Path("/hello-world")
 public class HelloResource {
@@ -29,21 +29,23 @@ public class HelloResource {
     public static HttpServer startServer() {
         // create a resource config that scans for JAX-RS resources and providers
         // in it.unina.webtech package
-        final ResourceConfig rc = new ResourceConfig().packages("it.unina.webtech");
+        final ResourceConfig rc = new ResourceConfig().packages("it.unina.rest_api_dietiestates25");
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }
 
+    private static SessionFactory sessionFactory;
 
+    public static SessionFactory getSessionFactory() {return sessionFactory;}
 
     public static void main(final String[] args) throws IOException {
 
-        System.out.println("Hello World");
+        System.out.println("Hello world");
         
 
-        SessionFactory sessionFactory =
+        sessionFactory =
                 new Configuration()
                         .addAnnotatedClass(Utente.class)
                         .addAnnotatedClass(Cliente.class)
@@ -61,10 +63,10 @@ public class HelloResource {
                         .addAnnotatedClass(AmministratoreAgenzia.class)
                         .addAnnotatedClass(ClienteGoogle.class)
                         // PostgreSQL
-                        .setProperty(AvailableSettings.JAKARTA_JDBC_URL, "jdbc:postgresql://localhost:5432/")
+                        .setProperty(AvailableSettings.JAKARTA_JDBC_URL, System.getenv("DATABASE_URL"))
                         // Credentials
-                        .setProperty(AvailableSettings.JAKARTA_JDBC_USER, "postgres")
-                        .setProperty(AvailableSettings.JAKARTA_JDBC_PASSWORD, "")
+                        .setProperty(AvailableSettings.JAKARTA_JDBC_USER, System.getenv("DATABASE_USERNAME"))
+                        .setProperty(AvailableSettings.JAKARTA_JDBC_PASSWORD, System.getenv("DATABASE_PASSWORD"))
                         // Automatic schema export
                         .setProperty(AvailableSettings.JAKARTA_HBM2DDL_DATABASE_ACTION,
                                 Action.SPEC_ACTION_DROP_AND_CREATE)
