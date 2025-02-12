@@ -10,6 +10,7 @@ import org.hibernate.annotations.NaturalId;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Base64;
 
 
@@ -92,6 +93,18 @@ public class Utente {
         } catch (NoSuchAlgorithmException e) {
             System.out.println("Password Hashing Failed");
         }
+    }
+
+    public boolean verifyPassword(String password) {
+        boolean isPasswordCorrect = false;
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+            isPasswordCorrect = hashedPassword.equals(Base64.getEncoder().encodeToString(hash));
+        } catch (NoSuchAlgorithmException e) {
+            System.out.println("Password Hashing Failed");
+        }
+        return isPasswordCorrect;
     }
 
 
