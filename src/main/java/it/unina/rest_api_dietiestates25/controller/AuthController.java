@@ -1,5 +1,6 @@
 package it.unina.rest_api_dietiestates25.controller;
 
+import it.unina.rest_api_dietiestates25.model.AgenteImmobiliare;
 import it.unina.rest_api_dietiestates25.model.Cliente;
 import it.unina.rest_api_dietiestates25.model.Utente;
 import jakarta.json.Json;
@@ -52,6 +53,15 @@ public class AuthController {
 
 
     }
+
+    public void createAgenteImmobiliare(String username, String email, String nome, String cognome, String password, String numeroTelefonico) {
+        sessionFactory.inTransaction(session -> {
+            AgenteImmobiliare agenteImmobiliare = new AgenteImmobiliare(username, email, nome, cognome, password, numeroTelefonico);
+            session.persist(agenteImmobiliare);
+        });
+    }
+
+
 
     private String createJWT(String username, long ttlMillis) {
 

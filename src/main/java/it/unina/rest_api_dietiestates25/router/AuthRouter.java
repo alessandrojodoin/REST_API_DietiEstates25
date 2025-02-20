@@ -41,4 +41,29 @@ public class AuthRouter {
                 userCredentials.getString("numeroTelefonico"));
         return Response.ok().build();
     }
+
+    @POST
+    @Path("agente-immobiliare")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response registerAgenteImmobiliare(JsonObject userCredentials) {
+        AuthController authController = new AuthController(HelloResource.getSessionFactory());
+        authController.createAgenteImmobiliare(
+                userCredentials.getString("username"),
+                userCredentials.getString("email"),
+                userCredentials.getString("nome"),
+                userCredentials.getString("cognome"),
+                userCredentials.getString("password"),
+                userCredentials.getString("numeroTelefonico")
+        );
+        return Response.ok().build();
+    }
+
+
+
 }
+
+
+
+
+

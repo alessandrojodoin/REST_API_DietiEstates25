@@ -8,7 +8,7 @@ import jakarta.persistence.OneToOne;
 @Entity
 public class Cliente extends Utente {
 
-    @OneToOne(optional = false, cascade = {CascadeType.ALL})
+    @OneToOne(optional = true, cascade = {CascadeType.ALL})
     private RiepilogoAttivita riepilogo;
 
     public RiepilogoAttivita getRiepilogo(){return riepilogo; }
