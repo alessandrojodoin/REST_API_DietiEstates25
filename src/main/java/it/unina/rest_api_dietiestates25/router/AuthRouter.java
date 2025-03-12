@@ -22,7 +22,7 @@ public class AuthRouter {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public Response authenticate(JsonObject loginCredentials) {
-        AuthController authController = new AuthController(HelloResource.getSessionFactory());
+        AuthController authController = new AuthController();
         String jwtToken = authController.authenticateUser(
                 loginCredentials.getString("username"),
                 loginCredentials.getString("password"));
@@ -38,7 +38,7 @@ public class AuthRouter {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public Response registerCliente(JsonObject userCredentials) {
-        AuthController authController = new AuthController(HelloResource.getSessionFactory());
+        AuthController authController = new AuthController();
         authController.createCliente
                 (userCredentials.getString("username"),
                 userCredentials.getString("email"),
@@ -103,7 +103,7 @@ public class AuthRouter {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public Response registerAgenteImmobiliare(JsonObject userCredentials) {
-        AuthController authController = new AuthController(HelloResource.getSessionFactory());
+        AuthController authController = new AuthController();
         authController.createAgenteImmobiliare(
                 userCredentials.getString("username"),
                 userCredentials.getString("email"),

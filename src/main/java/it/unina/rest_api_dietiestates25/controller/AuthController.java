@@ -1,5 +1,6 @@
 package it.unina.rest_api_dietiestates25.controller;
 
+import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.model.AgenteImmobiliare;
 import it.unina.rest_api_dietiestates25.model.Cliente;
 import it.unina.rest_api_dietiestates25.model.Utente;
@@ -14,6 +15,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import javax.xml.crypto.Data;
 import java.io.StringReader;
 import java.util.Date;
 import java.util.UUID;
@@ -21,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 public class AuthController {
 
-    private final SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory = Database.getInstance().getSessionFactory();
 
     private static final String ISSUER = "rest_api_dietiestates25";
     private static final Algorithm algorithm = Algorithm.HMAC256(System.getenv("JWT_SECRET"));
@@ -74,10 +76,6 @@ public class AuthController {
                 .sign(algorithm);
 
         return token;
-    }
-
-    public AuthController(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
     }
 
 

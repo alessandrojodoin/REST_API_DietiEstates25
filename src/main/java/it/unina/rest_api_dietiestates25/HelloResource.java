@@ -36,50 +36,12 @@ public class HelloResource {
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }
 
-    private static SessionFactory sessionFactory;
 
-    public static SessionFactory getSessionFactory() {return sessionFactory;}
 
     public static void main(final String[] args) throws IOException {
 
         System.out.println("Hello world");
-        
 
-        sessionFactory =
-                new Configuration()
-                        .addAnnotatedClass(Utente.class)
-                        .addAnnotatedClass(Cliente.class)
-                        .addAnnotatedClass(RiepilogoAttivita.class)
-                        .addAnnotatedClass(Offerta.class)
-                        .addAnnotatedClass(VisualizzazioneImmobile.class)
-                        .addAnnotatedClass(ListinoImmobile.class)
-                        .addAnnotatedClass(Immobile.class)
-                        .addAnnotatedClass(Tag.class)
-                        .addAnnotatedClass(StringTag.class)
-                        .addAnnotatedClass(FloatTag.class)
-                        .addAnnotatedClass(CheckboxTag.class)
-                        .addAnnotatedClass(IntegerTag.class)
-                        .addAnnotatedClass(AgenteImmobiliare.class)
-                        .addAnnotatedClass(AmministratoreAgenzia.class)
-                        .addAnnotatedClass(ClienteGoogle.class)
-                        // PostgreSQL
-                        .setProperty(AvailableSettings.JAKARTA_JDBC_URL, System.getenv("DATABASE_URL"))
-                        // Credentials
-                        .setProperty(AvailableSettings.JAKARTA_JDBC_USER, System.getenv("DATABASE_USERNAME"))
-                        .setProperty(AvailableSettings.JAKARTA_JDBC_PASSWORD, System.getenv("DATABASE_PASSWORD"))
-                        // Automatic schema export
-                        .setProperty(AvailableSettings.JAKARTA_HBM2DDL_DATABASE_ACTION,
-                                Action.SPEC_ACTION_DROP_AND_CREATE)
-                        // SQL statement logging
-                        .setProperty(AvailableSettings.SHOW_SQL, true)
-                        .setProperty(AvailableSettings.FORMAT_SQL, true)
-                        .setProperty(AvailableSettings.HIGHLIGHT_SQL, true)
-                        // Create a new SessionFactory
-                        .buildSessionFactory();
-
-
-        //AuthController authController = new AuthController(sessionFactory);
-        //authController.createCliente("Gennaro123", "gennaro@gennaro.it", "Gennaro", "Espostio", "password", "333-3333333");
 
         final HttpServer server = startServer();
         System.out.println(String.format("Jersey app started with endpoints available at "
