@@ -59,5 +59,9 @@ public class ListinoImmobile {
     public AgenteImmobiliare getCreatore() {return creatore; }
     public void setCreatore(AgenteImmobiliare creatore) {this.creatore = creatore; }
 
-
+    public ListinoImmobile(){}
+    public ListinoImmobile(AgenteImmobiliare creatore){
+        this.creatore= creatore;
+        this.id= creatore.getId();
+    }
 }

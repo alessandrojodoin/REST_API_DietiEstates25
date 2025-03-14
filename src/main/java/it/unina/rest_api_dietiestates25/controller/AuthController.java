@@ -2,6 +2,7 @@ package it.unina.rest_api_dietiestates25.controller;
 
 import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.model.AgenteImmobiliare;
+import it.unina.rest_api_dietiestates25.model.AmministratoreAgenzia;
 import it.unina.rest_api_dietiestates25.model.Cliente;
 import it.unina.rest_api_dietiestates25.model.Utente;
 import jakarta.json.Json;
@@ -39,6 +40,22 @@ public class AuthController {
         });
     }
 
+    public void createAmministratore(String username, String email, String nome, String cognome, String password, String numeroTelefonico){
+        sessionFactory.inTransaction(session -> {
+            AmministratoreAgenzia amministratore= new AmministratoreAgenzia(username, email, nome, cognome, password, numeroTelefonico);
+           session.persist(amministratore);
+        });
+    }
+
+
+    public void createAgenteImmobiliare(String username, String email, String nome, String cognome, String password, String numeroTelefonico) {
+        sessionFactory.inTransaction(session -> {
+            AgenteImmobiliare agenteImmobiliare = new AgenteImmobiliare(username, email, nome, cognome, password, numeroTelefonico);
+            session.persist(agenteImmobiliare);
+        });
+    }
+
+
     public String authenticateUser(String username, String password) throws IllegalArgumentException {
         Session session = sessionFactory.openSession();
         Utente utente =
@@ -51,17 +68,8 @@ public class AuthController {
         session.close();
 
         return createJWT(username, TimeUnit.DAYS.toMillis(1));
-
-
-
     }
 
-    public void createAgenteImmobiliare(String username, String email, String nome, String cognome, String password, String numeroTelefonico) {
-        sessionFactory.inTransaction(session -> {
-            AgenteImmobiliare agenteImmobiliare = new AgenteImmobiliare(username, email, nome, cognome, password, numeroTelefonico);
-            session.persist(agenteImmobiliare);
-        });
-    }
 
 
 

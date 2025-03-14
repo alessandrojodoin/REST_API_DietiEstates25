@@ -20,4 +20,7 @@ public class AgenteImmobiliare extends Utente {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "creatore")
     private Set<ListinoImmobile> immobiliGestiti;
+
+    public void setImmobiliGestiti(Set<ListinoImmobile> immobiliGestiti){this.immobiliGestiti= immobiliGestiti;}
+
 }
