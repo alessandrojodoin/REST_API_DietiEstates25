@@ -26,11 +26,7 @@ public class AuthController {
 
     private final SessionFactory sessionFactory = Database.getInstance().getSessionFactory();
 
-    private static final String ISSUER = "rest_api_dietiestates25";
-    private static final Algorithm algorithm = Algorithm.HMAC256(System.getenv("JWT_SECRET"));
-    private static final JWTVerifier verifier = JWT.require(algorithm)
-            .withIssuer(ISSUER)
-            .build();
+
 
     //WIP
     public void createCliente(String username, String email, String nome, String cognome, String password, String numeroTelefonico) {
@@ -74,6 +70,12 @@ public class AuthController {
 
 
     private String createJWT(String username, long ttlMillis) {
+
+        final String ISSUER = "rest_api_dietiestates25";
+        final Algorithm algorithm = Algorithm.HMAC256(System.getenv("JWT_SECRET"));
+        final JWTVerifier verifier = JWT.require(algorithm)
+                .withIssuer(ISSUER)
+                .build();
 
         String token = JWT.create()
                 .withIssuer(ISSUER)
