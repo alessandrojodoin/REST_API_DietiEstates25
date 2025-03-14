@@ -17,7 +17,7 @@ public class ListinoImmobile {
     @MapsId
     private Immobile immobile;
 
-    private int numeroVisualizzazioni;
+    private int numeroVisualizzazioni=0;
 
     @NotNull
     private String tipologiaContratto;
@@ -34,7 +34,7 @@ public class ListinoImmobile {
     @ManyToOne(fetch = FetchType.LAZY)
     private AgenteImmobiliare creatore;
 
-    private boolean venduto;
+    private boolean venduto= false;
 
     private LocalDateTime istanteCreazione;
 
@@ -60,8 +60,14 @@ public class ListinoImmobile {
     public void setCreatore(AgenteImmobiliare creatore) {this.creatore = creatore; }
 
     public ListinoImmobile(){}
-    public ListinoImmobile(AgenteImmobiliare creatore){
+
+    public ListinoImmobile(Immobile immobile, String tipologiaContratto, int speseCondominiali, int prezzo,
+                           AgenteImmobiliare creatore){
+        this.immobile= immobile;
+        this.tipologiaContratto= tipologiaContratto;
+        this.speseCondominiali= speseCondominiali;
+        this.prezzo= prezzo;
         this.creatore= creatore;
-        this.id= creatore.getId();
     }
+
 }

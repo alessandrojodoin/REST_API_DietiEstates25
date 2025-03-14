@@ -20,4 +20,9 @@ public abstract class Tag {
     public String getNome() {return nome; }
     public void setNome(String nome) {this.nome = nome; }
 
+    public Tag(){}
+    public Tag(String nome){
+        this.nome= nome;
+    }
+
 }

@@ -13,4 +13,11 @@ public class FloatTag extends Tag {
     public float getValore() {return valore; }
     public void setValore(float valore) {this.valore = valore; }
 
+    public FloatTag(){}
+
+    public FloatTag(String nome, float valore){
+        super(nome);
+        this.valore= valore;
+    }
+
 }

@@ -61,4 +61,12 @@ public class Immobile {
     public void setTags(Set<Tag> tagDescrittivi) {this.tagDescrittivi = tagDescrittivi; }
 
 
+    public Immobile(){}
+    public Immobile(String nome,String posizioneGeografica,String indirizzo, String citta, String provincia){
+        this.nome= nome;
+        this.posizioneGeografica= posizioneGeografica;
+        this.indirizzo= indirizzo;
+        this.citta= citta;
+        this.provincia= provincia;
+    }
 }

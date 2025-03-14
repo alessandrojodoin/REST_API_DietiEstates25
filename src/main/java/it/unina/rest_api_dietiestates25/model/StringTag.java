@@ -13,4 +13,11 @@ public class StringTag extends Tag {
     public String getValore() {return valore; }
     public void setValore(String valore) {this.valore = valore; }
 
+    public StringTag(){}
+
+    public StringTag(String nome, String valore){
+        super(nome);
+        this.valore= valore;
+    }
+
 }

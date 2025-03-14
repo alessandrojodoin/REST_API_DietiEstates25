@@ -13,4 +13,10 @@ public class CheckboxTag extends Tag {
     public boolean getValore() {return valore; }
     public void setValore(boolean valore) {this.valore = valore; }
 
+    public CheckboxTag(){}
+    public CheckboxTag(String nome, boolean valore){
+        super(nome);
+        this.valore= valore;
+    }
+
 }
