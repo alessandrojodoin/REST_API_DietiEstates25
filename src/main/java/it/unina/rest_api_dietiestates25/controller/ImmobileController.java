@@ -4,6 +4,9 @@ import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.model.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
+
+import java.awt.image.BufferedImage;
+
 public class ImmobileController {
 
 
@@ -66,4 +69,17 @@ public class ImmobileController {
 
         return immobile;
     }
+
+    public FotoImmobile getImage(int id){
+        Session session= sessionFactory.openSession();
+
+        FotoImmobile fotoImmobile = session.createSelectionQuery("from FotoImmobile where id like :id", FotoImmobile.class)
+                .setParameter("id", id)
+                .getSingleResultOrNull();
+        session.close();
+
+        return fotoImmobile;
+    }
+
+
 }

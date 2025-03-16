@@ -42,6 +42,7 @@ public class HelloResource {
 
         System.out.println("Hello world");
 
+        Database.getInstance();
 
         final HttpServer server = startServer();
         System.out.println(String.format("Jersey app started with endpoints available at "
