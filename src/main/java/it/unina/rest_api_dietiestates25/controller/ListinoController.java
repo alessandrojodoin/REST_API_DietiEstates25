@@ -21,7 +21,7 @@ public class ListinoController {
 
     public ListinoImmobile getListino(int id){
         Session session= sessionFactory.openSession();
-        ListinoImmobile listino= session.createSelectionQuery("from ListinoImmobile where id like :id", ListinoImmobile.class)
+        ListinoImmobile listino= session.createSelectionQuery("from ListinoImmobile where id = :id", ListinoImmobile.class)
                 .setParameter("id",id)
                 .getSingleResultOrNull();
         session.close();

@@ -63,6 +63,10 @@ public class Immobile {
     public Set<Tag> getTags() {return tagDescrittivi; }
     public void setTags(Set<Tag> tagDescrittivi) {this.tagDescrittivi = tagDescrittivi; }
 
+    public void addFoto(FotoImmobile fotoImmobile) {
+        foto.add(fotoImmobile);
+    }
+
 
     public Immobile(){}
     public Immobile(String nome,String posizioneGeografica,String indirizzo, String citta, String provincia){

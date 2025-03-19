@@ -62,7 +62,7 @@ public class ImmobileController {
     public Immobile getImmobile(int id){
         Session session= sessionFactory.openSession();
 
-        Immobile immobile= session.createSelectionQuery("from Immobile where id like :id", Immobile.class)
+        Immobile immobile= session.createSelectionQuery("from Immobile where id = :id", Immobile.class)
                         .setParameter("id", id)
                         .getSingleResultOrNull();
         session.close();
@@ -70,15 +70,23 @@ public class ImmobileController {
         return immobile;
     }
 
-    public FotoImmobile getImage(int id){
+    public FotoImmobile getImage(int fotoId){
         Session session= sessionFactory.openSession();
 
-        FotoImmobile fotoImmobile = session.createSelectionQuery("from FotoImmobile where id like :id", FotoImmobile.class)
-                .setParameter("id", id)
+        FotoImmobile fotoImmobile = session.createSelectionQuery("from FotoImmobile where id = :id", FotoImmobile.class)
+                .setParameter("id", fotoId)
                 .getSingleResultOrNull();
         session.close();
 
         return fotoImmobile;
+    }
+
+    public void addImage(Immobile immobile, BufferedImage image){
+        sessionFactory.inTransaction(session -> {
+            FotoImmobile fotoImmobile = new FotoImmobile(image, immobile);
+            immobile.addFoto(fotoImmobile);
+            session.persist(fotoImmobile);
+        });
     }
 
 

@@ -2,6 +2,7 @@ package it.unina.rest_api_dietiestates25.router;
 
 import it.unina.rest_api_dietiestates25.controller.ImmobileController;
 import it.unina.rest_api_dietiestates25.controller.ListinoController;
+import it.unina.rest_api_dietiestates25.model.Immobile;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.ws.rs.*;
@@ -9,7 +10,9 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 @Path("/immobile")
@@ -30,8 +33,9 @@ public class ImmobileRouter {
                 .build();
     }
 
-    @Path("/image/{imageId}")
-    @Produces("image/png")
+    @GET
+    @Path("{immobileId}/image/{imageId}")
+    @Produces("image/jpg")
     public Response getImage(@PathParam("imageId") int imageId) {
 
         try{
@@ -50,8 +54,28 @@ public class ImmobileRouter {
             e.printStackTrace();
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @POST
+    @Path("{immobileId}/image")
+    @Consumes("image/jpg")
+    public Response postImage(byte [] image, @PathParam("immobileId") int immobileId) {
+
+        try{
+            ImmobileController immobileController = new ImmobileController();
 
 
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(image);
+            BufferedImage bufferedImage = ImageIO.read(byteArrayInputStream);
+            Immobile immobile = immobileController.getImmobile(immobileId);
+            immobileController.addImage(immobile, bufferedImage);
 
+
+            return Response.ok().build();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
     }
 }
