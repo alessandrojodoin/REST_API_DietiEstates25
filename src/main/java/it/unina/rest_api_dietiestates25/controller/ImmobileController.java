@@ -13,9 +13,9 @@ public class ImmobileController {
     private final SessionFactory sessionFactory= Database.getInstance().getSessionFactory();
 
 
-    public void createImmobile(String nome, String posizioneGeografica, String indirizzo, String citta, String provincia){
+    public void createImmobile(String nome, String latitudine, String longitudine, String indirizzo, String citta, String provincia){
         sessionFactory.inTransaction(session -> {
-            Immobile immobile= new Immobile(nome, posizioneGeografica, indirizzo, citta, provincia);
+            Immobile immobile= new Immobile(nome, latitudine, longitudine, indirizzo, citta, provincia);
             session.persist(immobile);
         });
     }
@@ -70,11 +70,12 @@ public class ImmobileController {
         return immobile;
     }
 
-    public FotoImmobile getImage(int fotoId){
+    public FotoImmobile getImage(int immobileId, int fotoId){
         Session session= sessionFactory.openSession();
 
-        FotoImmobile fotoImmobile = session.createSelectionQuery("from FotoImmobile where id = :id", FotoImmobile.class)
+        FotoImmobile fotoImmobile = session.createSelectionQuery("from FotoImmobile where id = :id and immobile = :immobileId", FotoImmobile.class)
                 .setParameter("id", fotoId)
+                .setParameter("immobileId", immobileId)
                 .getSingleResultOrNull();
         session.close();
 

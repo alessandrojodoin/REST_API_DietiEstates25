@@ -36,12 +36,12 @@ public class ImmobileRouter {
     @GET
     @Path("{immobileId}/image/{imageId}")
     @Produces("image/jpg")
-    public Response getImage(@PathParam("imageId") int imageId) {
+    public Response getImage(@PathParam("imageId") int imageId, @PathParam("immobileId") int immobileId) {
 
         try{
             ImmobileController immobileController = new ImmobileController();
 
-            BufferedImage image = immobileController.getImage(imageId).getImage();
+            BufferedImage image = immobileController.getImage(immobileId, imageId).getImage();
 
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             ImageIO.write(image, "png", byteArrayOutputStream);

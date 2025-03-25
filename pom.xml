@@ -58,6 +58,12 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.12.0</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/jakarta.transaction/jakarta.transaction-api -->
         <dependency>
             <groupId>jakarta.transaction</groupId>
