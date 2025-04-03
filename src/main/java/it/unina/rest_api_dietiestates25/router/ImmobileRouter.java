@@ -23,6 +23,7 @@ public class ImmobileRouter {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getImmobile(JsonObject js_id){
+
         ListinoController listinoController= new ListinoController();
         int id= js_id.getInt("id");
         listinoController.getListino(id);
@@ -31,12 +32,15 @@ public class ImmobileRouter {
                 .status(Response.Status.OK)
                 .entity(listinoController)
                 .build();
+
     }
 
     @GET
     @Path("{immobileId}/image/{imageId}")
     @Produces("image/jpg")
     public Response getImage(@PathParam("imageId") int imageId, @PathParam("immobileId") int immobileId) {
+
+
 
         try{
             ImmobileController immobileController = new ImmobileController();

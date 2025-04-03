@@ -13,6 +13,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.tool.schema.Action;
 
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.URI;
 
@@ -43,6 +44,7 @@ public class HelloResource {
         System.out.println("Hello world");
 
         Database.getInstance();
+
 
         final HttpServer server = startServer();
         System.out.println(String.format("Jersey app started with endpoints available at "

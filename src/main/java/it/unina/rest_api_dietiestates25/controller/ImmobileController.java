@@ -2,76 +2,96 @@ package it.unina.rest_api_dietiestates25.controller;
 
 import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.model.*;
-import org.hibernate.SessionFactory;
 import org.hibernate.Session;
+
 
 import java.awt.image.BufferedImage;
 
 public class ImmobileController {
 
 
-    private final SessionFactory sessionFactory= Database.getInstance().getSessionFactory();
+    private final Session session = Database.getInstance().getSession();
 
 
-    public void createImmobile(String nome, String latitudine, String longitudine, String indirizzo, String citta, String provincia){
-        sessionFactory.inTransaction(session -> {
-            Immobile immobile= new Immobile(nome, latitudine, longitudine, indirizzo, citta, provincia);
-            session.persist(immobile);
-        });
+    public Immobile createImmobile(String nome, String latitudine, String longitudine, String indirizzo, String citta, String provincia){
+
+
+
+        session.beginTransaction();
+        Immobile immobile = new Immobile(nome, latitudine, longitudine, indirizzo, citta, provincia);
+        session.persist(immobile);
+        session.getTransaction().commit();
+
+
+        return immobile;
     }
 
     public void aggiungiIntegerTag(String nome, int valore, Immobile immobile){
-        sessionFactory.inTransaction(session -> {
-            IntegerTag tag= new IntegerTag(nome, valore);
-            immobile.getTags().add(tag);
-            session.persist(tag);
-            session.persist(immobile);
-        });
+        session.beginTransaction();
+        IntegerTag tag= new IntegerTag(nome, valore);
+        immobile.addTag(tag);
+        session.persist(tag);
+        session.merge(immobile);
+        session.getTransaction().commit();
+    }
+
+    public void aggiungiGenericTag(String nome, Immobile immobile){
+
+        session.beginTransaction();
+        Tag tag = new Tag(nome);
+        immobile.addTag(tag);
+        session.persist(tag);
+        session.merge(immobile);
+        session.getTransaction().commit();
+
     }
 
     public void aggiungiCheckboxTag(String nome, boolean valore, Immobile immobile){
-        sessionFactory.inTransaction(session -> {
-            CheckboxTag tag= new CheckboxTag(nome, valore);
-            immobile.getTags().add(tag);
-            session.persist(tag);
-            session.persist(immobile);
-        });
+
+        session.beginTransaction();
+        CheckboxTag tag= new CheckboxTag(nome, valore);
+        immobile.addTag(tag);
+        session.persist(tag);
+        session.merge(immobile);
+        session.getTransaction().commit();
+
     }
 
     public void aggiungiFloatTag(String nome, float valore, Immobile immobile){
-        sessionFactory.inTransaction(session -> {
-            FloatTag tag= new FloatTag(nome, valore);
-            immobile.getTags().add(tag);
-            session.persist(tag);
-            session.persist(immobile);
-        });
+
+        session.beginTransaction();
+        FloatTag tag= new FloatTag(nome, valore);
+        immobile.addTag(tag);
+        session.persist(tag);
+        session.merge(immobile);
+        session.getTransaction().commit();
+
     }
 
     public void aggiungiStringTag(String nome, String valore, Immobile immobile){
-        sessionFactory.inTransaction(session -> {
-            StringTag tag= new StringTag(nome, valore);
-            immobile.getTags().add(tag);
-            session.persist(tag);
-            session.persist(immobile);
-        });
+
+        session.beginTransaction();
+        StringTag tag= new StringTag(nome, valore);
+        immobile.addTag(tag);
+        session.persist(tag);
+        session.merge(immobile);
+        session.getTransaction().commit();
+
     }
 
 
 
 
     public Immobile getImmobile(int id){
-        Session session= sessionFactory.openSession();
 
-        Immobile immobile= session.createSelectionQuery("from Immobile where id = :id", Immobile.class)
+
+        return session.createSelectionQuery("from Immobile where id = :id", Immobile.class)
                         .setParameter("id", id)
                         .getSingleResultOrNull();
-        session.close();
-
-        return immobile;
     }
 
     public FotoImmobile getImage(int immobileId, int fotoId){
-        Session session= sessionFactory.openSession();
+
 
         FotoImmobile fotoImmobile = session.createSelectionQuery("from FotoImmobile where id = :id and immobile = :immobileId", FotoImmobile.class)
                 .setParameter("id", fotoId)
@@ -83,11 +103,13 @@ public class ImmobileController {
     }
 
     public void addImage(Immobile immobile, BufferedImage image){
-        sessionFactory.inTransaction(session -> {
-            FotoImmobile fotoImmobile = new FotoImmobile(image, immobile);
-            immobile.addFoto(fotoImmobile);
-            session.persist(fotoImmobile);
-        });
+
+        session.beginTransaction();
+        FotoImmobile fotoImmobile = new FotoImmobile(image, immobile);
+        immobile.addFoto(fotoImmobile);
+        session.persist(fotoImmobile);
+        session.getTransaction().commit();
+
     }
 
 

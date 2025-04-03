@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-public abstract class Tag {
+public class Tag {
 
 
     @Id
@@ -19,6 +19,8 @@ public abstract class Tag {
 
     public String getNome() {return nome; }
     public void setNome(String nome) {this.nome = nome; }
+
+    public void setImmobile(Immobile immobile) {this.immobile = immobile; }
 
     public Tag(){}
     public Tag(String nome){

@@ -16,28 +16,9 @@ public class GeoapifyClient implements GeolocationAPI {
 
     public void addNearbyServiceTags(Immobile immobile) throws IOException {
 
-        int radiusMeters = 800;
+        final int radiusMeters = 1000;
 
-        String url = "https://api.geoapify.com/v2/places?categories=public_transport,education.school,leisure.park&filter=circle:%s,%s,%d&bias=proximity:%s,%s&limit=20&apiKey=%s";
-        url = String.format(url, immobile.getLongitudine(), immobile.getLatitudine(), radiusMeters, immobile.getLongitudine(), immobile.getLatitudine(), System.getenv("GEOAPIFY_API_KEY"));
-
-
-        //Richiesta http che viene mandata all'endpoint di Geoapify
-        OkHttpClient client = new OkHttpClient().newBuilder()
-                .build();
-        Request request = new Request.Builder()
-                .url(url)
-                .method("GET", null)
-                .build();
-        Response response = client.newCall(request).execute();
-
-
-
-        //Conversione del corpo della risposta in JsonObject
-        JsonReader jsonReader = Json.createReader(new StringReader(response.body().string()));
-        JsonObject responseJson = jsonReader.readObject();
-        jsonReader.close();
-
+        JsonObject responseJson = getNearbyServices(radiusMeters, immobile.getLatitudine(), immobile.getLongitudine());
 
 
         //Ricerca dei luoghi presenti nella risposta dell'API
@@ -62,20 +43,62 @@ public class GeoapifyClient implements GeolocationAPI {
                     }
         }
 
-        System.out.println("isPublicTransportPresent = " + isPublicTransportPresent);
-        System.out.println("isSchoolPresent = " + isSchoolPresent);
-        System.out.println("isParkPresent = " + isParkPresent);
+        
+        //Aggiunta dei tag all'immobile
+        ImmobileController immobileController = new ImmobileController();
 
-        response.close();
+        if(isPublicTransportPresent) {
+            immobileController.aggiungiGenericTag("Vicino a una fermata di trasporto publico", immobile);
+        }
+
+        if(isSchoolPresent) {
+            immobileController.aggiungiGenericTag("Vicino a una scuola", immobile);
+        }
+
+        if(isParkPresent) {
+            immobileController.aggiungiGenericTag("Vicino a un parco publico", immobile);
+        }
+        
+
+
 
 
 
 
     }
 
-    public static void testMain(String[] args) throws IOException {
+    private JsonObject getNearbyServices(int radiusMeters, String latitude, String longitude) throws IOException {
+
+        String url = "https://api.geoapify.com/v2/places?categories=public_transport,education.school,leisure.park&filter=circle:%s,%s,%d&bias=proximity:%s,%s&limit=20&apiKey=%s";
+        url = String.format(url, longitude, latitude, radiusMeters, longitude, latitude, System.getenv("GEOAPIFY_API_KEY"));
+
+
+        //Richiesta http che viene mandata all'endpoint di Geoapify
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .method("GET", null)
+                .build();
+        Response response = client.newCall(request).execute();
+
+
+
+        //Conversione del corpo della risposta in JsonObject
+        JsonReader jsonReader = Json.createReader(new StringReader(response.body().string()));
+        JsonObject responseJson = jsonReader.readObject();
+        jsonReader.close();
+        response.close();
+
+        return responseJson;
+
+    }
+
+    public static void main(String[] args) throws IOException {
         GeoapifyClient client = new GeoapifyClient();
-        Immobile immobile = new Immobile("a", "40.880303259538664", "14.271733626162813", "a", "a", "a");
+        ImmobileController immobileController = new ImmobileController();
+        Immobile immobile = immobileController.createImmobile("a", "40.880303259538664", "14.271733626162813", "a", "a", "a");
+
         client.addNearbyServiceTags(immobile);
     }
 

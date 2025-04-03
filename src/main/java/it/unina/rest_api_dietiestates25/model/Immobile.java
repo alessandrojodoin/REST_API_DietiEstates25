@@ -5,7 +5,7 @@ package it.unina.rest_api_dietiestates25.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
-import java.awt.image.BufferedImage;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -14,7 +14,7 @@ public class Immobile {
     private int id;
 
     @NotNull
-    private String nome;
+    private String tipoImmobile;
 
     @NotNull
     private String longitudine;
@@ -23,7 +23,8 @@ public class Immobile {
     private String latitudine;
 
     @OneToMany(mappedBy = "immobile")
-    private Set<FotoImmobile> foto;
+    private Set<FotoImmobile> foto = new HashSet<FotoImmobile>() {
+    };
 
     @NotNull
     private String indirizzo;
@@ -35,14 +36,14 @@ public class Immobile {
     private String provincia;
 
     @OneToMany(mappedBy = "immobile")
-    private Set<Tag> tagDescrittivi;
+    private Set<Tag> tagDescrittivi = new HashSet<Tag>() {};
 
 
     public int getId() {return id; }
     public void setId(int id) {this.id = id; }
 
-    public String getNome() {return nome; }
-    public void setNome(String nome) {this.nome = nome; }
+    public String getTipoImmobile() {return tipoImmobile; }
+    public void setTipoImmobile(String nome) {this.tipoImmobile = nome; }
 
     public String getLongitudine() {return longitudine; }
     public String getLatitudine() {return latitudine; }
@@ -63,14 +64,19 @@ public class Immobile {
     public Set<Tag> getTags() {return tagDescrittivi; }
     public void setTags(Set<Tag> tagDescrittivi) {this.tagDescrittivi = tagDescrittivi; }
 
+    public void addTag(Tag tag) {
+        tagDescrittivi.add(tag);
+        tag.setImmobile(this);
+    }
+
     public void addFoto(FotoImmobile fotoImmobile) {
         foto.add(fotoImmobile);
     }
 
 
     public Immobile(){}
-    public Immobile(String nome, String latitudine, String longitudine, String indirizzo, String citta, String provincia){
-        this.nome= nome;
+    public Immobile(String tipoImmobile, String latitudine, String longitudine, String indirizzo, String citta, String provincia){
+        this.tipoImmobile = tipoImmobile;
         this.latitudine = latitudine;
         this.longitudine = longitudine;
         this.indirizzo= indirizzo;

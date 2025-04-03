@@ -5,55 +5,55 @@ import it.unina.rest_api_dietiestates25.model.AgenteImmobiliare;
 import it.unina.rest_api_dietiestates25.model.AmministratoreAgenzia;
 import it.unina.rest_api_dietiestates25.model.Cliente;
 import it.unina.rest_api_dietiestates25.model.Utente;
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonReader;
+
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
 
-import javax.xml.crypto.Data;
-import java.io.StringReader;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class AuthController {
 
-    private final SessionFactory sessionFactory = Database.getInstance().getSessionFactory();
+
+    private final Session session = Database.getInstance().getSession();
 
 
 
     //WIP
     public void createCliente(String username, String email, String nome, String cognome, String password, String numeroTelefonico) {
-        sessionFactory.inTransaction(session -> {
-            Cliente cliente = new Cliente(username, email, nome, cognome, password, numeroTelefonico);
-            session.persist(cliente);
-        });
+
+        session.beginTransaction();
+        Cliente cliente = new Cliente(username, email, nome, cognome, password, numeroTelefonico);
+        session.persist(cliente);
+        session.getTransaction().commit();
+
     }
 
     public void createAmministratore(String username, String email, String nome, String cognome, String password, String numeroTelefonico){
-        sessionFactory.inTransaction(session -> {
-            AmministratoreAgenzia amministratore= new AmministratoreAgenzia(username, email, nome, cognome, password, numeroTelefonico);
-           session.persist(amministratore);
-        });
+
+        session.beginTransaction();
+        AmministratoreAgenzia amministratore= new AmministratoreAgenzia(username, email, nome, cognome, password, numeroTelefonico);
+        session.persist(amministratore);
+        session.getTransaction().commit();
+
     }
 
 
     public void createAgenteImmobiliare(String username, String email, String nome, String cognome, String password, String numeroTelefonico) {
-        sessionFactory.inTransaction(session -> {
-            AgenteImmobiliare agenteImmobiliare = new AgenteImmobiliare(username, email, nome, cognome, password, numeroTelefonico);
-            session.persist(agenteImmobiliare);
-        });
+
+        session.beginTransaction();
+        AgenteImmobiliare agenteImmobiliare = new AgenteImmobiliare(username, email, nome, cognome, password, numeroTelefonico);
+        session.persist(agenteImmobiliare);
+        session.getTransaction().commit();
     }
 
 
     public String authenticateUser(String username, String password) throws IllegalArgumentException {
-        Session session = sessionFactory.openSession();
+
         Utente utente =
                 session.createSelectionQuery("from Utente where username like :username", Utente.class)
                 .setParameter("username", username)
@@ -61,7 +61,6 @@ public class AuthController {
         if (utente == null || (!utente.verifyPassword(password))) {
             throw new IllegalArgumentException("Authentication failed");
         }
-        session.close();
 
         return createJWT(username, TimeUnit.DAYS.toMillis(1));
     }
