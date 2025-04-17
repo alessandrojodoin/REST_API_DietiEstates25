@@ -88,14 +88,16 @@ public class ImmobileRouter {
 
         ImmobileController immobileController = new ImmobileController();
 
-        Immobile immobile = immobileController.createImmobile(listinoJson.getString("tipoImmobile"),
-                listinoJson.getString("latitudine"),
-                listinoJson.getString("longitudine"),
-                listinoJson.getString("indirizzo"),
-                listinoJson.getString("citta"),
-                listinoJson.getString("provincia"));
+        JsonObject immobileJson = listinoJson.getJsonObject("immobile");
 
-        for(JsonValue tagJsonValue: listinoJson.getJsonArray("tags")) {
+        Immobile immobile = immobileController.createImmobile(immobileJson.getString("tipoImmobile"),
+                immobileJson.getString("latitudine"),
+                immobileJson.getString("longitudine"),
+                immobileJson.getString("indirizzo"),
+                immobileJson.getString("citta"),
+                immobileJson.getString("provincia"));
+
+        for(JsonValue tagJsonValue: immobileJson.getJsonArray("tags")) {
             JsonObject tag = tagJsonValue.asJsonObject();
             switch (tag.getString("type")) {
                 case "NoValue":
