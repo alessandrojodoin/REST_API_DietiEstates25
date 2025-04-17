@@ -11,7 +11,9 @@ public class IntegerTag extends Tag {
     @NotNull
     private int valore;
 
-    public int getValore() {return valore; }
+    public String getValueType() { return "Integer";}
+
+    public Integer getValore() {return valore; }
     public void setValore(int valore) {this.valore = valore; }
 
     public IntegerTag(){}

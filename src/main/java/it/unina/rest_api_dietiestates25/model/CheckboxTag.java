@@ -10,7 +10,9 @@ public class CheckboxTag extends Tag {
     @NotNull
     private boolean valore;
 
-    public boolean getValore() {return valore; }
+    public String getValueType() { return "Boolean";}
+
+    public Boolean getValore() {return valore; }
     public void setValore(boolean valore) {this.valore = valore; }
 
     public CheckboxTag(){}

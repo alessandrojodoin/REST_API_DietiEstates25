@@ -68,6 +68,7 @@ public class AuthController {
 
 
 
+
     private String createJWT(String username, long ttlMillis) {
 
         final String ISSUER = "rest_api_dietiestates25";

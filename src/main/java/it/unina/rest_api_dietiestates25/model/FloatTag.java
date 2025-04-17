@@ -10,7 +10,9 @@ public class FloatTag extends Tag {
     @NotNull
     private float valore;
 
-    public float getValore() {return valore; }
+    public String getValueType() { return "Float";}
+
+    public Float getValore() {return valore; }
     public void setValore(float valore) {this.valore = valore; }
 
     public FloatTag(){}

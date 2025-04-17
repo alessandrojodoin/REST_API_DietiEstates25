@@ -16,8 +16,17 @@ public class Offerta {
     @ManyToOne(fetch = FetchType.LAZY)
     private ListinoImmobile listino;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Utente utente;
+    @NotNull
+    private String emailOfferente;
+
+    @NotNull
+    String nome;
+
+    @NotNull
+    String cognome;
+
+    @NotNull
+    String telefono;
 
     @NotNull
     private RisultatoOfferta risultatoOfferta;

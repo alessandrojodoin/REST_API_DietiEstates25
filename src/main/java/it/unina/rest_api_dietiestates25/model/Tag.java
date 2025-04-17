@@ -22,6 +22,10 @@ public class Tag {
 
     public void setImmobile(Immobile immobile) {this.immobile = immobile; }
 
+    public Object getValore() { return null; }
+
+    public String getValueType() { return "NoValue";}
+
     public Tag(){}
     public Tag(String nome){
         this.nome= nome;

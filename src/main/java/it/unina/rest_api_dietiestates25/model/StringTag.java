@@ -13,6 +13,8 @@ public class StringTag extends Tag {
     public String getValore() {return valore; }
     public void setValore(String valore) {this.valore = valore; }
 
+    public String getValueType() { return "String";}
+
     public StringTag(){}
 
     public StringTag(String nome, String valore){

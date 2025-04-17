@@ -31,6 +31,8 @@ public class FotoImmobile {
         this.immobile = immobile;
     }
 
+    public int getId() {return id;}
+
     @Converter(autoApply = true)
     public static class ImageConverter
             implements AttributeConverter<BufferedImage, byte[]> {

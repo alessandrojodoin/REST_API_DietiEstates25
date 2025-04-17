@@ -13,12 +13,12 @@ public class ImmobileController {
     private final Session session = Database.getInstance().getSession();
 
 
-    public Immobile createImmobile(String nome, String latitudine, String longitudine, String indirizzo, String citta, String provincia){
+    public Immobile createImmobile(String tipoImmobile, String latitudine, String longitudine, String indirizzo, String citta, String provincia){
 
 
 
         session.beginTransaction();
-        Immobile immobile = new Immobile(nome, latitudine, longitudine, indirizzo, citta, provincia);
+        Immobile immobile = new Immobile(tipoImmobile, latitudine, longitudine, indirizzo, citta, provincia);
         session.persist(immobile);
         session.getTransaction().commit();
 
@@ -93,13 +93,12 @@ public class ImmobileController {
     public FotoImmobile getImage(int immobileId, int fotoId){
 
 
-        FotoImmobile fotoImmobile = session.createSelectionQuery("from FotoImmobile where id = :id and immobile = :immobileId", FotoImmobile.class)
+        return session.createSelectionQuery("from FotoImmobile where id = :id and immobile = :immobileId", FotoImmobile.class)
                 .setParameter("id", fotoId)
                 .setParameter("immobileId", immobileId)
                 .getSingleResultOrNull();
-        session.close();
 
-        return fotoImmobile;
+
     }
 
     public void addImage(Immobile immobile, BufferedImage image){

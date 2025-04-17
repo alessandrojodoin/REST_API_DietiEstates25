@@ -4,6 +4,7 @@ package it.unina.rest_api_dietiestates25.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -34,12 +35,16 @@ public class ListinoImmobile {
     @ManyToOne(fetch = FetchType.LAZY)
     private AgenteImmobiliare creatore;
 
-    private boolean venduto= false;
+    private boolean isVenduto = false;
 
-    private LocalDateTime istanteCreazione;
+
+
+    private Instant istanteCreazione;
 
     public Immobile getImmobile() {return immobile; }
     public void setImmobile(Immobile immobile) {this.immobile = immobile; }
+
+    public int getId() {return id;}
 
     public int getNumeroVisualizzazioni() {return numeroVisualizzazioni; }
     public void setNumeroVisualizzazioni(int numeroVisualizzazioni) {this.numeroVisualizzazioni = numeroVisualizzazioni; }
@@ -68,6 +73,14 @@ public class ListinoImmobile {
         this.speseCondominiali= speseCondominiali;
         this.prezzo= prezzo;
         this.creatore= creatore;
+        this.istanteCreazione= Instant.now();
     }
 
+    public boolean isVenduto() {return isVenduto;}
+    public void setVenduto(boolean isVenduto) {this.isVenduto = isVenduto;}
+
+
+    public Instant getIstanteCreazione() {
+        return istanteCreazione;
+    }
 }
