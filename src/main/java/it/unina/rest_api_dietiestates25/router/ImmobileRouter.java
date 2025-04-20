@@ -1,5 +1,6 @@
 package it.unina.rest_api_dietiestates25.router;
 
+import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.controller.AuthController;
 import it.unina.rest_api_dietiestates25.controller.ImmobileController;
 import it.unina.rest_api_dietiestates25.controller.ListinoController;
@@ -122,11 +123,16 @@ public class ImmobileRouter {
         ListinoController listinoController = new ListinoController();
 
         //Agente Immobiliare da sostituire
+        AgenteImmobiliare agenteImmobiliare = new AgenteImmobiliare();
+        Database.getInstance().getSession().persist(agenteImmobiliare);
+
+
         listinoController.createListino(immobile,
                 listinoJson.getString("tipologiaContratto"),
                 Integer.parseInt(listinoJson.getString("speseCondominiali")),
                 Integer.parseInt(listinoJson.getString("prezzo")),
-                new AgenteImmobiliare()
+                agenteImmobiliare
+
 
         );
         return Response.ok().build();
