@@ -58,7 +58,7 @@ public class ListinoImmobile {
     public Set<Offerta> getOfferte() {return offerte; }
     public void setOfferte(Set<Offerta> offerte) {this.offerte = offerte; }
 
-    public int getPrezzo() {return prezzo; }x
+    public int getPrezzo() {return prezzo; }
     public void setPrezzo(int prezzo) {this.prezzo = prezzo; }
 
     public AgenteImmobiliare getCreatore() {return creatore; }

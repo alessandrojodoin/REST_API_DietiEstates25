@@ -5,6 +5,7 @@ import it.unina.rest_api_dietiestates25.controller.AuthController;
 import it.unina.rest_api_dietiestates25.controller.ImmobileController;
 import it.unina.rest_api_dietiestates25.controller.ListinoController;
 import it.unina.rest_api_dietiestates25.model.*;
+import it.unina.rest_api_dietiestates25.router.filter.RequireAgenteImmobiliareAuthentication;
 import jakarta.json.*;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -84,6 +85,7 @@ public class ImmobileRouter {
 
 
     @POST
+    @RequireAgenteImmobiliareAuthentication
     @Consumes(MediaType.APPLICATION_JSON)
     public Response postImmobile(JsonObject listinoJson){
 

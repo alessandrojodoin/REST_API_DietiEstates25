@@ -1,5 +1,6 @@
 package it.unina.rest_api_dietiestates25.controller;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.model.AgenteImmobiliare;
 import it.unina.rest_api_dietiestates25.model.AmministratoreAgenzia;
@@ -11,6 +12,7 @@ import org.hibernate.Session;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 import java.util.Date;
 import java.util.UUID;
@@ -20,6 +22,41 @@ public class AuthController {
 
 
     private final Session session = Database.getInstance().getSession();
+
+    public static boolean validateToken(String token){
+
+        final String ISSUER = "rest_api_dietiestates25";
+        final Algorithm algorithm = Algorithm.HMAC256(System.getenv("JWT_SECRET"));
+        final JWTVerifier verifier = JWT.require(algorithm)
+                .withIssuer(ISSUER)
+                .build();
+        try {
+            DecodedJWT decodedJWT = verifier.verify(token);
+            return true;
+        } catch (JWTVerificationException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+
+    public static String getUsernameClaim(String token) {
+        try {
+
+            final String ISSUER = "rest_api_dietiestates25";
+            final Algorithm algorithm = Algorithm.HMAC256(System.getenv("JWT_SECRET"));
+            final JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer(ISSUER)
+                    .build();
+            DecodedJWT decodedJWT = verifier.verify(token);
+            return decodedJWT.getClaim("username").asString();
+        } catch (JWTVerificationException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+
 
 
 
@@ -73,9 +110,7 @@ public class AuthController {
 
         final String ISSUER = "rest_api_dietiestates25";
         final Algorithm algorithm = Algorithm.HMAC256(System.getenv("JWT_SECRET"));
-        final JWTVerifier verifier = JWT.require(algorithm)
-                .withIssuer(ISSUER)
-                .build();
+
 
         String token = JWT.create()
                 .withIssuer(ISSUER)
