@@ -21,7 +21,7 @@ public class RiepilogoAttivita {
 
     //private visite_prenotate
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "riepilogo")
     private Set<Offerta> offerteFatte;
 
 
@@ -35,6 +35,9 @@ public class RiepilogoAttivita {
     public RiepilogoAttivita(Cliente cliente) {
         this.cliente = cliente;
         this.id = cliente.getId();
+    }
+    public int getId() {
+        return id;
     }
 
 }
