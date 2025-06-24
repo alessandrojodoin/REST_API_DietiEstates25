@@ -15,8 +15,6 @@ public class ImmobileController {
 
     public Immobile createImmobile(String tipoImmobile, String latitudine, String longitudine, String indirizzo, String citta, String provincia){
 
-
-
         session.beginTransaction();
         Immobile immobile = new Immobile(tipoImmobile, latitudine, longitudine, indirizzo, citta, provincia);
         session.persist(immobile);
@@ -84,7 +82,6 @@ public class ImmobileController {
 
     public Immobile getImmobile(int id){
 
-
         return session.createSelectionQuery("from Immobile where id = :id", Immobile.class)
                         .setParameter("id", id)
                         .getSingleResultOrNull();
@@ -92,12 +89,10 @@ public class ImmobileController {
 
     public FotoImmobile getImage(int immobileId, int fotoId){
 
-
         return session.createSelectionQuery("from FotoImmobile where id = :id and immobile = :immobileId", FotoImmobile.class)
                 .setParameter("id", fotoId)
                 .setParameter("immobileId", immobileId)
                 .getSingleResultOrNull();
-
 
     }
 
