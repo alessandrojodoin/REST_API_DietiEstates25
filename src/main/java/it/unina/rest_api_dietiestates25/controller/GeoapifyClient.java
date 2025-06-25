@@ -48,7 +48,7 @@ public class GeoapifyClient implements GeolocationAPI {
         ImmobileController immobileController = new ImmobileController();
 
         if(isPublicTransportPresent) {
-            immobileController.aggiungiGenericTag("Vicino a una fermata di trasporto publico", immobile);
+            immobileController.aggiungiGenericTag("Vicino a una fermata di trasporto pubblico", immobile);
         }
 
         if(isSchoolPresent) {
@@ -56,11 +56,11 @@ public class GeoapifyClient implements GeolocationAPI {
         }
 
         if(isParkPresent) {
-            immobileController.aggiungiGenericTag("Vicino a un parco publico", immobile);
+            immobileController.aggiungiGenericTag("Vicino a un parco pubblico", immobile);
         }
         
 
-
+        //...
 
 
 

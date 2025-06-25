@@ -148,8 +148,6 @@ public class ImmobileRouter {
     @Produces("image/jpg")
     public Response getImage(@PathParam("imageId") int imageId, @PathParam("immobileId") int immobileId) {
 
-
-
         try{
             ImmobileController immobileController = new ImmobileController();
 
@@ -175,7 +173,6 @@ public class ImmobileRouter {
 
         try{
             ImmobileController immobileController = new ImmobileController();
-
 
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(image);
             BufferedImage bufferedImage = ImageIO.read(byteArrayInputStream);
