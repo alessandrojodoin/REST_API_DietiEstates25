@@ -8,8 +8,7 @@ import it.unina.rest_api_dietiestates25.model.*;
 import it.unina.rest_api_dietiestates25.router.filter.RequireAgenteImmobiliareAuthentication;
 import jakarta.json.*;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -20,6 +19,8 @@ import java.io.ByteArrayOutputStream;
 @Path("/immobile")
 public class ImmobileRouter {
 
+    @Context
+    private HttpHeaders headers;
 
     @GET
     @Path("{immobileId}")
@@ -124,9 +125,12 @@ public class ImmobileRouter {
         }
         ListinoController listinoController = new ListinoController();
 
-        //Agente Immobiliare da sostituire
-        AgenteImmobiliare agenteImmobiliare = new AgenteImmobiliare();
-        Database.getInstance().getSession().persist(agenteImmobiliare);
+
+
+
+        AuthController authController = new AuthController();
+        AgenteImmobiliare agenteImmobiliare = authController.getAgenteImmobiliare(headers.getHeaderString("username"));
+
 
 
         listinoController.createListino(immobile,

@@ -1,6 +1,5 @@
 package it.unina.rest_api_dietiestates25.router.filter;
 
-
 import jakarta.annotation.Priority;
 import jakarta.ws.rs.NotAuthorizedException;
 import jakarta.ws.rs.Priorities;
@@ -16,7 +15,7 @@ import java.io.IOException;
 @Provider
 @RequireAgenteImmobiliareAuthentication
 @Priority(Priorities.AUTHENTICATION)
-public class AgenteImmobiliareAuthenticationFilter implements ContainerRequestFilter {
+public class ClienteAuthenticationFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {

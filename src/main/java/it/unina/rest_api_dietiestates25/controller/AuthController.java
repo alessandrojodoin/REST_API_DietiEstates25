@@ -88,6 +88,12 @@ public class AuthController {
         session.getTransaction().commit();
     }
 
+    public AgenteImmobiliare getAgenteImmobiliare(String username){
+        return session.createSelectionQuery("from AgenteImmobiliare where username like :username", AgenteImmobiliare.class)
+                        .setParameter("username", username)
+                        .getSingleResultOrNull();
+    }
+
 
     public String authenticateUser(String username, String password) throws IllegalArgumentException {
 
