@@ -4,30 +4,14 @@ import it.unina.rest_api_dietiestates25.controller.OfferteController;
 import it.unina.rest_api_dietiestates25.model.*;
 import jakarta.json.Json;
 import jakarta.json.JsonValue;
-import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 @Path("/offerte")
 public class OffertaRouter {
-/*
-this.listino= listino;
-        this.riepilogo= riepilogo;
-        this.emailOfferente= emailOfferente;
-        this.nome= nome;
-        this.cognome= cognome;
-        this.telefono= telefono;
-        this.risultatoOfferta= risultatoOfferta;
-        this.cifraInCentesimi= cifraInCentesimi;
-        this.cifraContropropostaInCentesimi= cifraContropropostaInCentesimi;
-        this.istanteCreazione= Instant.now();
- */
 
     @GET
     @Path("{offerteId}")
@@ -87,4 +71,52 @@ this.listino= listino;
 
 
     }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response creaOfferta(JsonObject jsonOfferta) {
+        try {
+            Offerta offerta = new Offerta();
+            offerta.setEmailOfferente(jsonOfferta.getString("emailOfferente", null));
+            offerta.setNome(jsonOfferta.getString("nome", null));
+            offerta.setCognome(jsonOfferta.getString("cognome", null));
+            offerta.setTelefono(jsonOfferta.getString("telefono", null));
+            offerta.setCifraInCentesimi(jsonOfferta.getInt("cifraInCentesimi", 0));
+            offerta.setCifraContropropostaInCentesimi(jsonOfferta.getInt("cifraContropropostaInCentesimi", 0));
+
+            int listinoId = jsonOfferta.getInt("listinoId", -1);
+            int riepilogoId = jsonOfferta.getInt("riepilogoId", -1);
+
+            // Recupera i riferimenti se necessario (dipende dalla logica interna)
+            if (listinoId > 0) {
+                ListinoImmobile listino = new ListinoImmobile();
+                listino.setId(listinoId);
+                offerta.setListino(listino);
+            }
+
+            if (riepilogoId > 0) {
+                RiepilogoAttivita riepilogo = new RiepilogoAttivita();
+                riepilogo.setId(riepilogoId);
+                offerta.setRiepilogo(riepilogo);
+            }
+
+            OfferteController controller = new OfferteController();
+            controller.createOfferta(offerta.getListino(), offerta.getRiepilogo(), offerta.getEmailOfferente(),
+                    offerta.getNome(), offerta.getCognome(), offerta.getTelefono(), offerta.getCifraInCentesimi());
+
+            return Response.status(Response.Status.CREATED).entity(Json.createObjectBuilder()
+                    .add("message", "Offerta creata con successo")
+                    .add("id", offerta.getId())
+                    .build()).build();
+
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(Json.createObjectBuilder()
+                            .add("error", "Errore nella creazione dell'offerta")
+                            .add("details", e.getMessage())
+                            .build())
+                    .build();
+        }
+    }
+
 }

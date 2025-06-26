@@ -9,6 +9,10 @@ import java.util.Set;
 @Entity
 public class RiepilogoAttivita {
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 

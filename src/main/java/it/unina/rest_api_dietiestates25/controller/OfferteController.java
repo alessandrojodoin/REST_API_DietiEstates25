@@ -39,7 +39,6 @@ public class OfferteController {
 
     }
 
-
     public Offerta setOffertaAccettata(Offerta offerta){
         session.beginTransaction();
         offerta.setRisultatoOfferta(RisultatoOfferta.Accettata);

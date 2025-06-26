@@ -11,6 +11,10 @@ import java.util.Set;
 @Entity
 public class ListinoImmobile {
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Id
     private int id;
 

@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 public class Offerta {
+
     @Id
     @GeneratedValue
     private int id;
@@ -101,6 +102,38 @@ public class Offerta {
 
     public void setCifraContropropostaInCentesimi(int cifraContropropostaInCentesimi) {
         this.cifraContropropostaInCentesimi = cifraContropropostaInCentesimi;
+    }
+
+    public void setEmailOfferente(String emailOfferente) {
+        this.emailOfferente = emailOfferente;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setCognome(String cognome) {
+        this.cognome = cognome;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public void setCifraInCentesimi(int cifraInCentesimi) {
+        this.cifraInCentesimi = cifraInCentesimi;
+    }
+
+    public void setIstanteCreazione(Instant istanteCreazione) {
+        this.istanteCreazione = istanteCreazione;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setRiepilogo(RiepilogoAttivita riepilogo) {
+        this.riepilogo = riepilogo;
     }
 
 
