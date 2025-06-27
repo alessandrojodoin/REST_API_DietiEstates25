@@ -1,12 +1,16 @@
 package it.unina.rest_api_dietiestates25.router;
 
+import it.unina.rest_api_dietiestates25.controller.AuthController;
 import it.unina.rest_api_dietiestates25.controller.OfferteController;
 import it.unina.rest_api_dietiestates25.model.*;
+import it.unina.rest_api_dietiestates25.router.filter.RequireClienteAuthentication;
 import jakarta.json.Json;
 import jakarta.json.JsonValue;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -19,43 +23,14 @@ public class OffertaRouter {
     public Response getOfferte(@PathParam("offerteId") int offerteId){
         OfferteController offertaController= new OfferteController();
         Offerta offerta = offertaController.getOfferta(offerteId);
-
-        JsonObjectBuilder offertaJsonBuilder = Json.createObjectBuilder()
-                .add("id", offerta.getId())
-                .add("emailOfferente", offerta.getEmailOfferente())
-                .add("nome", offerta.getNome())
-                .add("cognome", offerta.getCognome())
-                .add("telefono", offerta.getTelefono())
-                .add("cifraInCentesimi", offerta.getCifraInCentesimi())
-                .add("cifraContropropostaInCentesimi", offerta.getCifraContropropostaInCentesimi());
-
-        ListinoImmobile listino= offerta.getListino();
-        JsonObject listinoJson = Json.createObjectBuilder()
-                .add("id", listino.getId())
-                .add("tipologiaContratto", listino.getTipologiaContratto())
-                .add("prezzo", listino.getPrezzo())
-                .add("isVenduto", listino.isVenduto())
-                .build();
-
-        RiepilogoAttivita riepilogo = offerta.getRiepilogo();
-        JsonObject riepilogoJson = Json.createObjectBuilder()
-                .add("id", riepilogo.getId())
-                .build();
-
-
-        offertaJsonBuilder
-                .add("listino", listinoJson)
-                .add("riepilogo", riepilogoJson);
-
-        RisultatoOfferta risultato = offerta.getRisultatoOfferta();
-
+/*
         if (risultato != null) {
             offertaJsonBuilder.add("risultatoOfferta", risultato.toString());
         } else {
             offertaJsonBuilder.add("risultatoOfferta", JsonValue.NULL);
         }
-
-        JsonObject jsonResponse = Json.createObjectBuilder()    //listino, risultato offerta, riepilogo ??
+*/
+        JsonObject jsonResponse = Json.createObjectBuilder()
                 .add("id", offerta.getId())
                 .add("emailOfferente", offerta.getEmailOfferente())
                 .add("nome", offerta.getNome())
@@ -63,17 +38,21 @@ public class OffertaRouter {
                 .add("telefono", offerta.getTelefono())
                 .add("cifraInCentesimi", offerta.getCifraInCentesimi())
                 .add("cifraContropropostaInCentesimi", offerta.getCifraContropropostaInCentesimi())
+                .add("idListino", offerta.getListino().getId())
+                .add("idRiepilogo", offerta.getRiepilogo().getId())
+                .add("risultatoOfferta", offerta.getRisultatoOfferta().toString())
                 .build();
         return Response
                 .status(Response.Status.OK)
                 .entity(jsonResponse)
                 .build();
-
-
     }
 
+    @Context
+    private HttpHeaders headers;
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @RequireClienteAuthentication
     public Response creaOfferta(JsonObject jsonOfferta) {
         try {
             Offerta offerta = new Offerta();
@@ -88,17 +67,16 @@ public class OffertaRouter {
             int riepilogoId = jsonOfferta.getInt("riepilogoId", -1);
 
             // Recupera i riferimenti se necessario (dipende dalla logica interna)
-            if (listinoId > 0) {
-                ListinoImmobile listino = new ListinoImmobile();
-                listino.setId(listinoId);
-                offerta.setListino(listino);
-            }
+            ListinoImmobile listino = new ListinoImmobile();
+            listino.setId(listinoId);
+            offerta.setListino(listino);
 
-            if (riepilogoId > 0) {
-                RiepilogoAttivita riepilogo = new RiepilogoAttivita();
-                riepilogo.setId(riepilogoId);
-                offerta.setRiepilogo(riepilogo);
-            }
+
+            AuthController authController= new AuthController();
+            RiepilogoAttivita riepilogo= authController.getCliente(headers.getHeaderString("username")).getRiepilogo();
+            riepilogo.setId(riepilogoId);
+            offerta.setRiepilogo(riepilogo);
+
 
             OfferteController controller = new OfferteController();
             controller.createOfferta(offerta.getListino(), offerta.getRiepilogo(), offerta.getEmailOfferente(),

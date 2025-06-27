@@ -93,7 +93,11 @@ public class AuthController {
                         .setParameter("username", username)
                         .getSingleResultOrNull();
     }
-
+    public Cliente getCliente(String username){
+        return session.createSelectionQuery("from Cliente where username like :username", Cliente.class)
+                .setParameter("username", username)
+                .getSingleResultOrNull();
+    }
 
     public String authenticateUser(String username, String password) throws IllegalArgumentException {
 
