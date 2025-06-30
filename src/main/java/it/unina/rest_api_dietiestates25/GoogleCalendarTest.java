@@ -17,6 +17,8 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
@@ -56,7 +58,7 @@ public class GoogleCalendarTest{
 
         System.out.println(new File(CREDENTIALS_FILE_PATH).canRead());
         // Load client secrets.
-        InputStream in = new FileInputStream(CREDENTIALS_FILE_PATH);
+        InputStream in = Files.newInputStream(Paths.get(CREDENTIALS_FILE_PATH));
         System.out.println("Working Directory = " + System.getProperty("user.dir"));
         if (in == null) {
             throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);

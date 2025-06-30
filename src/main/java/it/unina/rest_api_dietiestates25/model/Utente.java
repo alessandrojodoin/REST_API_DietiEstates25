@@ -25,10 +25,10 @@ public class Utente {
     private String username;
 
     @NotNull
+    @NaturalId
     private String email;
 
     @NotNull
-    @NaturalId
     private String nome;
 
     @NotNull
