@@ -23,4 +23,8 @@ public class AgenteImmobiliare extends Utente {
 
     public void setImmobiliGestiti(Set<ListinoImmobile> immobiliGestiti){this.immobiliGestiti= immobiliGestiti;}
 
+    public String getUtenteTypeAsSting(){
+        return "AgenteImmobiliare";
+    }
+
 }

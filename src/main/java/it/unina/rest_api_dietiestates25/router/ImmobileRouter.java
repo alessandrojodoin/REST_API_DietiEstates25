@@ -108,10 +108,12 @@ public class ImmobileRouter {
                     immobileController.aggiungiGenericTag(tag.getString("nome"), immobile);
                     break;
                 case "Integer":
-                    immobileController.aggiungiIntegerTag(tag.getString("nome"), Integer.parseInt(tag.getString("value")), immobile);
+                    immobileController.aggiungiIntegerTag(tag.getString("nome"), tag.getInt("value"), immobile);
                     break;
                 case "Float":
-                    immobileController.aggiungiFloatTag(tag.getString("nome"), Float.parseFloat(tag.getString("value")), immobile);
+                    JsonNumber num = tag.getJsonNumber("value");
+                    float value = num.bigDecimalValue().floatValue();
+                    immobileController.aggiungiFloatTag(tag.getString("nome"), value, immobile);
                     break;
                 case "String":
                     immobileController.aggiungiStringTag(tag.getString("nome"), tag.getString("value"), immobile);
@@ -135,8 +137,8 @@ public class ImmobileRouter {
 
         listinoController.createListino(immobile,
                 listinoJson.getString("tipologiaContratto"),
-                Integer.parseInt(listinoJson.getString("speseCondominiali")),
-                Integer.parseInt(listinoJson.getString("prezzo")),
+                listinoJson.getInt("speseCondominiali"),
+                listinoJson.getInt("prezzo"),
                 agenteImmobiliare
 
 

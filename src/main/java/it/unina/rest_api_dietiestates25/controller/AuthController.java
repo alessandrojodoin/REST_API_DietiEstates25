@@ -109,14 +109,14 @@ public class AuthController {
             throw new IllegalArgumentException("Authentication failed");
         }
 
-        return createJWT(username, TimeUnit.DAYS.toMillis(1));
+        return createJWT(username, utente.getUtenteTypeAsSting(), TimeUnit.DAYS.toMillis(1));
     }
 
 
 
 
 
-    private String createJWT(String username, long ttlMillis) {
+    private String createJWT(String username, String userType, long ttlMillis) {
 
         final String ISSUER = "rest_api_dietiestates25";
         final Algorithm algorithm = Algorithm.HMAC256(System.getenv("JWT_SECRET"));
@@ -125,6 +125,7 @@ public class AuthController {
         String token = JWT.create()
                 .withIssuer(ISSUER)
                 .withClaim("username", username)
+                .withClaim("userType", userType)
                 .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + ttlMillis))
                 .withJWTId(UUID.randomUUID().toString())

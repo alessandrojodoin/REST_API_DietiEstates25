@@ -21,4 +21,8 @@ public class Cliente extends Utente {
         super(username, email, nome, cognome, password, numeroTelefonico);
         setRiepilogo(new RiepilogoAttivita(this));
     }
+
+    public String getUtenteTypeAsSting(){
+        return "Cliente";
+    }
 }

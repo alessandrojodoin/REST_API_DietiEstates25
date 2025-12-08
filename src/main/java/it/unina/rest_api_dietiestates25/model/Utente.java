@@ -116,6 +116,10 @@ public class Utente {
         this.numeroTelefonico = numeroTelefonico;
     }
 
+    public String getUtenteTypeAsSting(){
+        return "Utente";
+    }
+
     public Utente() {
     }
 
