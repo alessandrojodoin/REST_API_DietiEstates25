@@ -88,6 +88,7 @@ public class ImmobileRouter {
     @POST
     @RequireAgenteImmobiliareAuthentication
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public Response postImmobile(JsonObject listinoJson){
 
         ImmobileController immobileController = new ImmobileController();
@@ -143,7 +144,10 @@ public class ImmobileRouter {
 
 
         );
-        return Response.ok().build();
+        return Response
+                .status(Response.Status.OK)
+                .entity(immobile.getId())
+                .build();
 
     }
 
