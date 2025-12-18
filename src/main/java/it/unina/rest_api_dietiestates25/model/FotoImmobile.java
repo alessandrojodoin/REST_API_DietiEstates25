@@ -41,7 +41,7 @@ public class FotoImmobile {
 
             try{
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                ImageIO.write(image, "jpg", byteArrayOutputStream );
+                ImageIO.write(image, "png", byteArrayOutputStream );
                 return byteArrayOutputStream.toByteArray();
             }
             catch (IOException e){

@@ -91,7 +91,7 @@ public class ImmobileController {
 
         return session.createSelectionQuery("from FotoImmobile where id = :id and immobile = :immobileId", FotoImmobile.class)
                 .setParameter("id", fotoId)
-                .setParameter("immobileId", immobileId)
+                .setParameter("immobileId", getImmobile(immobileId))
                 .getSingleResultOrNull();
 
     }

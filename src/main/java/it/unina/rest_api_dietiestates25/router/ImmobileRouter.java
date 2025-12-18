@@ -155,7 +155,7 @@ public class ImmobileRouter {
 
     @GET
     @Path("{immobileId}/image/{imageId}")
-    @Produces("image/jpg")
+    @Produces("image/png")
     public Response getImage(@PathParam("imageId") int imageId, @PathParam("immobileId") int immobileId) {
 
         try{
@@ -178,7 +178,7 @@ public class ImmobileRouter {
 
     @POST
     @Path("{immobileId}/image")
-    @Consumes("image/jpg")
+    //@Consumes("image/png")
     public Response postImage(byte [] image, @PathParam("immobileId") int immobileId) {
 
         try{
