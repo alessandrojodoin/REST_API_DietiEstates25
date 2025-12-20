@@ -74,6 +74,11 @@ public class Immobile {
     }
 
 
+    public int getFotoNumber() {
+        return foto.size();
+    }
+
+
     public Immobile(){}
     public Immobile(String tipoImmobile, String latitudine, String longitudine, String indirizzo, String citta, String provincia){
         this.tipoImmobile = tipoImmobile;

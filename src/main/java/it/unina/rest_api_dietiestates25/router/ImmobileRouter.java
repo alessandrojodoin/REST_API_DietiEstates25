@@ -37,7 +37,9 @@ public class ImmobileRouter {
                 .add("latitudine", listino.getImmobile().getLatitudine())
                 .add("indirizzo", listino.getImmobile().getIndirizzo())
                 .add("citta", listino.getImmobile().getCitta())
-                .add("provincia", listino.getImmobile().getProvincia());
+                .add("provincia", listino.getImmobile().getProvincia())
+                .add("fotoNumber", listino.getImmobile().getFotoNumber());
+
 
         JsonArrayBuilder tagJsonArrayBuilder = Json.createArrayBuilder();
 
@@ -197,4 +199,6 @@ public class ImmobileRouter {
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 }

@@ -107,4 +107,11 @@ public class ImmobileController {
     }
 
 
+    public long getFotoNumber(int immobileId){
+        return session.createSelectionQuery("from FotoImmobile where immobile = :immobileId", FotoImmobile.class)
+                .setParameter("immobileId", getImmobile(immobileId))
+                .getResultCount();
+    }
+
+
 }

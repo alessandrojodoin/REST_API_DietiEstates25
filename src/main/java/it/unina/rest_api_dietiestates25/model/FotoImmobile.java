@@ -14,6 +14,7 @@ import java.io.IOException;
 public class FotoImmobile {
 
 
+
     @NotNull @Convert(converter = ImageConverter.class)
     private BufferedImage image;
 
@@ -23,6 +24,9 @@ public class FotoImmobile {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Immobile immobile;
+
+    public FotoImmobile() {
+    }
 
     public BufferedImage getImage() {return image;}
 
