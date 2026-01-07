@@ -15,6 +15,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.Set;
 
 @Path("/immobile")
 public class ImmobileRouter {
@@ -199,6 +201,30 @@ public class ImmobileRouter {
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GET
+    @Path("{immobileId}/imageIds")
+    public Response getImageIds(@PathParam("immobileId") int immobileId){
+        try{
+            ImmobileController immobileController = new ImmobileController();
+            Immobile immobile = immobileController.getImmobile(immobileId);
+            Set<FotoImmobile>  foto= immobile.getFoto();
+
+            ArrayList<Integer> imageIds= new ArrayList<Integer>();
+            for (FotoImmobile f : foto) {
+                imageIds.add(f.getId());
+            }
+
+            return Response.ok(imageIds).build();
+
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(e.getMessage())
+                    .build();
+        }
+
+    }
+
 
 
 }
