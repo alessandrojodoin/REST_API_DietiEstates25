@@ -27,7 +27,7 @@ public class Immobile {
     };
 
     @NotNull
-    private String indirizzo;
+    private String via;
 
     @NotNull
     private String citta;
@@ -52,8 +52,8 @@ public class Immobile {
     public void setFoto(Set<FotoImmobile> foto) {this.foto = foto; }
 
 
-    public String getIndirizzo() {return indirizzo; }
-    public void setIndirizzo(String indirizzo) {this.indirizzo = indirizzo; }
+    public String getVia() {return via; }
+    public void setVia(String indirizzo) {this.via = indirizzo; }
 
     public String getCitta() {return citta; }
     public void setCitta(String citta) {this.citta = citta; }
@@ -84,7 +84,7 @@ public class Immobile {
         this.tipoImmobile = tipoImmobile;
         this.latitudine = latitudine;
         this.longitudine = longitudine;
-        this.indirizzo= indirizzo;
+        this.via = indirizzo;
         this.citta= citta;
         this.provincia= provincia;
     }

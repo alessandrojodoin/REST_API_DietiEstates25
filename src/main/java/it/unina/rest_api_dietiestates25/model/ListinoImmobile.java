@@ -35,6 +35,14 @@ public class ListinoImmobile {
 
     private int prezzo;
 
+
+
+    private String nome;
+
+
+
+    private String descrizione;
+
     //private ArrayList<> prenotazioni;
     @ManyToOne(fetch = FetchType.LAZY)
     private AgenteImmobiliare creatore;
@@ -49,6 +57,14 @@ public class ListinoImmobile {
     public void setImmobile(Immobile immobile) {this.immobile = immobile; }
 
     public int getId() {return id;}
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getDescrizione() {
+        return descrizione;
+    }
 
     public int getNumeroVisualizzazioni() {return numeroVisualizzazioni; }
     public void setNumeroVisualizzazioni(int numeroVisualizzazioni) {this.numeroVisualizzazioni = numeroVisualizzazioni; }
@@ -70,8 +86,10 @@ public class ListinoImmobile {
 
     public ListinoImmobile(){}
 
-    public ListinoImmobile(Immobile immobile, String tipologiaContratto, int speseCondominiali, int prezzo,
+    public ListinoImmobile(Immobile immobile, String nome, String descrizione, String tipologiaContratto, int speseCondominiali, int prezzo,
                            AgenteImmobiliare creatore){
+        this.nome = nome;
+        this.descrizione = descrizione;
         this.immobile= immobile;
         this.tipologiaContratto= tipologiaContratto;
         this.speseCondominiali= speseCondominiali;

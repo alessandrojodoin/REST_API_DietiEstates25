@@ -12,9 +12,9 @@ public class ListinoController {
     private Database database = Database.getInstance();
 
 
-    public ListinoImmobile createListino(Immobile immobile, String tipologiaContratto, int speseCondominiali, int prezzo, AgenteImmobiliare creatore){
+    public ListinoImmobile createListino(Immobile immobile, String nome, String descrizione, String tipologiaContratto, int speseCondominiali, int prezzo, AgenteImmobiliare creatore){
         Session session = database.getSession();
-        ListinoImmobile listino= new ListinoImmobile(immobile,tipologiaContratto,speseCondominiali, prezzo, creatore);
+        ListinoImmobile listino= new ListinoImmobile(immobile, nome, descrizione, tipologiaContratto,speseCondominiali, prezzo, creatore);
         session.persist(listino);
 
 

@@ -14,7 +14,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -48,15 +47,23 @@ public class ImmobileRouter {
         ListinoController listinoController= new ListinoController();
         ListinoImmobile listino = listinoController.getListino(immobileId);
 
+        JsonObject indirizzoJson = Json.createObjectBuilder()
+                .add("via", listino.getImmobile().getVia())
+                .add("citta", listino.getImmobile().getCitta())
+                .add("provincia", listino.getImmobile().getProvincia())
+                .build();
+
         JsonObjectBuilder immobileJsonBuilder = Json.createObjectBuilder()
                 .add("id", listino.getImmobile().getId())
                 .add("tipoImmobile", listino.getImmobile().getTipoImmobile())
                 .add("longitudine", listino.getImmobile().getLongitudine())
                 .add("latitudine", listino.getImmobile().getLatitudine())
-                .add("indirizzo", listino.getImmobile().getIndirizzo())
-                .add("citta", listino.getImmobile().getCitta())
-                .add("provincia", listino.getImmobile().getProvincia())
-                .add("fotoNumber", listino.getImmobile().getFotoNumber());
+                .add("fotoNumber", listino.getImmobile().getFotoNumber())
+                .add("indirizzo", indirizzoJson);
+
+
+
+
 
 
         JsonArrayBuilder tagJsonArrayBuilder = Json.createArrayBuilder();
@@ -86,6 +93,8 @@ public class ImmobileRouter {
                 .add("foto", fotoJsonArrayBuilder.build());
 
         JsonObject jsonResponse = Json.createObjectBuilder()
+                .add("nome", listino.getNome())
+                .add("descrizione", listino.getDescrizione())
                 .add("id", listino.getId())
                 .add("numeroVisualizzazioni", listino.getNumeroVisualizzazioni())
                 .add("tipologiaContratto" , listino.getTipologiaContratto())
@@ -129,7 +138,7 @@ public class ImmobileRouter {
         Immobile immobile = immobileController.createImmobile(immobileJson.getString("tipoImmobile"),
                 immobileJson.getString("latitudine"),
                 immobileJson.getString("longitudine"),
-                immobileJson.getString("indirizzo"),
+                immobileJson.getString("via"),
                 immobileJson.getString("citta"),
                 immobileJson.getString("provincia"));
 
@@ -173,6 +182,8 @@ public class ImmobileRouter {
 
 
         listinoController.createListino(immobile,
+                listinoJson.getString("nome"),
+                listinoJson.getString("descrizione"),
                 listinoJson.getString("tipologiaContratto"),
                 listinoJson.getInt("speseCondominiali"),
                 listinoJson.getInt("prezzo"),
