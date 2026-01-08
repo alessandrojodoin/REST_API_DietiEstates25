@@ -10,6 +10,8 @@ import jakarta.json.*;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.*;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -26,7 +28,9 @@ public class ImmobileRouter {
     private HttpHeaders headers;
 
     @Context
-    ContainerRequestContext ctx;
+    private ContainerRequestContext ctx;
+
+    private final Database database = Database.getInstance();
 
 
 
@@ -35,6 +39,11 @@ public class ImmobileRouter {
     @Path("{immobileId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getImmobile(@PathParam("immobileId") int immobileId){
+
+        database.openSession();
+        Session session = database.getSession();
+
+        Transaction tx = session.beginTransaction();
 
         ListinoController listinoController= new ListinoController();
         ListinoImmobile listino = listinoController.getListino(immobileId);
@@ -88,10 +97,16 @@ public class ImmobileRouter {
                 .add("immobile", immobileJsonBuilder.build())
 
                 .build();
+
+        tx.commit();
+        database.closeSession();
+
         return Response
                 .status(Response.Status.OK)
                 .entity(jsonResponse)
                 .build();
+
+
 
     }
 
@@ -101,6 +116,11 @@ public class ImmobileRouter {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public Response postImmobile(JsonObject listinoJson){
+
+        database.openSession();
+        Session session = database.getSession();
+
+        Transaction tx = session.beginTransaction();
 
         ImmobileController immobileController = new ImmobileController();
 
@@ -160,6 +180,10 @@ public class ImmobileRouter {
 
 
         );
+
+        tx.commit();
+        database.closeSession();
+
         return Response
                 .status(Response.Status.OK)
                 .entity(immobile.getId())
@@ -174,6 +198,11 @@ public class ImmobileRouter {
     @Produces("image/png")
     public Response getImage(@PathParam("imageId") int imageId, @PathParam("immobileId") int immobileId) {
 
+        database.openSession();
+        Session session = database.getSession();
+
+        Transaction tx = session.beginTransaction();
+
         try{
             ImmobileController immobileController = new ImmobileController();
 
@@ -183,10 +212,19 @@ public class ImmobileRouter {
             ImageIO.write(image, "png", byteArrayOutputStream);
             byte[] imageData = byteArrayOutputStream.toByteArray();
 
+            tx.commit();
+            database.closeSession();
+
+
 
             return Response.ok(imageData).build();
         }
         catch(Exception e){
+
+            tx.commit();
+            database.closeSession();
+
+
             e.printStackTrace();
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
@@ -198,6 +236,11 @@ public class ImmobileRouter {
     //@Consumes("image/png")
     public Response postImage(byte [] image, @PathParam("immobileId") int immobileId) {
 
+        database.openSession();
+        Session session = database.getSession();
+
+        Transaction tx = session.beginTransaction();
+
         try{
             ImmobileController immobileController = new ImmobileController();
 
@@ -207,9 +250,15 @@ public class ImmobileRouter {
             immobileController.addImage(immobile, bufferedImage);
 
 
+            tx.commit();
+            database.closeSession();
+
             return Response.ok().build();
         }
         catch(Exception e){
+            tx.commit();
+            database.closeSession();
+
             e.printStackTrace();
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
@@ -218,6 +267,11 @@ public class ImmobileRouter {
     @GET
     @Path("{immobileId}/imageIds")
     public Response getImageIds(@PathParam("immobileId") int immobileId){
+
+        database.openSession();
+        Session session = database.getSession();
+
+        Transaction tx = session.beginTransaction();
         try{
             ImmobileController immobileController = new ImmobileController();
             Immobile immobile = immobileController.getImmobile(immobileId);
@@ -227,10 +281,16 @@ public class ImmobileRouter {
             for (FotoImmobile f : foto) {
                 imageIds.add(f.getId());
             }
+            tx.commit();
+            database.closeSession();
+
 
             return Response.ok(imageIds).build();
 
         } catch (Exception e) {
+            tx.commit();
+            database.closeSession();
+
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(e.getMessage())
                     .build();

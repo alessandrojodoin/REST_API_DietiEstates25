@@ -9,14 +9,13 @@ import org.hibernate.Session;
 
 public class ListinoController {
 
-    private final Session session = Database.getInstance().getSession();
+    private Database database = Database.getInstance();
 
 
     public ListinoImmobile createListino(Immobile immobile, String tipologiaContratto, int speseCondominiali, int prezzo, AgenteImmobiliare creatore){
-        session.beginTransaction();
+        Session session = database.getSession();
         ListinoImmobile listino= new ListinoImmobile(immobile,tipologiaContratto,speseCondominiali, prezzo, creatore);
         session.persist(listino);
-        session.getTransaction().commit();
 
 
         return listino;
@@ -24,7 +23,7 @@ public class ListinoController {
     }
 
     public ListinoImmobile getListino(int id){
-
+        Session session = database.getSession();
         ListinoImmobile listino= session.createSelectionQuery("from ListinoImmobile where id = :id", ListinoImmobile.class)
                 .setParameter("id",id)
                 .getSingleResultOrNull();

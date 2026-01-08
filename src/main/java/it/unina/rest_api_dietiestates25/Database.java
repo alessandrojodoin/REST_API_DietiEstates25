@@ -1,17 +1,19 @@
 package it.unina.rest_api_dietiestates25;
 
 import it.unina.rest_api_dietiestates25.model.*;
+import jakarta.enterprise.context.ApplicationScoped;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.tool.schema.Action;
 
+@ApplicationScoped
 public class Database {
 
     private static Database database = null;
     private final SessionFactory sessionFactory;
-    private Session session;
+    //private Session session;
 
 
     private Database() {
@@ -59,13 +61,29 @@ public class Database {
         }
         return database;
     }
-
+/*
     public Session getSession() {
         if(session == null) {
             session = sessionFactory.openSession();
         }
 
         return session;
+    }*/
+
+    private final ThreadLocal<Session> sessionThreadLocal = new ThreadLocal<>();
+
+    public void openSession() {
+        sessionThreadLocal.set(sessionFactory.openSession());
+    }
+
+    public Session getSession() {
+        return sessionThreadLocal.get();
+    }
+
+    public void closeSession() {
+        Session s = sessionThreadLocal.get();
+        if (s != null) s.close();
+        sessionThreadLocal.remove();
     }
 
 

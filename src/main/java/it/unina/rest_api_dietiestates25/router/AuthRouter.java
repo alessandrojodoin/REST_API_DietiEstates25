@@ -1,6 +1,7 @@
 package it.unina.rest_api_dietiestates25.router;
 
 import com.google.api.client.http.HttpTransport;
+import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.HelloResource;
 import it.unina.rest_api_dietiestates25.controller.AuthController;
 import jakarta.json.JsonObject;
@@ -12,20 +13,33 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.util.Collections;
 
 @Path("/auth")
 public class AuthRouter {
 
+    private final Database database = Database.getInstance();
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public Response authenticate(JsonObject loginCredentials) {
+
+        database.openSession();
+        Session session = database.getSession();
+
+        Transaction tx = session.beginTransaction();
+
         AuthController authController = new AuthController();
         String jwtToken = authController.authenticateUser(
                 loginCredentials.getString("username"),
                 loginCredentials.getString("password"));
+
+        tx.commit();
+        database.closeSession();
 
         return Response
                 .status(Response.Status.OK)
@@ -38,6 +52,12 @@ public class AuthRouter {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public Response registerCliente(JsonObject userCredentials) {
+
+        database.openSession();
+        Session session = database.getSession();
+
+        Transaction tx = session.beginTransaction();
+
         AuthController authController = new AuthController();
         authController.createCliente
                 (userCredentials.getString("username"),
@@ -46,6 +66,9 @@ public class AuthRouter {
                 userCredentials.getString("cognome"),
                 userCredentials.getString("password"),
                 userCredentials.getString("numeroTelefonico"));
+
+        tx.commit();
+        database.closeSession();
         return Response.ok().build();
     }
 
@@ -103,6 +126,11 @@ public class AuthRouter {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public Response registerAgenteImmobiliare(JsonObject userCredentials) {
+        database.openSession();
+        Session session = database.getSession();
+
+        Transaction tx = session.beginTransaction();
+
         AuthController authController = new AuthController();
         authController.createAgenteImmobiliare(
                 userCredentials.getString("username"),
@@ -112,6 +140,9 @@ public class AuthRouter {
                 userCredentials.getString("password"),
                 userCredentials.getString("numeroTelefonico")
         );
+        tx.commit();
+        database.closeSession();
+
         return Response.ok().build();
     }
 }

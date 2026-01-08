@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 public class AuthController {
 
 
-    private final Session session = Database.getInstance().getSession();
+    private Database database = Database.getInstance();
 
     public static boolean validateToken(String token){
 
@@ -61,46 +61,47 @@ public class AuthController {
 
 
 
-    //WIP
-    public void createCliente(String username, String email, String nome, String cognome, String password, String numeroTelefonico) {
 
-        session.beginTransaction();
+    public void createCliente(String username, String email, String nome, String cognome, String password, String numeroTelefonico) {
+        Session session = database.getSession();
         Cliente cliente = new Cliente(username, email, nome, cognome, password, numeroTelefonico);
         session.persist(cliente);
-        session.getTransaction().commit();
 
     }
 
     public void createAmministratore(String username, String email, String nome, String cognome, String password, String numeroTelefonico){
 
-        session.beginTransaction();
+        Session session = database.getSession();
         AmministratoreAgenzia amministratore= new AmministratoreAgenzia(username, email, nome, cognome, password, numeroTelefonico);
         session.persist(amministratore);
-        session.getTransaction().commit();
+
 
     }
 
 
     public void createAgenteImmobiliare(String username, String email, String nome, String cognome, String password, String numeroTelefonico) {
 
-        session.beginTransaction();
+        Session session = database.getSession();
         AgenteImmobiliare agenteImmobiliare = new AgenteImmobiliare(username, email, nome, cognome, password, numeroTelefonico);
         session.persist(agenteImmobiliare);
-        session.getTransaction().commit();
+
     }
 
     public AgenteImmobiliare getAgenteImmobiliare(String username){
+        Session session = database.getSession();
         return session.createSelectionQuery("from AgenteImmobiliare where username like :username", AgenteImmobiliare.class)
                         .setParameter("username", username)
                         .getSingleResultOrNull();
     }
     public Cliente getCliente(String username){
+        Session session = database.getSession();
         return session.createSelectionQuery("from Cliente where username like :username", Cliente.class)
                 .setParameter("username", username)
                 .getSingleResultOrNull();
     }
 
     public String authenticateUser(String username, String password) throws IllegalArgumentException {
+        Session session = database.getSession();
 
         Utente utente =
                 session.createSelectionQuery("from Utente where username like :username", Utente.class)
