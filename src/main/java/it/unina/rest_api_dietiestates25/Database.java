@@ -15,6 +15,7 @@ public class Database {
 
 
     private Database() {
+        System.out.println(System.getenv("DATABASE_URL"));
         sessionFactory =
                 new Configuration()
                         .addAnnotatedClass(Utente.class)

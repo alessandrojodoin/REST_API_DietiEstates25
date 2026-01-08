@@ -21,6 +21,7 @@ public class AgenteImmobiliareAuthenticationFilter implements ContainerRequestFi
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
         System.out.println("Filtering request");
+        System.out.println("Method: " + containerRequestContext.getMethod());
 
 
         // Get the HTTP Authorization header from the request
@@ -38,7 +39,10 @@ public class AgenteImmobiliareAuthenticationFilter implements ContainerRequestFi
 
         if( AuthController.validateToken(token) ){
             System.out.println("Token is valid: " + token);
-            containerRequestContext.getHeaders().add("username", AuthController.getUsernameClaim(token));
+            containerRequestContext.setProperty(
+                    "username",
+                    AuthController.getUsernameClaim(token)
+            );
 
         } else {
             System.out.println("Token is NOT valid: " + token);

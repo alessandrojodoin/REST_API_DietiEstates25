@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 public class ImmobileController {
 
 
-    private final Session session = Database.getInstance().getSession();
+    //private final Session session = Database.getInstance().getSession();
 
 
     public Immobile createImmobile(String tipoImmobile, String latitudine, String longitudine, String indirizzo, String citta, String provincia){

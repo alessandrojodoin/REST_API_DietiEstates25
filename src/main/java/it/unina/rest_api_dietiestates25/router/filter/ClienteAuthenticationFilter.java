@@ -13,13 +13,15 @@ import it.unina.rest_api_dietiestates25.controller.AuthController;
 import java.io.IOException;
 
 @Provider
-@RequireAgenteImmobiliareAuthentication
+@RequireClienteAuthentication
 @Priority(Priorities.AUTHENTICATION)
 public class ClienteAuthenticationFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
         System.out.println("Filtering request");
+        System.out.println("Client filtro");
+
 
 
         // Get the HTTP Authorization header from the request
@@ -37,8 +39,10 @@ public class ClienteAuthenticationFilter implements ContainerRequestFilter {
 
         if( AuthController.validateToken(token) ){
             System.out.println("Token is valid: " + token);
-            containerRequestContext.getHeaders().add("username", AuthController.getUsernameClaim(token));
-
+            containerRequestContext.setProperty(
+                    "username",
+                    AuthController.getUsernameClaim(token)
+            );
         } else {
             System.out.println("Token is NOT valid: " + token);
             containerRequestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());

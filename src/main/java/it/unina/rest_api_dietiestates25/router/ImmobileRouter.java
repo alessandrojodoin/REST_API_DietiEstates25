@@ -8,6 +8,7 @@ import it.unina.rest_api_dietiestates25.model.*;
 import it.unina.rest_api_dietiestates25.router.filter.RequireAgenteImmobiliareAuthentication;
 import jakarta.json.*;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.*;
 
 import javax.imageio.ImageIO;
@@ -23,6 +24,12 @@ public class ImmobileRouter {
 
     @Context
     private HttpHeaders headers;
+
+    @Context
+    ContainerRequestContext ctx;
+
+
+
 
     @GET
     @Path("{immobileId}")
@@ -136,7 +143,12 @@ public class ImmobileRouter {
 
 
         AuthController authController = new AuthController();
-        AgenteImmobiliare agenteImmobiliare = authController.getAgenteImmobiliare(headers.getHeaderString("username"));
+
+
+        String username = (String) ctx.getProperty("username");
+
+        AgenteImmobiliare agenteImmobiliare =
+                authController.getAgenteImmobiliare(username);
 
 
 
@@ -181,6 +193,7 @@ public class ImmobileRouter {
     }
 
     @POST
+    @RequireAgenteImmobiliareAuthentication
     @Path("{immobileId}/image")
     //@Consumes("image/png")
     public Response postImage(byte [] image, @PathParam("immobileId") int immobileId) {

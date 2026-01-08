@@ -31,6 +31,7 @@ public class AuthController {
                 .withIssuer(ISSUER)
                 .build();
         try {
+            //Accetta pure se l'utente non esist e piu'
             DecodedJWT decodedJWT = verifier.verify(token);
             return true;
         } catch (JWTVerificationException e) {
