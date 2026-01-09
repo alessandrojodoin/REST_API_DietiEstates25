@@ -82,12 +82,6 @@ public class ImmobileRouter {
 
         JsonArrayBuilder fotoJsonArrayBuilder = Json.createArrayBuilder();
 
-        for(FotoImmobile fotoImmobile: listino.getImmobile().getFoto()){
-
-
-            tagJsonArrayBuilder.add(fotoImmobile.getId());
-        }
-
         immobileJsonBuilder
                 .add("tags", tagJsonArrayBuilder.build())
                 .add("foto", fotoJsonArrayBuilder.build());
