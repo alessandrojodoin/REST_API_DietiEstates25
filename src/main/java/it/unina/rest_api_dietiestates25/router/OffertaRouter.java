@@ -1,6 +1,9 @@
 package it.unina.rest_api_dietiestates25.router;
 
+import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.controller.AuthController;
+import it.unina.rest_api_dietiestates25.controller.ImmobileController;
+import it.unina.rest_api_dietiestates25.controller.ListinoController;
 import it.unina.rest_api_dietiestates25.controller.OfferteController;
 import it.unina.rest_api_dietiestates25.model.*;
 import it.unina.rest_api_dietiestates25.router.filter.RequireClienteAuthentication;
@@ -9,13 +12,19 @@ import jakarta.json.JsonValue;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 @Path("/offerte")
 public class OffertaRouter {
+    @Context
+    private ContainerRequestContext ctx;
+    private final Database database = Database.getInstance();
 
     @GET
     @Path("{offerteId}")
@@ -54,47 +63,41 @@ public class OffertaRouter {
     @Consumes(MediaType.APPLICATION_JSON)
     @RequireClienteAuthentication
     public Response creaOfferta(JsonObject jsonOfferta) {
-        try {
-            Offerta offerta = new Offerta();
-            offerta.setEmailOfferente(jsonOfferta.getString("emailOfferente", null));
-            offerta.setNome(jsonOfferta.getString("nome", null));
-            offerta.setCognome(jsonOfferta.getString("cognome", null));
-            offerta.setTelefono(jsonOfferta.getString("telefono", null));
-            offerta.setCifraInCentesimi(jsonOfferta.getInt("cifraInCentesimi", 0));
-            offerta.setCifraContropropostaInCentesimi(jsonOfferta.getInt("cifraContropropostaInCentesimi", 0));
+        database.openSession();
+        Session session= database.getSession();
 
-            int listinoId = jsonOfferta.getInt("listinoId", -1);
-            int riepilogoId = jsonOfferta.getInt("riepilogoId", -1);
+        Transaction tx = session.beginTransaction();
 
-            // Recupera i riferimenti se necessario (dipende dalla logica interna)
-            ListinoImmobile listino = new ListinoImmobile();
-            listino.setId(listinoId);
-            offerta.setListino(listino);
+        OfferteController offerteController= new OfferteController();
+        //ImmobileController immobileController= new ImmobileController();
+        AuthController authController = new AuthController();
+        ListinoController listinoController= new ListinoController();
 
+        int listinoId = jsonOfferta.getInt("immobileId", -1);
+        ListinoImmobile listinoImmobile= listinoController.getListino(listinoId);
 
-            AuthController authController= new AuthController();
-            RiepilogoAttivita riepilogo= authController.getCliente(headers.getHeaderString("username")).getRiepilogo();
-            riepilogo.setId(riepilogoId);
-            offerta.setRiepilogo(riepilogo);
+        String username = (String) ctx.getProperty("username");
+        Cliente cliente= authController.getCliente(username);
 
 
-            OfferteController controller = new OfferteController();
-            controller.createOfferta(offerta.getListino(), offerta.getRiepilogo(), offerta.getEmailOfferente(),
-                    offerta.getNome(), offerta.getCognome(), offerta.getTelefono(), offerta.getCifraInCentesimi());
 
+        Offerta offerta= offerteController.createOfferta(
+                listinoImmobile,
+                cliente.getRiepilogo(),
+                jsonOfferta.getString("email"),
+                jsonOfferta.getString("nome"),
+                jsonOfferta.getString("cognome"),
+                jsonOfferta.getString("numeroTelefonico"),
+                jsonOfferta.getInt("offerPrice")
+        );
+
+        tx.commit();
+        database.closeSession();
             return Response.status(Response.Status.CREATED).entity(Json.createObjectBuilder()
                     .add("message", "Offerta creata con successo")
                     .add("id", offerta.getId())
                     .build()).build();
 
-        } catch (Exception e) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(Json.createObjectBuilder()
-                            .add("error", "Errore nella creazione dell'offerta")
-                            .add("details", e.getMessage())
-                            .build())
-                    .build();
-        }
     }
 
 }

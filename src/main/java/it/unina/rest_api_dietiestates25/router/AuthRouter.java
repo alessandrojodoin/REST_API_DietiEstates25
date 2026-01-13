@@ -4,6 +4,8 @@ import com.google.api.client.http.HttpTransport;
 import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.HelloResource;
 import it.unina.rest_api_dietiestates25.controller.AuthController;
+import it.unina.rest_api_dietiestates25.model.Utente;
+import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -145,6 +147,47 @@ public class AuthRouter {
 
         return Response.ok().build();
     }
+
+    @GET
+    @Path("users")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response userInformations(@QueryParam("username") String username) {
+        database.openSession();
+        Session session = database.getSession();
+
+        Transaction tx = session.beginTransaction();
+
+
+        if (username == null || username.isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Username mancante")
+                    .build();
+        }
+
+        AuthController authController = new AuthController();
+        Utente utente = authController.getUtente(username);
+
+        if (utente == null) {
+            tx.commit();
+            database.closeSession();
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("Utente non trovato")
+                    .build();
+        }
+
+        JsonObject jsonResponse = Json.createObjectBuilder()
+                .add("username", utente.getUsername())
+                .add("email", utente.getEmail())
+                .add("nome", utente.getNome())
+                .add("cognome", utente.getCognome())
+                .add("numeroTelefonico", utente.getNumeroTelefonico())
+                .build();
+
+        tx.commit();
+        database.closeSession();
+        return Response.ok(jsonResponse).build();
+    }
+
 }
 
 

@@ -100,6 +100,13 @@ public class AuthController {
                 .getSingleResultOrNull();
     }
 
+    public Utente getUtente(String username){
+        Session session = database.getSession();
+        return session.createSelectionQuery("from Utente where username like :username", Utente.class)
+                .setParameter("username", username)
+                .getSingleResultOrNull();
+    }
+
     public String authenticateUser(String username, String password) throws IllegalArgumentException {
         Session session = database.getSession();
 
