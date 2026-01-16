@@ -7,10 +7,7 @@ import it.unina.rest_api_dietiestates25.controller.ListinoController;
 import it.unina.rest_api_dietiestates25.controller.OfferteController;
 import it.unina.rest_api_dietiestates25.model.*;
 import it.unina.rest_api_dietiestates25.router.filter.RequireClienteAuthentication;
-import jakarta.json.Json;
-import jakarta.json.JsonValue;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonObjectBuilder;
+import jakarta.json.*;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.Context;
@@ -19,6 +16,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import java.util.List;
 
 @Path("/offerte")
 public class OffertaRouter {
@@ -30,6 +29,11 @@ public class OffertaRouter {
     @Path("{offerteId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOfferte(@PathParam("offerteId") int offerteId){
+        database.openSession();
+        Session session= database.getSession();
+
+        Transaction tx = session.beginTransaction();
+
         OfferteController offertaController= new OfferteController();
         Offerta offerta = offertaController.getOfferta(offerteId);
 /*
@@ -51,9 +55,62 @@ public class OffertaRouter {
                 .add("idRiepilogo", offerta.getRiepilogo().getId())
                 .add("risultatoOfferta", offerta.getRisultatoOfferta().toString())
                 .build();
+        tx.commit();
+        database.closeSession();
         return Response
                 .status(Response.Status.OK)
                 .entity(jsonResponse)
+                .build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOfferte(@QueryParam("username") String username, @QueryParam("immobileId") int immobileId){
+        database.openSession();
+        Session session= database.getSession();
+
+        Transaction tx = session.beginTransaction();
+
+        OfferteController offertaController= new OfferteController();
+        AuthController authController= new AuthController();
+        List<Offerta> offerte;
+
+        if(username != null){
+            int clienteId= authController.getCliente(username).getId();
+            offerte = offertaController.getOffertePerCliente(clienteId);
+
+        }else{
+
+            offerte = offertaController.getOffertePerImmobile(immobileId);
+
+        }
+
+        JsonArrayBuilder offerteJsonArrayBuilder = Json.createArrayBuilder();
+
+        for(Offerta offerta: offerte){
+
+            JsonObject offertaJson = Json.createObjectBuilder()
+                    .add("id", offerta.getId())
+                    .add("emailOfferente", offerta.getEmailOfferente())
+                    .add("nome", offerta.getNome())
+                    .add("cognome", offerta.getCognome())
+                    .add("telefono", offerta.getTelefono())
+                    .add("cifraInCentesimi", offerta.getCifraInCentesimi())
+                    .add("cifraContropropostaInCentesimi", offerta.getCifraContropropostaInCentesimi())
+                    .add("idListino", offerta.getListino().getId())
+                    .add("idRiepilogo", offerta.getRiepilogo().getId())
+                    .add("risultatoOfferta", offerta.getRisultatoOfferta().toString())
+                    .add("dataOfferta", offerta.getIstanteCreazione().toString())
+                    .build();
+
+            offerteJsonArrayBuilder.add(offertaJson);
+
+        }
+        tx.commit();
+        database.closeSession();
+        return Response
+                .status(Response.Status.OK)
+                .entity(offerteJsonArrayBuilder.build())
                 .build();
     }
 

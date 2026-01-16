@@ -1,10 +1,11 @@
 package it.unina.rest_api_dietiestates25.controller;
 import it.unina.rest_api_dietiestates25.Database;
-import it.unina.rest_api_dietiestates25.model.ListinoImmobile;
-import it.unina.rest_api_dietiestates25.model.Offerta;
-import it.unina.rest_api_dietiestates25.model.RiepilogoAttivita;
-import it.unina.rest_api_dietiestates25.model.RisultatoOfferta;
+import it.unina.rest_api_dietiestates25.model.*;
 import org.hibernate.Session;
+
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OfferteController {
 
@@ -56,4 +57,34 @@ public class OfferteController {
 
         return offerta;
     }
+
+
+    public List<Offerta> getOffertePerCliente(int clienteId){
+        Session session = database.getSession();
+
+         List<Offerta> offerte= session.createSelectionQuery("select o from Offerta o " +
+                         "join o.riepilogo r " +
+                         "join r.cliente c " +
+                         "where c.id = :idCliente", Offerta.class)
+                .setParameter("idCliente", clienteId)
+                .getResultList();
+         return offerte;
+
+    }
+
+    public List<Offerta> getOffertePerImmobile(int immobileId){
+        Session session = database.getSession();
+
+        List<Offerta> offerte= session.createSelectionQuery("select o from Offerta o " +
+                        "join o.listino r"+
+                        "where r.id = :idImmobile", Offerta.class)
+                .setParameter("idImmobile", immobileId)
+                .getResultList();
+        return offerte;
+    }
+
+
+
+
+
 }
