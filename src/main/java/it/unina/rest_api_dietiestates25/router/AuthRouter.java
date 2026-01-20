@@ -1,8 +1,6 @@
 package it.unina.rest_api_dietiestates25.router;
 
-import com.google.api.client.http.HttpTransport;
 import it.unina.rest_api_dietiestates25.Database;
-import it.unina.rest_api_dietiestates25.HelloResource;
 import it.unina.rest_api_dietiestates25.controller.AuthController;
 import it.unina.rest_api_dietiestates25.model.Utente;
 import jakarta.json.Json;

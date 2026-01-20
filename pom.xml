@@ -152,7 +152,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>it.unina.rest_api_dietiestates25.HelloResource</mainClass>
+                    <mainClass>it.unina.rest_api_dietiestates25.Main</mainClass>
                 </configuration>
             </plugin>
             <plugin>
