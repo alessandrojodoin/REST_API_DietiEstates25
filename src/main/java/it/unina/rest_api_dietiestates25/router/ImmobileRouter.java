@@ -1,9 +1,7 @@
 package it.unina.rest_api_dietiestates25.router;
 
 import it.unina.rest_api_dietiestates25.Database;
-import it.unina.rest_api_dietiestates25.controller.AuthController;
-import it.unina.rest_api_dietiestates25.controller.ImmobileController;
-import it.unina.rest_api_dietiestates25.controller.ListinoController;
+import it.unina.rest_api_dietiestates25.controller.*;
 import it.unina.rest_api_dietiestates25.model.*;
 import it.unina.rest_api_dietiestates25.router.filter.RequireAgenteImmobiliareAuthentication;
 import jakarta.json.*;
@@ -125,6 +123,7 @@ public class ImmobileRouter {
 
         Transaction tx = session.beginTransaction();
 
+
         ImmobileController immobileController = new ImmobileController();
 
         JsonObject immobileJson = listinoJson.getJsonObject("immobile");
@@ -160,9 +159,15 @@ public class ImmobileRouter {
                     throw new IllegalArgumentException("Tipo tag non valido");
             }
         }
+        GeolocationAPIFactory geoFactory= new GeolocationAPIFactory();
+        GeolocationAPI geoAPI = geoFactory.getGeolocationAPI();
+        try {
+            geoAPI.addNearbyServiceTags(immobile);
+        }catch(Exception exception){
+            System.out.println("An error occurred: " + exception);
+        }
+
         ListinoController listinoController = new ListinoController();
-
-
 
 
         AuthController authController = new AuthController();
@@ -185,6 +190,7 @@ public class ImmobileRouter {
 
 
         );
+
 
         tx.commit();
         database.closeSession();
