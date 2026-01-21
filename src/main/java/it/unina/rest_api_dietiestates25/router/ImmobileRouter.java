@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Path("/immobile")
@@ -60,10 +61,6 @@ public class ImmobileRouter {
                 .add("indirizzo", indirizzoJson);
 
 
-
-
-
-
         JsonArrayBuilder tagJsonArrayBuilder = Json.createArrayBuilder();
 
         for(Tag tag: listino.getImmobile().getTags()){
@@ -106,8 +103,6 @@ public class ImmobileRouter {
                 .status(Response.Status.OK)
                 .entity(jsonResponse)
                 .build();
-
-
 
     }
 
@@ -309,6 +304,93 @@ public class ImmobileRouter {
 
     }
 
+@GET
+@RequireAgenteImmobiliareAuthentication
+@Produces(MediaType.APPLICATION_JSON)
+public Response getImmobili(@QueryParam("agenteImmobiliare") String username ){
 
+    database.openSession();
+    Session session = database.getSession();
+
+    Transaction tx = session.beginTransaction();
+    ListinoController listinoController= new ListinoController();
+    List<ListinoImmobile> immobili;
+
+        if(username != null){
+
+            AuthController authController= new AuthController();
+            AgenteImmobiliare agente= authController.getAgenteImmobiliare(username);
+
+             immobili= listinoController.getImmobileListPerAgente(agente.getId());
+        }else{
+            immobili= listinoController.getImmobileList();
+        }
+    JsonArrayBuilder immobiliJsonArrayBuilder = Json.createArrayBuilder();
+
+    for(ListinoImmobile listino: immobili){
+
+        JsonObject indirizzoJson = Json.createObjectBuilder()
+                .add("via", listino.getImmobile().getVia())
+                .add("citta", listino.getImmobile().getCitta())
+                .add("provincia", listino.getImmobile().getProvincia())
+                .build();
+
+        JsonObjectBuilder immobileJsonBuilder = Json.createObjectBuilder()
+                .add("id", listino.getImmobile().getId())
+                .add("tipoImmobile", listino.getImmobile().getTipoImmobile())
+                .add("longitudine", listino.getImmobile().getLongitudine())
+                .add("latitudine", listino.getImmobile().getLatitudine())
+                .add("fotoNumber", listino.getImmobile().getFotoNumber())
+                .add("indirizzo", indirizzoJson);
+
+
+        JsonArrayBuilder tagJsonArrayBuilder = Json.createArrayBuilder();
+
+        for(Tag tag: listino.getImmobile().getTags()){
+
+            JsonObject tagJson = Json.createObjectBuilder()
+                    .add("nome", tag.getNome())
+                    .add("valore", tag.getValore().toString())
+                    .add("type", tag.getValueType())
+                    .build();
+
+            tagJsonArrayBuilder.add(tagJson);
+
+        }
+
+        JsonArrayBuilder fotoJsonArrayBuilder = Json.createArrayBuilder();
+
+        immobileJsonBuilder
+                .add("tags", tagJsonArrayBuilder.build())
+                .add("foto", fotoJsonArrayBuilder.build());
+
+        JsonObject jsonResponse = Json.createObjectBuilder()
+                .add("nome", listino.getNome())
+                .add("descrizione", listino.getDescrizione())
+                .add("id", listino.getId())
+                .add("numeroVisualizzazioni", listino.getNumeroVisualizzazioni())
+                .add("tipologiaContratto" , listino.getTipologiaContratto())
+                .add("prezzo", listino.getPrezzo())
+                .add("speseCondominiali", listino.getSpeseCondominiali())
+                .add("agenteImmobiliareId", listino.getCreatore().getId())
+                .add("isVenduto", listino.isVenduto())
+                .add("istanteCreazione", listino.getIstanteCreazione().toEpochMilli())
+                .add("immobile", immobileJsonBuilder.build())
+
+                .build();
+
+
+        immobiliJsonArrayBuilder.add(jsonResponse);
+
+    }
+
+
+    tx.commit();
+    database.closeSession();
+    return Response.ok()
+            .entity(immobiliJsonArrayBuilder.build())
+            .build();
+
+}
 
 }

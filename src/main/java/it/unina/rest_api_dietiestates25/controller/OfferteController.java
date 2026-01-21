@@ -76,7 +76,7 @@ public class OfferteController {
         Session session = database.getSession();
 
         List<Offerta> offerte= session.createSelectionQuery("select o from Offerta o " +
-                        "join o.listino r"+
+                        "join o.listino r "+
                         "where r.id = :idImmobile", Offerta.class)
                 .setParameter("idImmobile", immobileId)
                 .getResultList();

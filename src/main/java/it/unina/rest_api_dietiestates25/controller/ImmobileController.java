@@ -9,6 +9,8 @@ import org.hibernate.Session;
 
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ImmobileController {
@@ -71,8 +73,6 @@ private Database database = Database.getInstance();
         session.merge(immobile);
 
     }
-
-
 
 
     public Immobile getImmobile(int id){

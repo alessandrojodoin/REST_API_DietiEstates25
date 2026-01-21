@@ -7,6 +7,8 @@ import it.unina.rest_api_dietiestates25.model.ListinoImmobile;
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
 
+import java.util.List;
+
 public class ListinoController {
 
     private Database database = Database.getInstance();
@@ -28,5 +30,21 @@ public class ListinoController {
                 .setParameter("id",id)
                 .getSingleResultOrNull();
         return listino;
+    }
+
+
+    public List<ListinoImmobile> getImmobileListPerAgente(int agenteId){
+        Session session = database.getSession();
+
+        return session.createSelectionQuery("from ListinoImmobile L where L.creatore.id= :id", ListinoImmobile.class)
+                .setParameter("id", agenteId)
+                .getResultList();
+    }
+
+    public List<ListinoImmobile> getImmobileList(){
+        Session session = database.getSession();
+
+        return session.createSelectionQuery("from ListinoImmobile", ListinoImmobile.class)
+                .getResultList();
     }
 }
