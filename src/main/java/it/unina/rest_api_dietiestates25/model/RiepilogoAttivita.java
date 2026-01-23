@@ -23,6 +23,8 @@ public class RiepilogoAttivita {
     @OneToMany(fetch = FetchType.LAZY)
     private Set<VisualizzazioneImmobile> immobiliVisualizzati;
 
+
+
     //private visite_prenotate
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "riepilogo")
@@ -30,7 +32,11 @@ public class RiepilogoAttivita {
 
 
     public Set<VisualizzazioneImmobile> getImmobiliVisualizzati() {return immobiliVisualizzati; }
-    public void setImmobiliVisualizzati(Set<VisualizzazioneImmobile> immobiliVisualizzati) {this.immobiliVisualizzati = immobiliVisualizzati; }
+    public void setImmobiliVisualizzati(Set<VisualizzazioneImmobile> immobiliVisualizzati) {
+        this.immobiliVisualizzati = immobiliVisualizzati;
+
+
+    }
 
     public Set<Offerta> getOfferteFatte() {return offerteFatte; }
     public void setOfferteFatte(Set<Offerta> offerteFatte) {this.offerteFatte = offerteFatte; }
@@ -43,5 +49,9 @@ public class RiepilogoAttivita {
     public int getId() {
         return id;
     }
+
+   public void addVisualizzazione(VisualizzazioneImmobile view){
+        this.immobiliVisualizzati.add(view);
+   }
 
 }

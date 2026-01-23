@@ -1,9 +1,7 @@
 package it.unina.rest_api_dietiestates25.controller;
 
 import it.unina.rest_api_dietiestates25.Database;
-import it.unina.rest_api_dietiestates25.model.AgenteImmobiliare;
-import it.unina.rest_api_dietiestates25.model.Immobile;
-import it.unina.rest_api_dietiestates25.model.ListinoImmobile;
+import it.unina.rest_api_dietiestates25.model.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
 
@@ -18,7 +16,6 @@ public class ListinoController {
         Session session = database.getSession();
         ListinoImmobile listino= new ListinoImmobile(immobile, nome, descrizione, tipologiaContratto,speseCondominiali, prezzo, creatore);
         session.persist(listino);
-
 
         return listino;
 
@@ -47,4 +44,26 @@ public class ListinoController {
         return session.createSelectionQuery("from ListinoImmobile", ListinoImmobile.class)
                 .getResultList();
     }
+
+    public void aggiungiVisualizzazione(int listinoId, String username){
+        Session session = database.getSession();
+
+        ListinoImmobile listino= getListino(listinoId);
+        listino.setNumeroVisualizzazioni(listino.getNumeroVisualizzazioni()+1);
+
+        AuthController authController= new AuthController();
+        Cliente cliente= authController.getCliente(username);
+
+        RiepilogoAttivita riepilogo= cliente.getRiepilogo();
+        VisualizzazioneImmobile viewImmobile= new VisualizzazioneImmobile();
+        riepilogo.addVisualizzazione(viewImmobile);
+
+        session.persist(viewImmobile);
+        session.merge(cliente);
+        session.merge(riepilogo);
+        session.persist(listino);
+    }
+
+
+
 }

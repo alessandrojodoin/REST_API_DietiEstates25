@@ -3,6 +3,7 @@ package it.unina.rest_api_dietiestates25.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -19,5 +20,15 @@ public class VisualizzazioneImmobile {
     private Cliente cliente;
 
     @NotNull
-    private LocalDateTime istanteVisualizzazione;
+    private Instant istanteVisualizzazione;
+
+    public VisualizzazioneImmobile(){}
+    public VisualizzazioneImmobile(Immobile immobile, Cliente cliente){
+        this.immobile= immobile;
+        this.cliente= cliente;
+        this.istanteVisualizzazione= Instant.now();
+    }
+
 }
+
+

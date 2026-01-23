@@ -35,11 +35,7 @@ public class ListinoImmobile {
 
     private int prezzo;
 
-
-
     private String nome;
-
-
 
     private String descrizione;
 
@@ -48,8 +44,6 @@ public class ListinoImmobile {
     private AgenteImmobiliare creatore;
 
     private boolean isVenduto = false;
-
-
 
     private Instant istanteCreazione;
 

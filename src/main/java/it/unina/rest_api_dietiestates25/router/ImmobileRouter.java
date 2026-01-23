@@ -4,6 +4,7 @@ import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.controller.*;
 import it.unina.rest_api_dietiestates25.model.*;
 import it.unina.rest_api_dietiestates25.router.filter.RequireAgenteImmobiliareAuthentication;
+import it.unina.rest_api_dietiestates25.router.filter.RequireClienteAuthentication;
 import jakarta.json.*;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.container.ContainerRequestContext;
@@ -392,5 +393,32 @@ public Response getImmobili(@QueryParam("agenteImmobiliare") String username ){
             .build();
 
 }
+
+    @POST
+    @Path("/visualizzazione")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    @RequireClienteAuthentication
+    public Response postImmobiliVisualizzati(JsonObject listinoJson){
+
+        database.openSession();
+        Session session = database.getSession();
+
+        Transaction tx = session.beginTransaction();
+
+        int listinoId= listinoJson.getInt("id");
+        String username = (String) ctx.getProperty("username");
+
+        ListinoController listinoController= new ListinoController();
+        listinoController.aggiungiVisualizzazione(listinoId, username);
+
+        tx.commit();
+        database.closeSession();
+
+        return Response
+                .status(Response.Status.OK)
+                .entity(listinoId)
+                .build();
+    }
 
 }
