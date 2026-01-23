@@ -10,11 +10,11 @@ import java.util.Set;
 @Entity
 public class VisualizzazioneImmobile {
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Immobile immobile;
+    private ListinoImmobile immobile;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Cliente cliente;
@@ -22,8 +22,10 @@ public class VisualizzazioneImmobile {
     @NotNull
     private Instant istanteVisualizzazione;
 
+
+
     public VisualizzazioneImmobile(){}
-    public VisualizzazioneImmobile(Immobile immobile, Cliente cliente){
+    public VisualizzazioneImmobile(ListinoImmobile immobile, Cliente cliente){
         this.immobile= immobile;
         this.cliente= cliente;
         this.istanteVisualizzazione= Instant.now();

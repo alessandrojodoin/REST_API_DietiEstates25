@@ -55,7 +55,7 @@ public class ListinoController {
         Cliente cliente= authController.getCliente(username);
 
         RiepilogoAttivita riepilogo= cliente.getRiepilogo();
-        VisualizzazioneImmobile viewImmobile= new VisualizzazioneImmobile();
+        VisualizzazioneImmobile viewImmobile= new VisualizzazioneImmobile(listino, cliente);
         riepilogo.addVisualizzazione(viewImmobile);
 
         session.persist(viewImmobile);
@@ -65,5 +65,14 @@ public class ListinoController {
     }
 
 
+    public List<ListinoImmobile> getImmobileListPerCliente(int clienteId){
+        Session session = database.getSession();
+
+        return session.createSelectionQuery("select L from VisualizzazioneImmobile V "
+                                              + "join V.immobile L "
+                                              + "where V.cliente.id = :id", ListinoImmobile.class)
+                .setParameter("id", clienteId)
+                .getResultList();
+    }
 
 }

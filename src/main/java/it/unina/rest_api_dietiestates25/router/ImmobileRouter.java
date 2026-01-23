@@ -308,24 +308,32 @@ public class ImmobileRouter {
 @GET
 @RequireAgenteImmobiliareAuthentication
 @Produces(MediaType.APPLICATION_JSON)
-public Response getImmobili(@QueryParam("agenteImmobiliare") String username ){
+public Response getImmobili(@QueryParam("agenteImmobiliare") String agenteUsername, @QueryParam("cliente") String clienteUsername){
 
     database.openSession();
     Session session = database.getSession();
 
     Transaction tx = session.beginTransaction();
+
     ListinoController listinoController= new ListinoController();
     List<ListinoImmobile> immobili;
 
-        if(username != null){
+        if(agenteUsername != null){
 
             AuthController authController= new AuthController();
-            AgenteImmobiliare agente= authController.getAgenteImmobiliare(username);
+            AgenteImmobiliare agente= authController.getAgenteImmobiliare(agenteUsername);
 
              immobili= listinoController.getImmobileListPerAgente(agente.getId());
-        }else{
+        }else if(clienteUsername != null){
+            AuthController authController= new AuthController();
+            Cliente cliente= authController.getCliente(clienteUsername);
+
+            immobili= listinoController.getImmobileListPerCliente(cliente.getId());
+        }
+        else{
             immobili= listinoController.getImmobileList();
         }
+
     JsonArrayBuilder immobiliJsonArrayBuilder = Json.createArrayBuilder();
 
     for(ListinoImmobile listino: immobili){
@@ -420,5 +428,7 @@ public Response getImmobili(@QueryParam("agenteImmobiliare") String username ){
                 .entity(listinoId)
                 .build();
     }
+
+
 
 }
