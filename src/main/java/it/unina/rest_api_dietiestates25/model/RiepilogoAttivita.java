@@ -54,4 +54,15 @@ public class RiepilogoAttivita {
         this.immobiliVisualizzati.add(view);
    }
 
+   public VisualizzazioneImmobile findVisualizzazione(ListinoImmobile listino){
+
+        for(VisualizzazioneImmobile  visualizzazione : immobiliVisualizzati){
+            if (visualizzazione.getImmobile().getId() == listino.getId()){
+                return visualizzazione;
+            }
+        }
+
+        return null;
+   }
+
 }

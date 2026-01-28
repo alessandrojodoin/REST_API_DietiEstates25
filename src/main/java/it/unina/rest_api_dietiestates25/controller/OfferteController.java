@@ -54,7 +54,6 @@ public class OfferteController {
         offerta.setRisultatoOfferta(RisultatoOfferta.Rifiutata);
         session.merge(offerta);
 
-
         return offerta;
     }
 

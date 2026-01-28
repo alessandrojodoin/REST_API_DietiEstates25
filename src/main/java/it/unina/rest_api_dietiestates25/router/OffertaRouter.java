@@ -6,6 +6,7 @@ import it.unina.rest_api_dietiestates25.controller.ImmobileController;
 import it.unina.rest_api_dietiestates25.controller.ListinoController;
 import it.unina.rest_api_dietiestates25.controller.OfferteController;
 import it.unina.rest_api_dietiestates25.model.*;
+import it.unina.rest_api_dietiestates25.router.filter.RequireAgenteImmobiliareAuthentication;
 import it.unina.rest_api_dietiestates25.router.filter.RequireClienteAuthentication;
 import jakarta.json.*;
 import jakarta.ws.rs.*;
@@ -24,6 +25,8 @@ public class OffertaRouter {
     @Context
     private ContainerRequestContext ctx;
     private final Database database = Database.getInstance();
+    @Context
+    private HttpHeaders headers;
 
     @GET
     @Path("{offerteId}")
@@ -114,8 +117,7 @@ public class OffertaRouter {
                 .build();
     }
 
-    @Context
-    private HttpHeaders headers;
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @RequireClienteAuthentication
@@ -157,4 +159,70 @@ public class OffertaRouter {
 
     }
 
+
+    @POST
+    @Path("/{offertaId}/accettata")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RequireAgenteImmobiliareAuthentication
+    public Response offertaAccettata(@PathParam("offertaId") int offertaId){
+        database.openSession();
+        Session session= database.getSession();
+
+        Transaction tx = session.beginTransaction();
+
+        OfferteController offerteController= new OfferteController();
+
+        offerteController.setOffertaAccettata(offerteController.getOfferta(offertaId));
+
+
+        tx.commit();
+        database.closeSession();
+        return Response
+                .status(Response.Status.OK)
+                .build();
+    }
+
+    @POST
+    @Path("/{offertaId}/rifiutata")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RequireAgenteImmobiliareAuthentication
+    public Response offertaRifiutata(@PathParam("offertaId") int offertaId){
+        database.openSession();
+        Session session= database.getSession();
+
+        Transaction tx = session.beginTransaction();
+
+        OfferteController offerteController= new OfferteController();
+
+        offerteController.setOffertaRifiutata(offerteController.getOfferta(offertaId));
+
+
+        tx.commit();
+        database.closeSession();
+        return Response
+                .status(Response.Status.OK)
+                .build();
+    }
+
+    @POST
+    @Path("/{offertaId}/controproposta")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RequireAgenteImmobiliareAuthentication
+    public Response offertaControproposta(@PathParam("offertaId") int offertaId, JsonObject valoreOfferta ){
+        database.openSession();
+        Session session= database.getSession();
+
+        Transaction tx = session.beginTransaction();
+
+        OfferteController offerteController= new OfferteController();
+        Offerta offerta= offerteController.getOfferta(offertaId);
+
+        offerteController.createControOfferta(offerta, valoreOfferta.getInt("controproposta"));
+
+        tx.commit();
+        database.closeSession();
+        return Response
+                .status(Response.Status.OK)
+                .build();
+    }
 }

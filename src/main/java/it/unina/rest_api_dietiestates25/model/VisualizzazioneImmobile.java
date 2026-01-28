@@ -13,6 +13,10 @@ public class VisualizzazioneImmobile {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    public ListinoImmobile getImmobile() {
+        return immobile;
+    }
+
     @ManyToOne(fetch = FetchType.LAZY)
     private ListinoImmobile immobile;
 
@@ -23,12 +27,15 @@ public class VisualizzazioneImmobile {
     private Instant istanteVisualizzazione;
 
 
-
     public VisualizzazioneImmobile(){}
     public VisualizzazioneImmobile(ListinoImmobile immobile, Cliente cliente){
         this.immobile= immobile;
         this.cliente= cliente;
         this.istanteVisualizzazione= Instant.now();
+    }
+
+    public void dateTime(){
+        this.istanteVisualizzazione = Instant.now();
     }
 
 }

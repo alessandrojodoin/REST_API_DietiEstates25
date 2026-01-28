@@ -49,16 +49,23 @@ public class ListinoController {
         Session session = database.getSession();
 
         ListinoImmobile listino= getListino(listinoId);
-        listino.setNumeroVisualizzazioni(listino.getNumeroVisualizzazioni()+1);
 
         AuthController authController= new AuthController();
         Cliente cliente= authController.getCliente(username);
 
         RiepilogoAttivita riepilogo= cliente.getRiepilogo();
-        VisualizzazioneImmobile viewImmobile= new VisualizzazioneImmobile(listino, cliente);
-        riepilogo.addVisualizzazione(viewImmobile);
+        VisualizzazioneImmobile newVisualizzazione = riepilogo.findVisualizzazione(listino);
+        if(newVisualizzazione != null){
+            newVisualizzazione.dateTime();
+            session.merge(newVisualizzazione);
+        }else{
+            VisualizzazioneImmobile viewImmobile= new VisualizzazioneImmobile(listino, cliente);
+            riepilogo.addVisualizzazione(viewImmobile);
+            listino.setNumeroVisualizzazioni(listino.getNumeroVisualizzazioni()+1);
 
-        session.persist(viewImmobile);
+            session.persist(viewImmobile);
+        }
+
         session.merge(cliente);
         session.merge(riepilogo);
         session.persist(listino);
