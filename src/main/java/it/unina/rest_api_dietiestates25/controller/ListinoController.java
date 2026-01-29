@@ -82,4 +82,12 @@ public class ListinoController {
                 .getResultList();
     }
 
+
+    public void setImmobileToVenduto(int listinoId){
+        Session session = database.getSession();
+        ListinoImmobile listino= getListino(listinoId);
+        listino.setVenduto(true);
+        session.merge(listino);
+    }
+
 }

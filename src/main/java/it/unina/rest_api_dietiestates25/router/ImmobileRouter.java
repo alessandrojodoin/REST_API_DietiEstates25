@@ -430,5 +430,25 @@ public Response getImmobili(@QueryParam("agenteImmobiliare") String agenteUserna
     }
 
 
+    @POST
+    @Path("{immobileId}/venduto")
+    @Produces(MediaType.TEXT_PLAIN)
+    @RequireClienteAuthentication
+    public Response setImmobileToVenduto(@PathParam("immobileId") int immobileId){
+        database.openSession();
+        Session session = database.getSession();
+        Transaction tx = session.beginTransaction();
+
+        ListinoController listinoController= new ListinoController();
+        listinoController.setImmobileToVenduto(immobileId);
+
+        tx.commit();
+        database.closeSession();
+
+        return  Response.ok()
+                .entity(immobileId)
+                .build();
+    }
+
 
 }
