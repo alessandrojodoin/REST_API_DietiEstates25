@@ -1,10 +1,7 @@
 package it.unina.rest_api_dietiestates25.router;
 
 import it.unina.rest_api_dietiestates25.Database;
-import it.unina.rest_api_dietiestates25.controller.AuthController;
-import it.unina.rest_api_dietiestates25.controller.ImmobileController;
-import it.unina.rest_api_dietiestates25.controller.ListinoController;
-import it.unina.rest_api_dietiestates25.controller.OfferteController;
+import it.unina.rest_api_dietiestates25.controller.*;
 import it.unina.rest_api_dietiestates25.model.*;
 import it.unina.rest_api_dietiestates25.router.filter.RequireAgenteImmobiliareAuthentication;
 import it.unina.rest_api_dietiestates25.router.filter.RequireClienteAuthentication;
@@ -18,6 +15,7 @@ import jakarta.ws.rs.core.Response;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("/offerte")
@@ -68,7 +66,8 @@ public class OffertaRouter {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getOfferte(@QueryParam("username") String username, @QueryParam("immobileId") int immobileId){
+    public Response getOfferte(@QueryParam("username") String username, @QueryParam("immobileId") int immobileId,
+                               @QueryParam("offerteEsterne") boolean offerteEsterne){
         database.openSession();
         Session session= database.getSession();
 
@@ -77,14 +76,20 @@ public class OffertaRouter {
         OfferteController offertaController= new OfferteController();
         AuthController authController= new AuthController();
         List<Offerta> offerte;
+        List<OfferteEsterne> offerteEsterneList = new ArrayList<OfferteEsterne>();
 
         if(username != null){
             int clienteId= authController.getCliente(username).getId();
             offerte = offertaController.getOffertePerCliente(clienteId);
 
+
         }else{
 
             offerte = offertaController.getOffertePerImmobile(immobileId);
+            if(offerteEsterne){
+                OfferteEsterneController offertaEsternaController= new OfferteEsterneController();
+                offerteEsterneList = offertaEsternaController.getOffertePerImmobile(immobileId);
+            }
 
         }
 
@@ -109,6 +114,26 @@ public class OffertaRouter {
             offerteJsonArrayBuilder.add(offertaJson);
 
         }
+        if(offerteEsterne){
+            for(OfferteEsterne off: offerteEsterneList){
+
+                JsonObject offertaJson = Json.createObjectBuilder()
+                        .add("id", off.getId())
+                        .add("emailOfferente", off.getEmailOfferente())
+                        .add("nome", off.getNome())
+                        .add("cognome", off.getCognome())
+                        .add("telefono", off.getTelefono())
+                        .add("cifraInCentesimi", off.getCifraInCentesimi())
+                        .add("idListino", off.getListino().getId())
+                        .add("risultatoOfferta", off.getRisultatoOfferta().toString())
+                        .add("dataOfferta", off.getIstanteCreazione().toString())
+                        .build();
+
+                offerteJsonArrayBuilder.add(offertaJson);
+            }
+        }
+
+
         tx.commit();
         database.closeSession();
         return Response
@@ -156,6 +181,45 @@ public class OffertaRouter {
                     .add("message", "Offerta creata con successo")
                     .add("id", offerta.getId())
                     .build()).build();
+
+    }
+
+    @POST
+    @Path("/offerteEsterne")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RequireAgenteImmobiliareAuthentication
+    public Response creaOffertaEsterna(JsonObject jsonOfferta) {
+        database.openSession();
+        Session session= database.getSession();
+
+        Transaction tx = session.beginTransaction();
+
+        OfferteEsterneController offerteController= new OfferteEsterneController();
+
+        ListinoController listinoController= new ListinoController();
+
+        int listinoId = jsonOfferta.getInt("immobileId", -1);
+        ListinoImmobile listinoImmobile= listinoController.getListino(listinoId);
+
+        String username = (String) ctx.getProperty("username");
+
+
+
+        OfferteEsterne offerta= offerteController.createOfferteEsterne(
+                listinoImmobile,
+                jsonOfferta.getString("email"),
+                jsonOfferta.getString("nome"),
+                jsonOfferta.getString("cognome"),
+                jsonOfferta.getString("numeroTelefonico"),
+                jsonOfferta.getInt("offerPrice")
+        );
+
+        tx.commit();
+        database.closeSession();
+        return Response.status(Response.Status.CREATED).entity(Json.createObjectBuilder()
+                .add("message", "Offerta creata con successo")
+                .add("id", offerta.getId())
+                .build()).build();
 
     }
 
@@ -225,4 +289,7 @@ public class OffertaRouter {
                 .status(Response.Status.OK)
                 .build();
     }
+
+
+
 }

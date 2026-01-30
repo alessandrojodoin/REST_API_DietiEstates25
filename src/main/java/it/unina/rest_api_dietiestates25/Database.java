@@ -24,6 +24,7 @@ public class Database {
                         .addAnnotatedClass(Cliente.class)
                         .addAnnotatedClass(RiepilogoAttivita.class)
                         .addAnnotatedClass(Offerta.class)
+                        .addAnnotatedClass(OfferteEsterne.class)
                         .addAnnotatedClass(VisualizzazioneImmobile.class)
                         .addAnnotatedClass(ListinoImmobile.class)
                         .addAnnotatedClass(Immobile.class)
@@ -43,7 +44,7 @@ public class Database {
                         .setProperty(AvailableSettings.JAKARTA_JDBC_PASSWORD, System.getenv("DATABASE_PASSWORD"))
                         // Automatic schema export
                         //.setProperty(AvailableSettings.JAKARTA_HBM2DDL_DATABASE_ACTION,
-                          //      Action.SPEC_ACTION_DROP_AND_CREATE)
+                        //      Action.SPEC_ACTION_DROP_AND_CREATE)
                         // SQL statement logging
                         .setProperty(AvailableSettings.SHOW_SQL, true)
                         .setProperty(AvailableSettings.FORMAT_SQL, true)
