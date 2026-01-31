@@ -48,6 +48,15 @@ public class OfferteController {
         return offerta;
     }
 
+
+    public Offerta annullaAccettazione(Offerta offerta){
+        Session session = database.getSession();
+        offerta.setRisultatoOfferta(RisultatoOfferta.InRevisione);
+        session.merge(offerta);
+
+        return offerta;
+    }
+
     public Offerta setOffertaRifiutata(Offerta offerta){
         Session session = database.getSession();
 
@@ -81,7 +90,6 @@ public class OfferteController {
                 .getResultList();
         return offerte;
     }
-
 
 
 

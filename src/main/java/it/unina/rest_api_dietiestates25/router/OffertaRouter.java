@@ -247,6 +247,28 @@ public class OffertaRouter {
     }
 
     @POST
+    @Path("/{offertaId}/revisionata")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RequireAgenteImmobiliareAuthentication
+    public Response offertaAnnullaAccettazione(@PathParam("offertaId") int offertaId){
+        database.openSession();
+        Session session= database.getSession();
+
+        Transaction tx = session.beginTransaction();
+
+        OfferteController offerteController= new OfferteController();
+
+        offerteController.annullaAccettazione(offerteController.getOfferta(offertaId));
+
+
+        tx.commit();
+        database.closeSession();
+        return Response
+                .status(Response.Status.OK)
+                .build();
+    }
+
+    @POST
     @Path("/{offertaId}/rifiutata")
     @Consumes(MediaType.APPLICATION_JSON)
     @RequireAgenteImmobiliareAuthentication
