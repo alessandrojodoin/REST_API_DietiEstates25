@@ -36,7 +36,7 @@ public class OffertaRouter {
         Transaction tx = session.beginTransaction();
 
         OfferteController offertaController= new OfferteController();
-        Offerta offerta = offertaController.getOfferta(offerteId);
+        OffertaUtente offertaUtente = offertaController.getOffertaUtente(offerteId);
 /*
         if (risultato != null) {
             offertaJsonBuilder.add("risultatoOfferta", risultato.toString());
@@ -45,16 +45,16 @@ public class OffertaRouter {
         }
 */
         JsonObject jsonResponse = Json.createObjectBuilder()
-                .add("id", offerta.getId())
-                .add("emailOfferente", offerta.getEmailOfferente())
-                .add("nome", offerta.getNome())
-                .add("cognome", offerta.getCognome())
-                .add("telefono", offerta.getTelefono())
-                .add("cifraInCentesimi", offerta.getCifraInCentesimi())
-                .add("cifraContropropostaInCentesimi", offerta.getCifraContropropostaInCentesimi())
-                .add("idListino", offerta.getListino().getId())
-                .add("idRiepilogo", offerta.getRiepilogo().getId())
-                .add("risultatoOfferta", offerta.getRisultatoOfferta().toString())
+                .add("id", offertaUtente.getId())
+                .add("emailOfferente", offertaUtente.getEmailOfferente())
+                .add("nome", offertaUtente.getNome())
+                .add("cognome", offertaUtente.getCognome())
+                .add("telefono", offertaUtente.getTelefono())
+                .add("cifraInCentesimi", offertaUtente.getCifraInCentesimi())
+                .add("cifraContropropostaInCentesimi", offertaUtente.getCifraContropropostaInCentesimi())
+                .add("idListino", offertaUtente.getListino().getId())
+                .add("idRiepilogo", offertaUtente.getRiepilogo().getId())
+                .add("risultatoOfferta", offertaUtente.getRisultatoOfferta().toString())
                 .build();
         tx.commit();
         database.closeSession();
@@ -75,8 +75,8 @@ public class OffertaRouter {
 
         OfferteController offertaController= new OfferteController();
         AuthController authController= new AuthController();
-        List<Offerta> offerte;
-        List<OfferteEsterne> offerteEsterneList = new ArrayList<OfferteEsterne>();
+        List<OffertaUtente> offerte;
+        List<Offerta> offertaList = new ArrayList<Offerta>();
 
         if(username != null){
             int clienteId= authController.getCliente(username).getId();
@@ -88,34 +88,34 @@ public class OffertaRouter {
             offerte = offertaController.getOffertePerImmobile(immobileId);
             if(offerteEsterne){
                 OfferteEsterneController offertaEsternaController= new OfferteEsterneController();
-                offerteEsterneList = offertaEsternaController.getOffertePerImmobile(immobileId);
+                offertaList = offertaEsternaController.getOffertePerImmobile(immobileId);
             }
 
         }
 
         JsonArrayBuilder offerteJsonArrayBuilder = Json.createArrayBuilder();
 
-        for(Offerta offerta: offerte){
+        for(OffertaUtente offertaUtente : offerte){
 
             JsonObject offertaJson = Json.createObjectBuilder()
-                    .add("id", offerta.getId())
-                    .add("emailOfferente", offerta.getEmailOfferente())
-                    .add("nome", offerta.getNome())
-                    .add("cognome", offerta.getCognome())
-                    .add("telefono", offerta.getTelefono())
-                    .add("cifraInCentesimi", offerta.getCifraInCentesimi())
-                    .add("cifraContropropostaInCentesimi", offerta.getCifraContropropostaInCentesimi())
-                    .add("idListino", offerta.getListino().getId())
-                    .add("idRiepilogo", offerta.getRiepilogo().getId())
-                    .add("risultatoOfferta", offerta.getRisultatoOfferta().toString())
-                    .add("dataOfferta", offerta.getIstanteCreazione().toString())
+                    .add("id", offertaUtente.getId())
+                    .add("emailOfferente", offertaUtente.getEmailOfferente())
+                    .add("nome", offertaUtente.getNome())
+                    .add("cognome", offertaUtente.getCognome())
+                    .add("telefono", offertaUtente.getTelefono())
+                    .add("cifraInCentesimi", offertaUtente.getCifraInCentesimi())
+                    .add("cifraContropropostaInCentesimi", offertaUtente.getCifraContropropostaInCentesimi())
+                    .add("idListino", offertaUtente.getListino().getId())
+                    .add("idRiepilogo", offertaUtente.getRiepilogo().getId())
+                    .add("risultatoOfferta", offertaUtente.getRisultatoOfferta().toString())
+                    .add("dataOfferta", offertaUtente.getIstanteCreazione().toString())
                     .build();
 
             offerteJsonArrayBuilder.add(offertaJson);
 
         }
         if(offerteEsterne){
-            for(OfferteEsterne off: offerteEsterneList){
+            for(Offerta off: offertaList){
 
                 JsonObject offertaJson = Json.createObjectBuilder()
                         .add("id", off.getId())
@@ -165,7 +165,7 @@ public class OffertaRouter {
 
 
 
-        Offerta offerta= offerteController.createOfferta(
+        OffertaUtente offertaUtente = offerteController.createOfferta(
                 listinoImmobile,
                 cliente.getRiepilogo(),
                 jsonOfferta.getString("email"),
@@ -179,7 +179,7 @@ public class OffertaRouter {
         database.closeSession();
             return Response.status(Response.Status.CREATED).entity(Json.createObjectBuilder()
                     .add("message", "Offerta creata con successo")
-                    .add("id", offerta.getId())
+                    .add("id", offertaUtente.getId())
                     .build()).build();
 
     }
@@ -205,7 +205,7 @@ public class OffertaRouter {
 
 
 
-        OfferteEsterne offerta= offerteController.createOfferteEsterne(
+        Offerta offerta= offerteController.createOfferteEsterne(
                 listinoImmobile,
                 jsonOfferta.getString("email"),
                 jsonOfferta.getString("nome"),
@@ -301,9 +301,9 @@ public class OffertaRouter {
         Transaction tx = session.beginTransaction();
 
         OfferteController offerteController= new OfferteController();
-        Offerta offerta= offerteController.getOfferta(offertaId);
+        OffertaUtente offertaUtente = offerteController.getOffertaUtente(offertaId);
 
-        offerteController.createControOfferta(offerta, valoreOfferta.getInt("controproposta"));
+        offerteController.createControOfferta(offertaUtente, valoreOfferta.getInt("controproposta"));
 
         tx.commit();
         database.closeSession();

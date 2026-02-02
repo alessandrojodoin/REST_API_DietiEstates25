@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -31,7 +30,7 @@ public class ListinoImmobile {
     private int speseCondominiali;
 
     @OneToMany(mappedBy = "listino")
-    private Set<Offerta> offerte;
+    private Set<OffertaUtente> offerte;
 
     private int prezzo;
 
@@ -69,8 +68,8 @@ public class ListinoImmobile {
     public int getSpeseCondominiali() {return speseCondominiali; }
     public void setSpeseCondominiali(int speseCondominiali) {this.speseCondominiali = speseCondominiali; }
 
-    public Set<Offerta> getOfferte() {return offerte; }
-    public void setOfferte(Set<Offerta> offerte) {this.offerte = offerte; }
+    public Set<OffertaUtente> getOfferte() {return offerte; }
+    public void setOfferte(Set<OffertaUtente> offerte) {this.offerte = offerte; }
 
     public int getPrezzo() {return prezzo; }
     public void setPrezzo(int prezzo) {this.prezzo = prezzo; }

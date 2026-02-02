@@ -3,40 +3,46 @@ import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.model.*;
 import org.hibernate.Session;
 
-import java.sql.Array;
-import java.util.ArrayList;
 import java.util.List;
 
 public class OfferteController {
 
     private Database database = Database.getInstance();
 
-    public Offerta createOfferta(ListinoImmobile listino, RiepilogoAttivita riepilogo, String emailOfferente, String nome,
-                         String cognome, String telefono, int cifraInCentesimi) {
+    public OffertaUtente createOfferta(ListinoImmobile listino, RiepilogoAttivita riepilogo, String emailOfferente, String nome,
+                                       String cognome, String telefono, int cifraInCentesimi) {
         Session session = database.getSession();
 
-        Offerta offerta= new Offerta(listino, riepilogo, emailOfferente,nome, cognome, telefono,
+        OffertaUtente offertaUtente = new OffertaUtente(listino, riepilogo, emailOfferente,nome, cognome, telefono,
                 RisultatoOfferta.InRevisione, cifraInCentesimi,0);
-        session.persist(offerta);
+        session.persist(offertaUtente);
 
-        return offerta;
+        return offertaUtente;
     }
 
-    public Offerta createControOfferta(Offerta offerta, int cifraContropropostaInCentesimi){
+    public OffertaUtente createControOfferta(OffertaUtente offertaUtente, int cifraContropropostaInCentesimi){
         Session session = database.getSession();
-        offerta.setRisultatoOfferta(RisultatoOfferta.ContropropostaRicevuta);
-        offerta.setCifraContropropostaInCentesimi(cifraContropropostaInCentesimi);
-        session.merge(offerta);
+        offertaUtente.setRisultatoOfferta(RisultatoOfferta.ContropropostaRicevuta);
+        offertaUtente.setCifraContropropostaInCentesimi(cifraContropropostaInCentesimi);
+        session.merge(offertaUtente);
 
-        return offerta;
+        return offertaUtente;
     }
 
     public Offerta getOfferta(int id){
         Session session = database.getSession();
-        Offerta offerta= session.createSelectionQuery("from Offerta where id = :id", Offerta.class)
+        Offerta offerta = session.createSelectionQuery("from Offerta where id = :id", Offerta.class)
                 .setParameter("id",id)
                 .getSingleResultOrNull();
         return offerta;
+    }
+
+    public OffertaUtente getOffertaUtente(int id){
+        Session session = database.getSession();
+        OffertaUtente offertaUtente = session.createSelectionQuery("from OffertaUtente where id = :id", OffertaUtente.class)
+                .setParameter("id",id)
+                .getSingleResultOrNull();
+        return offertaUtente;
 
     }
 
@@ -67,25 +73,25 @@ public class OfferteController {
     }
 
 
-    public List<Offerta> getOffertePerCliente(int clienteId){
+    public List<OffertaUtente> getOffertePerCliente(int clienteId){
         Session session = database.getSession();
 
-         List<Offerta> offerte= session.createSelectionQuery("select o from Offerta o " +
+         List<OffertaUtente> offerte= session.createSelectionQuery("select o from OffertaUtente o " +
                          "join o.riepilogo r " +
                          "join r.cliente c " +
-                         "where c.id = :idCliente", Offerta.class)
+                         "where c.id = :idCliente", OffertaUtente.class)
                 .setParameter("idCliente", clienteId)
                 .getResultList();
          return offerte;
 
     }
 
-    public List<Offerta> getOffertePerImmobile(int immobileId){
+    public List<OffertaUtente> getOffertePerImmobile(int immobileId){
         Session session = database.getSession();
 
-        List<Offerta> offerte= session.createSelectionQuery("select o from Offerta o " +
+        List<OffertaUtente> offerte= session.createSelectionQuery("select o from OffertaUtente o " +
                         "join o.listino r "+
-                        "where r.id = :idImmobile", Offerta.class)
+                        "where r.id = :idImmobile", OffertaUtente.class)
                 .setParameter("idImmobile", immobileId)
                 .getResultList();
         return offerte;

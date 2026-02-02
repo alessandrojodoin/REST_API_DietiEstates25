@@ -3,7 +3,6 @@ package it.unina.rest_api_dietiestates25.model;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.Set;
 
 @Entity
@@ -28,7 +27,7 @@ public class RiepilogoAttivita {
     //private visite_prenotate
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "riepilogo")
-    private Set<Offerta> offerteFatte;
+    private Set<OffertaUtente> offerteFatte;
 
 
     public Set<VisualizzazioneImmobile> getImmobiliVisualizzati() {return immobiliVisualizzati; }
@@ -38,8 +37,8 @@ public class RiepilogoAttivita {
 
     }
 
-    public Set<Offerta> getOfferteFatte() {return offerteFatte; }
-    public void setOfferteFatte(Set<Offerta> offerteFatte) {this.offerteFatte = offerteFatte; }
+    public Set<OffertaUtente> getOfferteFatte() {return offerteFatte; }
+    public void setOfferteFatte(Set<OffertaUtente> offerteFatte) {this.offerteFatte = offerteFatte; }
 
     public RiepilogoAttivita() {}
     public RiepilogoAttivita(Cliente cliente) {
