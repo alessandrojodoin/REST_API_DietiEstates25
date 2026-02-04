@@ -109,6 +109,7 @@ public class OffertaRouter {
                     .add("idRiepilogo", offertaUtente.getRiepilogo().getId())
                     .add("risultatoOfferta", offertaUtente.getRisultatoOfferta().toString())
                     .add("dataOfferta", offertaUtente.getIstanteCreazione().toString())
+                    .add("offertaType", "offertaUtente")
                     .build();
 
             offerteJsonArrayBuilder.add(offertaJson);
@@ -127,6 +128,7 @@ public class OffertaRouter {
                         .add("idListino", off.getListino().getId())
                         .add("risultatoOfferta", off.getRisultatoOfferta().toString())
                         .add("dataOfferta", off.getIstanteCreazione().toString())
+                        .add("offertaType", "offertaEsterna")
                         .build();
 
                 offerteJsonArrayBuilder.add(offertaJson);
@@ -227,7 +229,6 @@ public class OffertaRouter {
     @POST
     @Path("/{offertaId}/accettata")
     @Consumes(MediaType.APPLICATION_JSON)
-    @RequireAgenteImmobiliareAuthentication
     public Response offertaAccettata(@PathParam("offertaId") int offertaId){
         database.openSession();
         Session session= database.getSession();
@@ -271,7 +272,6 @@ public class OffertaRouter {
     @POST
     @Path("/{offertaId}/rifiutata")
     @Consumes(MediaType.APPLICATION_JSON)
-    @RequireAgenteImmobiliareAuthentication
     public Response offertaRifiutata(@PathParam("offertaId") int offertaId){
         database.openSession();
         Session session= database.getSession();
@@ -293,7 +293,6 @@ public class OffertaRouter {
     @POST
     @Path("/{offertaId}/controproposta")
     @Consumes(MediaType.APPLICATION_JSON)
-    @RequireAgenteImmobiliareAuthentication
     public Response offertaControproposta(@PathParam("offertaId") int offertaId, JsonObject valoreOfferta ){
         database.openSession();
         Session session= database.getSession();

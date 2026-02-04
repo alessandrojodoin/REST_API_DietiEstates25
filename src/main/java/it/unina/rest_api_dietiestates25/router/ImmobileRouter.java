@@ -440,6 +440,8 @@ public Response getImmobili(@QueryParam("agenteImmobiliare") String agenteUserna
         Transaction tx = session.beginTransaction();
 
         ListinoController listinoController= new ListinoController();
+
+
         listinoController.setImmobileToVenduto(immobileId);
 
         tx.commit();
