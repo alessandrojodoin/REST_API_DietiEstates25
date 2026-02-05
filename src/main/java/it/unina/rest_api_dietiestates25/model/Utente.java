@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
+import org.checkerframework.common.aliasing.qual.Unique;
 import org.hibernate.annotations.NaturalId;
 
 import java.nio.charset.StandardCharsets;
@@ -22,6 +23,7 @@ public class Utente {
     private int id;
 
     @NotNull
+    @NaturalId
     private String username;
 
     @NotNull
