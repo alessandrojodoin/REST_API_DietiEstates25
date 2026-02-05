@@ -138,7 +138,8 @@ public class AuthRouter {
                 userCredentials.getString("nome"),
                 userCredentials.getString("cognome"),
                 userCredentials.getString("password"),
-                userCredentials.getString("numeroTelefonico")
+                userCredentials.getString("numeroTelefonico"),
+                userCredentials.getString("agenziaImmobiliare")
         );
         tx.commit();
         database.closeSession();
@@ -184,6 +185,37 @@ public class AuthRouter {
         tx.commit();
         database.closeSession();
         return Response.ok(jsonResponse).build();
+    }
+
+
+    @POST
+    @Path("amministratore")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createAmministratore(JsonObject userCredentials) {
+        database.openSession();
+        Session session = database.getSession();
+
+        Transaction tx = session.beginTransaction();
+
+
+        AuthController authController = new AuthController();
+        authController.createAmministratore(
+                userCredentials.getString("username"),
+                "mail",
+                "nome",
+                "cognome",
+                "admin",
+                "numeroTelefonico",
+                userCredentials.getString("agenziaImmobiliare")
+        );
+
+
+
+
+        tx.commit();
+        database.closeSession();
+        return Response.ok().build();
     }
 
 }

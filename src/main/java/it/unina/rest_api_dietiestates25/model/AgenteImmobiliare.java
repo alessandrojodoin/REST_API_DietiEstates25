@@ -4,6 +4,7 @@ package it.unina.rest_api_dietiestates25.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
 
 
 import java.util.Set;
@@ -13,8 +14,12 @@ public class AgenteImmobiliare extends Utente {
 
     public AgenteImmobiliare() {}
 
-    public AgenteImmobiliare(String username, String email, String nome, String cognome, String password, String numeroTelefonico){
+    @NotNull
+    public String agenziaImmobiliare;
+
+    public AgenteImmobiliare(String username, String email, String nome, String cognome, String password, String numeroTelefonico, String agenziaImmobiliare){
         super(username, email, nome, cognome, password, numeroTelefonico);
+        this.agenziaImmobiliare = agenziaImmobiliare;
     }
 
 

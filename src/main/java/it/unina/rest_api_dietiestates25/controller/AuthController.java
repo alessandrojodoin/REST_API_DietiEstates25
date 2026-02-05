@@ -69,20 +69,20 @@ public class AuthController {
 
     }
 
-    public void createAmministratore(String username, String email, String nome, String cognome, String password, String numeroTelefonico){
+    public void createAmministratore(String username, String email, String nome, String cognome, String password, String numeroTelefonico, String agenziaImmobiliare){
 
         Session session = database.getSession();
-        AmministratoreAgenzia amministratore= new AmministratoreAgenzia(username, email, nome, cognome, password, numeroTelefonico);
+        AmministratoreAgenzia amministratore= new AmministratoreAgenzia(username, email, nome, cognome, password, numeroTelefonico, agenziaImmobiliare);
         session.persist(amministratore);
 
 
     }
 
 
-    public void createAgenteImmobiliare(String username, String email, String nome, String cognome, String password, String numeroTelefonico) {
+    public void createAgenteImmobiliare(String username, String email, String nome, String cognome, String password, String numeroTelefonico, String agenziaImmobiliare) {
 
         Session session = database.getSession();
-        AgenteImmobiliare agenteImmobiliare = new AgenteImmobiliare(username, email, nome, cognome, password, numeroTelefonico);
+        AgenteImmobiliare agenteImmobiliare = new AgenteImmobiliare(username, email, nome, cognome, password, numeroTelefonico, agenziaImmobiliare);
         session.persist(agenteImmobiliare);
 
     }

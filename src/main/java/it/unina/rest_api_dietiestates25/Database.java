@@ -37,6 +37,7 @@ public class Database {
                         .addAnnotatedClass(AmministratoreAgenzia.class)
                         .addAnnotatedClass(ClienteGoogle.class)
                         .addAnnotatedClass(FotoImmobile.class)
+                        .addAnnotatedClass(AccountSupporto.class)
                         // PostgreSQL
                         .setProperty(AvailableSettings.JAKARTA_JDBC_URL, System.getenv("DATABASE_URL"))
                         // Credentials
