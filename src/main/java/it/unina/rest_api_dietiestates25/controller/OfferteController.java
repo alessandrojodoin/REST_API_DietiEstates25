@@ -97,7 +97,12 @@ public class OfferteController {
         return offerte;
     }
 
+    public void deleteOfferta(int offertaId){
+        Session session = database.getSession();
 
+        session.remove(this.getOfferta(offertaId));
+
+    }
 
 
 }

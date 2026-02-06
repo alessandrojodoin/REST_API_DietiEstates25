@@ -312,5 +312,23 @@ public class OffertaRouter {
     }
 
 
+    @DELETE
+    @Path("/{offertaId}")
+    public Response deleteOfferta(@PathParam("offertaId") int offertaId){
+        database.openSession();
+        Session session= database.getSession();
+
+        Transaction tx = session.beginTransaction();
+
+        OfferteController offerteController= new OfferteController();
+        offerteController.deleteOfferta(offertaId);
+
+        tx.commit();
+        database.closeSession();
+        return Response
+                .status(Response.Status.OK)
+                .build();
+    }
+
 
 }
