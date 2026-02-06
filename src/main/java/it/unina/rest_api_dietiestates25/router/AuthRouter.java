@@ -211,12 +211,39 @@ public class AuthRouter {
         );
 
 
+        tx.commit();
+        database.closeSession();
+        return Response.ok().build();
+    }
 
+
+    @POST
+    @Path("accountSupporto")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createAmministratoreSupporto(JsonObject userCredentials) {
+        database.openSession();
+        Session session = database.getSession();
+
+        Transaction tx = session.beginTransaction();
+
+
+        AuthController authController = new AuthController();
+        authController.createAmministratoreSupporto(
+                userCredentials.getString("username"),
+                userCredentials.getString("email"),
+                userCredentials.getString("nome"),
+                userCredentials.getString("cognome"),
+                userCredentials.getString("password"),
+                userCredentials.getString("numeroTelefonico"),
+                userCredentials.getString("agenziaImmobiliare")
+        );
 
         tx.commit();
         database.closeSession();
         return Response.ok().build();
     }
+
 
 }
 

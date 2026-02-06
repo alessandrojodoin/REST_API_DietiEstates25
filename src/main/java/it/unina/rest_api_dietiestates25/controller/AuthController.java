@@ -2,10 +2,7 @@ package it.unina.rest_api_dietiestates25.controller;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import it.unina.rest_api_dietiestates25.Database;
-import it.unina.rest_api_dietiestates25.model.AgenteImmobiliare;
-import it.unina.rest_api_dietiestates25.model.AmministratoreAgenzia;
-import it.unina.rest_api_dietiestates25.model.Cliente;
-import it.unina.rest_api_dietiestates25.model.Utente;
+import it.unina.rest_api_dietiestates25.model.*;
 
 import org.hibernate.Session;
 
@@ -74,10 +71,14 @@ public class AuthController {
         Session session = database.getSession();
         AmministratoreAgenzia amministratore= new AmministratoreAgenzia(username, email, nome, cognome, password, numeroTelefonico, agenziaImmobiliare);
         session.persist(amministratore);
-
-
     }
 
+    public void createAmministratoreSupporto(String username, String email, String nome, String cognome, String password, String numeroTelefonico, String agenziaImmobiliare){
+
+        Session session = database.getSession();
+        AccountSupporto amministratoreSupporto= new AccountSupporto(username, email, nome, cognome, password, numeroTelefonico, agenziaImmobiliare);
+        session.persist(amministratoreSupporto);
+    }
 
     public void createAgenteImmobiliare(String username, String email, String nome, String cognome, String password, String numeroTelefonico, String agenziaImmobiliare) {
 
