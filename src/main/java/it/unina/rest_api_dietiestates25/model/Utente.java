@@ -136,6 +136,12 @@ public class Utente {
 
 
     }
+
+
+    public String getAgenziaImmobiliare() {
+        return "";
+    }
+
 }
 
 

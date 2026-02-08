@@ -32,4 +32,9 @@ public class AgenteImmobiliare extends Utente {
         return "AgenteImmobiliare";
     }
 
+
+    public String getAgenziaImmobiliare() {
+        return agenziaImmobiliare;
+    }
+
 }

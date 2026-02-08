@@ -21,4 +21,9 @@ public class AccountSupporto extends Utente {
         return "AccountSupporto";
     }
 
+
+    public String getAgenziaImmobiliare() {
+        return agenziaImmobiliare;
+    }
+
 }

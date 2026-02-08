@@ -21,4 +21,8 @@ public class AmministratoreAgenzia extends Utente {
         return "AmministratoreAgenzia";
     }
 
+    public String getAgenziaImmobiliare() {
+        return agenziaImmobiliare;
+    }
+
 }

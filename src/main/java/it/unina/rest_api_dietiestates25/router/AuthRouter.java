@@ -180,6 +180,7 @@ public class AuthRouter {
                 .add("nome", utente.getNome())
                 .add("cognome", utente.getCognome())
                 .add("numeroTelefonico", utente.getNumeroTelefonico())
+                .add("agenziaImmobiliare", utente.getAgenziaImmobiliare())
                 .build();
 
         tx.commit();
