@@ -23,11 +23,11 @@ public class Utente {
     private int id;
 
     @NotNull
-    @NaturalId
+    @Unique
     private String username;
 
     @NotNull
-    @NaturalId
+    @Unique
     private String email;
 
     @NotNull

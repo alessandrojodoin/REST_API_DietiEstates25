@@ -101,6 +101,13 @@ public class AuthController {
                 .getSingleResultOrNull();
     }
 
+    public AmministratoreAgenzia getAmministratore(String username){
+        Session session = database.getSession();
+        return session.createSelectionQuery("from AmministratoreAgenzia where username like :username", AmministratoreAgenzia.class)
+                .setParameter("username", username)
+                .getSingleResultOrNull();
+    }
+
     public Utente getUtente(String username){
         Session session = database.getSession();
         return session.createSelectionQuery("from Utente where username like :username", Utente.class)
@@ -144,5 +151,16 @@ public class AuthController {
         return token;
     }
 
+
+    public void modificaAmministratore(String old_username, String new_username, String password){
+
+        Session session = database.getSession();
+
+        AmministratoreAgenzia amministratore= this.getAmministratore(old_username);
+        amministratore.setUsername(new_username);
+        amministratore.setPassword(password);
+
+        session.merge(amministratore);
+    }
 
 }

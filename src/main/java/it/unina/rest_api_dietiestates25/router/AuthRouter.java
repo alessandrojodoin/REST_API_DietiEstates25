@@ -34,9 +34,27 @@ public class AuthRouter {
         Transaction tx = session.beginTransaction();
 
         AuthController authController = new AuthController();
-        String jwtToken = authController.authenticateUser(
-                loginCredentials.getString("username"),
-                loginCredentials.getString("password"));
+        String jwtToken;
+
+        try{
+
+            jwtToken= authController.authenticateUser(
+                    loginCredentials.getString("username"),
+                    loginCredentials.getString("password")
+            );
+        }catch(Exception e){
+            tx.commit();
+            database.closeSession();
+
+            return Response
+                    .status(Response.Status.UNAUTHORIZED)
+                    .entity("Error 401: not authorized.")
+                    .build();
+        }
+
+
+
+
 
         tx.commit();
         database.closeSession();
@@ -239,6 +257,32 @@ public class AuthRouter {
                 userCredentials.getString("numeroTelefonico"),
                 userCredentials.getString("agenziaImmobiliare")
         );
+
+        tx.commit();
+        database.closeSession();
+        return Response.ok().build();
+    }
+
+
+
+    @PUT
+    @Path("amministratore/{username}")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response modificaCredenzialiAmministratore(JsonObject userCredentials, @PathParam("username") String amministratoreUsername) {
+        database.openSession();
+        Session session = database.getSession();
+
+        Transaction tx = session.beginTransaction();
+
+
+        AuthController authController = new AuthController();
+        authController.modificaAmministratore(
+                amministratoreUsername,
+                userCredentials.getString("new_username"),
+                userCredentials.getString("password")
+        );
+
 
         tx.commit();
         database.closeSession();
