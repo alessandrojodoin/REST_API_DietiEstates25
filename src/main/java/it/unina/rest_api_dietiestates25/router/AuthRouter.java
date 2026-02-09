@@ -42,7 +42,7 @@ public class AuthRouter {
                     loginCredentials.getString("username"),
                     loginCredentials.getString("password")
             );
-        }catch(Exception e){
+        }catch(IllegalArgumentException e){
             tx.commit();
             database.closeSession();
 

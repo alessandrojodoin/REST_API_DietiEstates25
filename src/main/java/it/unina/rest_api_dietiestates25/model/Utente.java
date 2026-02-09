@@ -1,9 +1,6 @@
 package it.unina.rest_api_dietiestates25.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.checkerframework.common.aliasing.qual.Unique;
 import org.hibernate.annotations.NaturalId;
@@ -23,11 +20,11 @@ public class Utente {
     private int id;
 
     @NotNull
-    @Unique
+    @Column(unique = true)
     private String username;
 
     @NotNull
-    @Unique
+    @Column(unique = true)
     private String email;
 
     @NotNull
