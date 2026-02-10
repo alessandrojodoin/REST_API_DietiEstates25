@@ -52,10 +52,6 @@ public class AuthRouter {
                     .build();
         }
 
-
-
-
-
         tx.commit();
         database.closeSession();
 

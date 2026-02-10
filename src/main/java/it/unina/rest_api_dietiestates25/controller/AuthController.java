@@ -126,14 +126,17 @@ public class AuthController {
             throw new IllegalArgumentException("Authentication failed");
         }
 
-        return createJWT(username, utente.getUtenteTypeAsSting(), TimeUnit.DAYS.toMillis(1));
+        boolean googleLinked = false;
+
+        if (utente instanceof AgenteImmobiliare) {
+            AgenteImmobiliare agente = (AgenteImmobiliare) utente;
+            googleLinked = agente.isGoogleLinked();
+        }
+
+        return createJWT(username, utente.getUtenteTypeAsSting(), googleLinked, TimeUnit.DAYS.toMillis(1));
     }
 
-
-
-
-
-    private String createJWT(String username, String userType, long ttlMillis) {
+    private String createJWT(String username, String userType,  boolean googleLinked, long ttlMillis) {
 
         final String ISSUER = "rest_api_dietiestates25";
         final Algorithm algorithm = Algorithm.HMAC256(System.getenv("JWT_SECRET"));
@@ -143,6 +146,7 @@ public class AuthController {
                 .withIssuer(ISSUER)
                 .withClaim("username", username)
                 .withClaim("userType", userType)
+                .withClaim("googleLinked", googleLinked)
                 .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + ttlMillis))
                 .withJWTId(UUID.randomUUID().toString())
