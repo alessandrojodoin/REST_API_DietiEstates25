@@ -308,7 +308,13 @@ public class ImmobileRouter {
 @GET
 @RequireAgenteImmobiliareAuthentication
 @Produces(MediaType.APPLICATION_JSON)
-public Response getImmobili(@QueryParam("agenteImmobiliare") String agenteUsername, @QueryParam("cliente") String clienteUsername){
+public Response getImmobili(@QueryParam("agenteImmobiliare") String agenteUsername, @QueryParam("cliente") String clienteUsername, @QueryParam("filters") boolean filters,
+                            @QueryParam("minPrice") int minPrice, @QueryParam("maxPrice") int maxPrice, @QueryParam("propertyType") String propertyType, @QueryParam("bathrooms") int bathrooms,
+                            @QueryParam("bedrooms") int bedrooms, @QueryParam("areaSize") int areaSize, @QueryParam("extraFeatures") boolean extraFeatures,
+                            @QueryParam("energyClass") String energyClass, @QueryParam("citta") String citta, @QueryParam("Terrazzo") boolean Terrazzo,
+                            @QueryParam("Balcone") boolean Balcone, @QueryParam("Ascensore") boolean Ascensore, @QueryParam("Garage") boolean Garage,
+                            @QueryParam("Giardino") boolean Giardino, @QueryParam("PostoAuto") boolean PostoAuto, @QueryParam("AccessoDisabili") boolean AccessoDisabili
+                            ){
 
     database.openSession();
     Session session = database.getSession();
