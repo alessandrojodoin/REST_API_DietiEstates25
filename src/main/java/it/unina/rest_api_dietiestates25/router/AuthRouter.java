@@ -275,18 +275,32 @@ public class AuthRouter {
 
         Transaction tx = session.beginTransaction();
 
-
+    try{
         AuthController authController = new AuthController();
         authController.modificaAmministratore(
-                amministratoreUsername,
-                userCredentials.getString("new_username"),
-                userCredentials.getString("password")
+            amministratoreUsername,
+            userCredentials.getString("new_username"),
+            userCredentials.getString("password")
         );
 
 
         tx.commit();
-        database.closeSession();
         return Response.ok().build();
+    }catch(org.hibernate.exception.ConstraintViolationException e){
+        tx.rollback();
+        return Response.status(Response.Status.CONFLICT)
+            .entity( "Username già in uso")
+            .build();
+    }catch (Exception e){
+        tx.rollback();
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+            .entity( "Errore del server")
+            .build();
+    }finally{
+        database.closeSession();
+    }
+
+
     }
 
 
