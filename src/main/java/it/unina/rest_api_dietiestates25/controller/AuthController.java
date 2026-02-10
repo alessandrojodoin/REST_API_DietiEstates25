@@ -155,6 +155,11 @@ public class AuthController {
         return token;
     }
 
+    public String createJwtWithGoogleLinked(String username, String userType, long ttlMillis) {
+        return createJWT(username, userType, true, ttlMillis);
+    }
+
+
 
     public void modificaAmministratore(String old_username, String new_username, String password){
 

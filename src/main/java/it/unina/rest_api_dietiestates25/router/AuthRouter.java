@@ -2,6 +2,7 @@ package it.unina.rest_api_dietiestates25.router;
 
 import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.controller.AuthController;
+import it.unina.rest_api_dietiestates25.model.AgenteImmobiliare;
 import it.unina.rest_api_dietiestates25.model.Utente;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
@@ -17,6 +18,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 @Path("/auth")
 public class AuthRouter {
@@ -90,50 +92,59 @@ public class AuthRouter {
     @Path("google-auth")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response authenticateGoogle(JsonObject googleIdToken) {
+    public Response authenticateGoogle(JsonObject googleIdToken, @HeaderParam("Authorization") String authHeader) {
 
+
+        database.openSession();
+        Session session = database.getSession();
+
+        Transaction tx = session.beginTransaction();
+
+        String token = authHeader.replace("Bearer ", "");
+        String username = AuthController.getUsernameClaim(token);
+
+        if(username == null) {
+            database.closeSession();
+            return Response.status(Response.Status.UNAUTHORIZED).entity("Invalid JWT").build();
+        }
+
+        String clientId = System.getenv("GOOGLE_SIGNIN_CLIENT_ID");
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
-                // Specify the WEB_CLIENT_ID of the app that accesses the backend:
-                .setAudience(Collections.singletonList(System.getenv("GOOGLE_SIGNIN_CLIENT_ID")))
-                // Or, if multiple clients access the backend:
-                //.setAudience(Arrays.asList(WEB_CLIENT_ID_1, WEB_CLIENT_ID_2, WEB_CLIENT_ID_3))
+                .setAudience(Collections.singletonList(clientId))
                 .build();
 
-// (Receive idTokenString by HTTPS POST)
-
         GoogleIdToken idToken = null;
-        try{
+        try {
             idToken = verifier.verify(googleIdToken.getString("idTokenString"));
-        }
-        catch(Exception e){
-            System.out.println("Error: " + e.getMessage());
+        } catch(Exception e) {
+            database.closeSession();
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid ID token").build();
         }
 
-        if (idToken != null) {
+        if(idToken != null) {
             Payload payload = idToken.getPayload();
-
-            // Print user identifier
-            String userId = payload.getSubject();
-            System.out.println("User ID: " + userId);
-
-            // Get profile information from payload
             String email = payload.getEmail();
-            System.out.println("Email: " + email);
-            boolean emailVerified = Boolean.valueOf(payload.getEmailVerified());
-            String name = (String) payload.get("name");
-            String pictureUrl = (String) payload.get("picture");
-            String locale = (String) payload.get("locale");
-            String familyName = (String) payload.get("family_name");
-            String givenName = (String) payload.get("given_name");
 
-            // Use or store profile information
-            // ...
+            AgenteImmobiliare agente = new AuthController().getAgenteImmobiliare(username);
 
+            if(agente != null) {
+                agente.setGoogleLinked(true);
+                agente.setGoogleEmail(email);
+                session.merge(agente);
+            }
+
+            // rigenera JWT con googleLinked = true
+            String newJwt = new AuthController().createJwtWithGoogleLinked(username, agente.getUtenteTypeAsSting(), TimeUnit.DAYS.toMillis(1));
+
+            tx.commit();
+            database.closeSession();
+            return Response.ok(newJwt).build();
         } else {
-            System.out.println("Invalid ID token.");
+            database.closeSession();
+            return Response.status(Response.Status.UNAUTHORIZED).entity("Invalid ID token").build();
         }
-        return Response.ok().build();
     }
+
 
     @POST
     @Path("agente-immobiliare")
@@ -298,6 +309,8 @@ public class AuthRouter {
 
 
     }
+
+
 
 
 }
