@@ -93,6 +93,7 @@ public class ImmobileRouter {
                 .add("agenteImmobiliareId", listino.getCreatore().getId())
                 .add("creatore", listino.getCreatore().getUsername())
                 .add("isVenduto", listino.isVenduto())
+                .add("esisteOffertaAccettata", listinoController.esisteOffertaAccettata(listino))
                 .add("istanteCreazione", listino.getIstanteCreazione().toEpochMilli())
                 .add("immobile", immobileJsonBuilder.build())
 
@@ -390,6 +391,7 @@ public Response getImmobili(@QueryParam("agenteImmobiliare") String agenteUserna
                 .add("speseCondominiali", listino.getSpeseCondominiali())
                 .add("agenteImmobiliareId", listino.getCreatore().getId())
                 .add("isVenduto", listino.isVenduto())
+                .add("esisteOffertaAccettata", listinoController.esisteOffertaAccettata(listino))
                 .add("istanteCreazione", listino.getIstanteCreazione().toEpochMilli())
                 .add("immobile", immobileJsonBuilder.build())
 

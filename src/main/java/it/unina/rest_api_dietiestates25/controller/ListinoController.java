@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 
 import java.util.List;
+import java.util.Set;
 
 public class ListinoController {
 
@@ -217,4 +218,22 @@ public class ListinoController {
         session.merge(listino);
     }
 
+    public boolean esisteOffertaAccettata(ListinoImmobile listino){
+
+        for( Offerta offerta: listino.getOfferte()){
+            if(offerta.getRisultatoOfferta() == RisultatoOfferta.Accettata){
+                return true;
+            }
+        }
+
+        OfferteEsterneController offerteEsterneController = new OfferteEsterneController();
+
+        for( Offerta offerta: offerteEsterneController.getOffertePerImmobile(listino.getId())){
+            if(offerta.getRisultatoOfferta() == RisultatoOfferta.Accettata){
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
