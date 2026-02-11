@@ -91,6 +91,7 @@ public class ImmobileRouter {
                 .add("prezzo", listino.getPrezzo())
                 .add("speseCondominiali", listino.getSpeseCondominiali())
                 .add("agenteImmobiliareId", listino.getCreatore().getId())
+                .add("creatore", listino.getCreatore().getUsername())
                 .add("isVenduto", listino.isVenduto())
                 .add("istanteCreazione", listino.getIstanteCreazione().toEpochMilli())
                 .add("immobile", immobileJsonBuilder.build())
