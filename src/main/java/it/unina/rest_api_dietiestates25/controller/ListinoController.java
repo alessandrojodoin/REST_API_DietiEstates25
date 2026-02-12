@@ -18,7 +18,12 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Subquery;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -66,112 +71,131 @@ public class ListinoController {
     }
 
 
-    private void addIntegerTagFilter(
-            CriteriaBuilder cb,
-            CriteriaQuery<?> cq,
-            List<Predicate> predicates,
-            Join<ListinoImmobile, Immobile> immobile,
-            String tagName,
-            Integer minValue
-    ) {
-        if (minValue == null) return;
+    private void addIntegerTagFilter(StringBuilder hql,
+                                     Map<String, Object> params,
+                                     String tagName,
+                                     Integer value) {
 
-        Subquery<Integer> sub = cq.subquery(Integer.class);
-        Root<IntegerTag> tag = sub.from(IntegerTag.class);
+        if (value != null) {
 
-        sub.select(tag.get("valore"))
-                .where(
-                        cb.and(
-                                cb.equal(tag.get("immobile"), immobile),
-                                cb.equal(tag.get("nome"), tagName),
-                                cb.ge(tag.get("valore"), minValue)
-                        )
-                );
+            String paramNameName = "tagName_" + tagName;
+            String paramNameValue = "tagValue_" + tagName;
 
-        predicates.add(cb.exists(sub));
-    }
+            hql.append(
+                    " AND EXISTS (" +
+                            "SELECT t.id FROM IntegerTag t " +
+                            "WHERE t.immobile = i " +
+                            "AND t.nome = :" + paramNameName +
+                            " AND t.valore >= :" + paramNameValue +
+                            ") "
+            );
 
-
-    private void addBooleanTagFilter(
-            CriteriaBuilder cb,
-            CriteriaQuery<?> cq,
-            List<Predicate> predicates,
-            Join<ListinoImmobile, Immobile> immobile,
-            String tagName,
-            Boolean value
-    ) {
-        if (value == null) return;
-
-        Subquery<Long> sub = cq.subquery(Long.class);
-        Root<Tag> tag = sub.from(Tag.class);
-
-        sub.select(cb.literal(1L))
-                .where(
-                        cb.and(
-                                cb.equal(tag.get("immobile"), immobile),
-                                cb.equal(tag.get("nome"), tagName)
-                        )
-                );
-
-        if (value) {
-            predicates.add(cb.exists(sub));
-        } else {
-            predicates.add(cb.not(cb.exists(sub)));
+            params.put(paramNameName, tagName);
+            params.put(paramNameValue, value);
         }
     }
 
 
-    @PersistenceContext
-    private EntityManager em;
-    public List<ListinoImmobile> getImmobileListFiltri(Integer minPrice, Integer maxPrice, String propertyType, Integer bathrooms, Integer bedrooms, Integer areaSize, String energyClass, String citta,
-                                                   Boolean Terrazzo, Boolean Balcone, Boolean Ascensore, Boolean Garage, Boolean Giardino, Boolean PostoAuto, Boolean AccessoDisabili
-                                                  ) {
+    private void addBooleanTagFilter(StringBuilder hql,
+                                     Map<String, Object> params,
+                                     String tagName,
+                                     Boolean value) {
+
+        if (value != null && value) {
+
+            String paramName = "tag_" + tagName;
+
+            hql.append(
+                    " AND EXISTS (" +
+                            "SELECT t.id FROM Tag t " +
+                            "WHERE t.immobile = i " +
+                            "AND t.nome = :" + paramName +
+                            ") "
+            );
+
+            params.put(paramName, tagName);
+        }
+    }
+
+
+    public List<ListinoImmobile> getImmobileListFiltri(
+            Integer minPrice,
+            Integer maxPrice,
+            String propertyType,
+            Integer bathrooms,
+            Integer bedrooms,
+            Integer areaSize,
+            String energyClass,
+            String citta,
+            Boolean Terrazzo,
+            Boolean Balcone,
+            Boolean Ascensore,
+            Boolean Garage,
+            Boolean Giardino,
+            Boolean PostoAuto,
+            Boolean AccessoDisabili
+    ) {
 
         Session session = database.getSession();
 
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<ListinoImmobile> cq = cb.createQuery(ListinoImmobile.class);
-        Root<ListinoImmobile> listino = cq.from(ListinoImmobile.class);
+            StringBuilder hql = new StringBuilder(
+                    "SELECT DISTINCT l FROM ListinoImmobile l " +
+                            "JOIN l.immobile i " +
+                            "WHERE l.isVenduto = false "
+            );
 
-        Join<ListinoImmobile, Immobile> immobile = listino.join("immobile");
+            Map<String, Object> params = new HashMap<>();
 
-        List<Predicate> predicates = new ArrayList<>();
+            if (minPrice != null) {
+                hql.append(" AND l.prezzo >= :minPrice ");
+                params.put("minPrice", minPrice);
+            }
 
-        if (minPrice != null)
-            predicates.add(cb.ge(listino.get("prezzo"), minPrice));
+            if (maxPrice != null) {
+                hql.append(" AND l.prezzo <= :maxPrice ");
+                params.put("maxPrice", maxPrice);
+            }
 
-        if (maxPrice != null)
-            predicates.add(cb.le(listino.get("prezzo"), maxPrice));
+            if (citta != null) {
+                hql.append(" AND i.citta = :citta ");
+                params.put("citta", citta);
+            }
 
-        if (propertyType != null)
-            predicates.add(cb.equal(listino.get("tipologiaContratto"), propertyType));
+            if (propertyType != null) {
+                hql.append(" AND i.tipoImmobile = :propertyType ");
+                params.put("propertyType", propertyType);
+            }
 
-        predicates.add(cb.isFalse(listino.get("isVenduto")));
+            if (energyClass != null) {
+                hql.append(" AND i.energyClass = :energyClass ");
+                params.put("energyClass", energyClass);
+            }
 
-        if (citta != null)
-            predicates.add(cb.equal(immobile.get("citta"), citta));
+            // -------- BOOLEAN TAG --------
 
-        if (propertyType != null)
-            predicates.add(cb.equal(immobile.get("tipoImmobile"), propertyType));
+            addBooleanTagFilter(hql, params, "Terrazzo", Terrazzo);
+            addBooleanTagFilter(hql, params, "Balcone", Balcone);
+            addBooleanTagFilter(hql, params, "Ascensore", Ascensore);
+            addBooleanTagFilter(hql, params, "Garage", Garage);
+            addBooleanTagFilter(hql, params, "Giardino", Giardino);
+            addBooleanTagFilter(hql, params, "PostoAuto", PostoAuto);
+            addBooleanTagFilter(hql, params, "AccessoDisabili", AccessoDisabili);
 
-        addBooleanTagFilter(cb, cq, predicates, immobile, "Terrazzo", Terrazzo);
-        addBooleanTagFilter(cb, cq, predicates, immobile, "Balcone", Balcone);
-        addBooleanTagFilter(cb, cq, predicates, immobile, "Ascensore", Ascensore);
-        addBooleanTagFilter(cb, cq, predicates, immobile, "Garage", Garage);
-        addBooleanTagFilter(cb, cq, predicates, immobile, "Giardino", Giardino);
-        addBooleanTagFilter(cb, cq, predicates, immobile, "PostoAuto", PostoAuto);
-        addBooleanTagFilter(cb, cq, predicates, immobile, "AccessoDisabili", AccessoDisabili);
+            // -------- INTEGER TAG --------
 
-        addIntegerTagFilter(cb, cq, predicates, immobile, "Bagni", bathrooms);
-        addIntegerTagFilter(cb, cq, predicates, immobile, "Camere", bedrooms);
-        addIntegerTagFilter(cb, cq, predicates, immobile, "Superficie", areaSize);
+            addIntegerTagFilter(hql, params, "Bagni", bathrooms);
+            addIntegerTagFilter(hql, params, "Camere", bedrooms);
+            addIntegerTagFilter(hql, params, "Superficie", areaSize);
 
-        cq.distinct(true);
-        cq.where(cb.and(predicates.toArray(new Predicate[0])));
+            Query<ListinoImmobile> query =
+                    session.createQuery(hql.toString(), ListinoImmobile.class);
 
-        return em.createQuery(cq).getResultList();
+            params.forEach(query::setParameter);
+
+            return query.getResultList();
 
     }
+
 
     public void aggiungiVisualizzazione(int listinoId, String username){
         Session session = database.getSession();
