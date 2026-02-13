@@ -310,12 +310,12 @@ public class ImmobileRouter {
 @GET
 @RequireAgenteImmobiliareAuthentication
 @Produces(MediaType.APPLICATION_JSON)
-public Response getImmobili(@QueryParam("agenteImmobiliare") String agenteUsername, @QueryParam("cliente") String clienteUsername, @QueryParam("filters") boolean filters,
-                            @QueryParam("minPrice") int minPrice, @QueryParam("maxPrice") int maxPrice, @QueryParam("propertyType") String propertyType, @QueryParam("bathrooms") int bathrooms,
-                            @QueryParam("bedrooms") int bedrooms, @QueryParam("areaSize") int areaSize, @QueryParam("extraFeatures") boolean extraFeatures,
-                            @QueryParam("energyClass") String energyClass, @QueryParam("citta") String citta, @QueryParam("Terrazzo") boolean Terrazzo,
-                            @QueryParam("Balcone") boolean Balcone, @QueryParam("Ascensore") boolean Ascensore, @QueryParam("Garage") boolean Garage,
-                            @QueryParam("Giardino") boolean Giardino, @QueryParam("PostoAuto") boolean PostoAuto, @QueryParam("AccessoDisabili") boolean AccessoDisabili
+public Response getImmobili(@QueryParam("agenteImmobiliare") String agenteUsername, @QueryParam("cliente") String clienteUsername, @QueryParam("filters") Boolean filters,
+                            @QueryParam("minPrice") Integer minPrice, @QueryParam("maxPrice") Integer maxPrice, @QueryParam("propertyType") String propertyType, @QueryParam("bathrooms") Integer bathrooms,
+                            @QueryParam("bedrooms") Integer bedrooms, @QueryParam("areaSize") Integer areaSize, @QueryParam("extraFeatures") Boolean extraFeatures,
+                            @QueryParam("energyClass") String energyClass, @QueryParam("citta") String citta, @QueryParam("Terrazzo") Boolean Terrazzo,
+                            @QueryParam("Balcone") Boolean Balcone, @QueryParam("Ascensore") Boolean Ascensore, @QueryParam("Garage") Boolean Garage,
+                            @QueryParam("Giardino") Boolean Giardino, @QueryParam("PostoAuto") Boolean PostoAuto, @QueryParam("AccessoDisabili") Boolean AccessoDisabili
                             ){
 
     database.openSession();
@@ -337,7 +337,17 @@ public Response getImmobili(@QueryParam("agenteImmobiliare") String agenteUserna
             Cliente cliente= authController.getCliente(clienteUsername);
 
             immobili= listinoController.getImmobileListPerCliente(cliente.getId());
+        }else if(filters != null && filters == true){
+            immobili= listinoController.getImmobileListFiltri(minPrice, maxPrice, propertyType, bathrooms, bedrooms,
+                                                              areaSize, energyClass, citta, Terrazzo, Balcone,
+                                                              Ascensore, Garage, Giardino, PostoAuto, AccessoDisabili);
+
+
+
+
         }
+
+
         else{
             immobili= listinoController.getImmobileList();
         }
