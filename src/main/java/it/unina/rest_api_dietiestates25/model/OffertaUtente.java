@@ -2,9 +2,6 @@ package it.unina.rest_api_dietiestates25.model;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-
-import java.time.Instant;
 
 @Entity
 public class OffertaUtente extends Offerta {
@@ -44,9 +41,7 @@ public class OffertaUtente extends Offerta {
 
 
 
-    public void setRiepilogo(RiepilogoAttivita riepilogo) {
-        this.riepilogo = riepilogo;
-    }
+    //public void setRiepilogo(RiepilogoAttivita riepilogo) {this.riepilogo = riepilogo;}
 
 
 }

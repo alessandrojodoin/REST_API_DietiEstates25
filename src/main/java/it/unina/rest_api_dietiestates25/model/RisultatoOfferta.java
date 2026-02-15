@@ -11,7 +11,5 @@ public enum RisultatoOfferta {
         this.tipoOfferta = tipoOfferta;
     }
 
-    public int getTipoOfferta() {
-        return tipoOfferta;
-    }
+    public int getTipoOfferta() {return tipoOfferta;}
 }

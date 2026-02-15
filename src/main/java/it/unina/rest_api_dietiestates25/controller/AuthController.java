@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class AuthController {
 
 
-    private Database database = Database.getInstance();
+    private final Database database = Database.getInstance();
 
     public static boolean validateToken(String token){
 
@@ -29,7 +29,7 @@ public class AuthController {
                 .build();
         try {
             //Accetta pure se l'utente non esist e piu'
-            DecodedJWT decodedJWT = verifier.verify(token);
+            verifier.verify(token);
             return true;
         } catch (JWTVerificationException e) {
             System.out.println(e.getMessage());
@@ -149,7 +149,7 @@ public class AuthController {
         final Algorithm algorithm = Algorithm.HMAC256(System.getenv("JWT_SECRET"));
 
 
-        String token = JWT.create()
+        return JWT.create()
                 .withIssuer(ISSUER)
                 .withClaim("username", username)
                 .withClaim("userType", userType)
@@ -159,7 +159,7 @@ public class AuthController {
                 .withJWTId(UUID.randomUUID().toString())
                 .sign(algorithm);
 
-        return token;
+
     }
 
     public String createJwtWithGoogleLinked(String username, String userType, long ttlMillis) {

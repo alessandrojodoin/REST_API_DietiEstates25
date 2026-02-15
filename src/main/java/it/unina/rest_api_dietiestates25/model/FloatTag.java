@@ -13,7 +13,7 @@ public class FloatTag extends Tag {
     public String getValueType() { return "Float";}
 
     public Float getValore() {return valore; }
-    public void setValore(float valore) {this.valore = valore; }
+    //public void setValore(float valore) {this.valore = valore; }
 
     public FloatTag(){}
 

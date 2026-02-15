@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
 public class VisualizzazioneImmobile {

@@ -80,16 +80,14 @@ public class Offerta {
     }
 
     public ListinoImmobile getListino(){return listino;}
-    public void setListino(ListinoImmobile listino){this.listino= listino;}
+    //public void setListino(ListinoImmobile listino){this.listino= listino;}
 
 
     public RisultatoOfferta getRisultatoOfferta(){return risultatoOfferta;}
     public void setRisultatoOfferta(RisultatoOfferta risultatoOfferta){this.risultatoOfferta= risultatoOfferta;}
 
 
-    public void setEmailOfferente(String emailOfferente) {
-        this.emailOfferente = emailOfferente;
-    }
+    //public void setEmailOfferente(String emailOfferente) {this.emailOfferente = emailOfferente;}
 
     public void setNome(String nome) {
         this.nome = nome;
@@ -99,17 +97,11 @@ public class Offerta {
         this.cognome = cognome;
     }
 
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
+    //public void setTelefono(String telefono) {this.telefono = telefono;}
 
-    public void setCifraInCentesimi(int cifraInCentesimi) {
-        this.cifraInCentesimi = cifraInCentesimi;
-    }
+    //public void setCifraInCentesimi(int cifraInCentesimi) {this.cifraInCentesimi = cifraInCentesimi;}
 
-    public void setIstanteCreazione(Instant istanteCreazione) {
-        this.istanteCreazione = istanteCreazione;
-    }
+    //public void setIstanteCreazione(Instant istanteCreazione) {this.istanteCreazione = istanteCreazione;}
 
     public void setId(int id) {
         this.id = id;

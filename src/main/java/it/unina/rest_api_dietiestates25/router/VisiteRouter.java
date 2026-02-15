@@ -1,6 +1,5 @@
 package it.unina.rest_api_dietiestates25.router;
 
-import it.unina.rest_api_dietiestates25.controller.ListinoController;
 import it.unina.rest_api_dietiestates25.controller.VisiteController;
 import it.unina.rest_api_dietiestates25.model.*;
 import it.unina.rest_api_dietiestates25.router.filter.RequireAgenteImmobiliareAuthentication;
@@ -55,10 +54,7 @@ public class VisiteRouter {
             String dataOraStr = jsonPrenotazione.getString("dataOra"); // es. "2026-02-14T15:30"
             LocalDateTime dataOra = LocalDateTime.parse(dataOraStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
-            // Recupera l'agente associato all'immobile
-            ListinoController listinoController = new ListinoController();
-            ListinoImmobile listino = listinoController.getListino(immobileId);
-            int agenteId = listino.getCreatore().getId();
+
 
             // Crea la visita
             Visita visita = visitaController.prenota(cliente, immobileId, dataOra);

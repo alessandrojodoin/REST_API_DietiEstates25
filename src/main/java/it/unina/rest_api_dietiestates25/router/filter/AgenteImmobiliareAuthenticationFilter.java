@@ -1,6 +1,8 @@
 package it.unina.rest_api_dietiestates25.router.filter;
 
 
+import it.unina.rest_api_dietiestates25.model.AgenteImmobiliare;
+import it.unina.rest_api_dietiestates25.model.Utente;
 import jakarta.annotation.Priority;
 import jakarta.ws.rs.NotAuthorizedException;
 import jakarta.ws.rs.Priorities;
@@ -36,8 +38,10 @@ public class AgenteImmobiliareAuthenticationFilter implements ContainerRequestFi
         }
 
         String token = authorizationHeader.substring("Bearer".length()).trim();
+        AuthController authController = new AuthController();
+        Utente utente = authController.getUtente(AuthController.getUsernameClaim(token));
 
-        if( AuthController.validateToken(token) ){
+        if( AuthController.validateToken(token) && utente instanceof AgenteImmobiliare){
             System.out.println("Token is valid: " + token);
             containerRequestContext.setProperty(
                     "username",

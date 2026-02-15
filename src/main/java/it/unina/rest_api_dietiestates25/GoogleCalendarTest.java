@@ -60,9 +60,7 @@ public class GoogleCalendarTest{
         // Load client secrets.
         InputStream in = Files.newInputStream(Paths.get(CREDENTIALS_FILE_PATH));
         System.out.println("Working Directory = " + System.getProperty("user.dir"));
-        if (in == null) {
-            throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
-        }
+        //if (in == null) {throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);}
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
@@ -73,9 +71,9 @@ public class GoogleCalendarTest{
                 .setAccessType("offline")
                 .build();
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
-        Credential credential = new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
         //returns an authorized Credential object.
-        return credential;
+        return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
+
     }
 
     public static void main(String... args) throws IOException, GeneralSecurityException {

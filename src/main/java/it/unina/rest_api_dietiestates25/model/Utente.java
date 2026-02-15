@@ -2,13 +2,10 @@ package it.unina.rest_api_dietiestates25.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import org.checkerframework.common.aliasing.qual.Unique;
-import org.hibernate.annotations.NaturalId;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.Base64;
 
 
@@ -79,9 +76,6 @@ public class Utente {
         this.cognome = cognome;
     }
 
-    public String getHashedPassword() {
-        return hashedPassword;
-    }
 
     public void setPassword(String password) {
 

@@ -203,9 +203,6 @@ public class OffertaRouter {
         int listinoId = jsonOfferta.getInt("immobileId", -1);
         ListinoImmobile listinoImmobile= listinoController.getListino(listinoId);
 
-        String username = (String) ctx.getProperty("username");
-
-
 
         Offerta offerta= offerteController.createOfferteEsterne(
                 listinoImmobile,

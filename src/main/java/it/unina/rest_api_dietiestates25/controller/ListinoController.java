@@ -2,56 +2,32 @@ package it.unina.rest_api_dietiestates25.controller;
 
 import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.model.*;
-import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.Response;
-import org.hibernate.SessionFactory;
 import org.hibernate.Session;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Subquery;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-import java.util.List;
-import java.util.ArrayList;
-
-
-import java.util.List;
-import java.util.Set;
 
 public class ListinoController {
 
-    private Database database = Database.getInstance();
+    private final Database database = Database.getInstance();
 
 
-    public ListinoImmobile createListino(Immobile immobile, String nome, String descrizione, String tipologiaContratto, int speseCondominiali, int prezzo, AgenteImmobiliare creatore){
+    public void createListino(Immobile immobile, String nome, String descrizione, String tipologiaContratto, int speseCondominiali, int prezzo, AgenteImmobiliare creatore){
         Session session = database.getSession();
         ListinoImmobile listino= new ListinoImmobile(immobile, nome, descrizione, tipologiaContratto,speseCondominiali, prezzo, creatore);
         session.persist(listino);
-
-        return listino;
 
     }
 
     public ListinoImmobile getListino(int id){
         Session session = database.getSession();
-        ListinoImmobile listino= session.createSelectionQuery("from ListinoImmobile where id = :id", ListinoImmobile.class)
+        return session.createSelectionQuery("from ListinoImmobile where id = :id", ListinoImmobile.class)
                 .setParameter("id",id)
                 .getSingleResultOrNull();
-        return listino;
+
     }
 
 
@@ -81,14 +57,7 @@ public class ListinoController {
             String paramNameName = "tagName_" + tagName;
             String paramNameValue = "tagValue_" + tagName;
 
-            hql.append(
-                    " AND EXISTS (" +
-                            "SELECT t.id FROM IntegerTag t " +
-                            "WHERE t.immobile = i " +
-                            "AND t.nome = :" + paramNameName +
-                            " AND t.valore >= :" + paramNameValue +
-                            ") "
-            );
+            hql.append(" AND EXISTS (" + "SELECT t.id FROM IntegerTag t " + "WHERE t.immobile = i " + "AND t.nome = :").append(paramNameName).append(" AND t.valore >= :").append(paramNameValue).append(") ");
 
             params.put(paramNameName, tagName);
             params.put(paramNameValue, value);
@@ -105,13 +74,7 @@ public class ListinoController {
 
             String paramName = "tag_" + tagName;
 
-            hql.append(
-                    " AND EXISTS (" +
-                            "SELECT t.id FROM Tag t " +
-                            "WHERE t.immobile = i " +
-                            "AND t.nome = :" + paramName +
-                            ") "
-            );
+            hql.append(" AND EXISTS (" + "SELECT t.id FROM Tag t " + "WHERE t.immobile = i " + "AND t.nome = :").append(paramName).append(") ");
 
             params.put(paramName, tagName);
         }

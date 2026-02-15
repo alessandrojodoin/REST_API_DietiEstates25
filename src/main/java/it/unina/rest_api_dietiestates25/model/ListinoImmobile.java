@@ -63,19 +63,19 @@ public class ListinoImmobile {
     public void setNumeroVisualizzazioni(int numeroVisualizzazioni) {this.numeroVisualizzazioni = numeroVisualizzazioni; }
 
     public String getTipologiaContratto() {return tipologiaContratto; }
-    public void setTipologiaContratto(String tipologiaContratto) {this.tipologiaContratto = tipologiaContratto; }
+    //public void setTipologiaContratto(String tipologiaContratto) {this.tipologiaContratto = tipologiaContratto; }
 
     public int getSpeseCondominiali() {return speseCondominiali; }
-    public void setSpeseCondominiali(int speseCondominiali) {this.speseCondominiali = speseCondominiali; }
+    //public void setSpeseCondominiali(int speseCondominiali) {this.speseCondominiali = speseCondominiali; }
 
     public Set<OffertaUtente> getOfferte() {return offerte; }
-    public void setOfferte(Set<OffertaUtente> offerte) {this.offerte = offerte; }
+    //public void setOfferte(Set<OffertaUtente> offerte) {this.offerte = offerte; }
 
     public int getPrezzo() {return prezzo; }
-    public void setPrezzo(int prezzo) {this.prezzo = prezzo; }
+    //public void setPrezzo(int prezzo) {this.prezzo = prezzo; }
 
     public AgenteImmobiliare getCreatore() {return creatore; }
-    public void setCreatore(AgenteImmobiliare creatore) {this.creatore = creatore; }
+    //public void setCreatore(AgenteImmobiliare creatore) {this.creatore = creatore; }
 
     public ListinoImmobile(){}
 

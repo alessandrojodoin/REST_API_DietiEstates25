@@ -6,7 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.tool.schema.Action;
+
 
 @ApplicationScoped
 public class Database {
@@ -90,6 +90,4 @@ public class Database {
     }
 
 
-
-    public SessionFactory getSessionFactory() {return sessionFactory;}
 }

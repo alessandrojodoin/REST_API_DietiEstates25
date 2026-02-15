@@ -133,7 +133,7 @@ public class AuthRouter {
                 .setAudience(Collections.singletonList(clientId))
                 .build();
 
-        GoogleIdToken idToken = null;
+        GoogleIdToken idToken;
         try {
             idToken = verifier.verify(googleIdToken.getString("idTokenString"));
         } catch(Exception e) {
@@ -154,6 +154,7 @@ public class AuthRouter {
             }
 
             // rigenera JWT con googleLinked = true
+            assert agente != null;
             String newJwt = new AuthController().createJwtWithGoogleLinked(username, agente.getUtenteTypeAsSting(), TimeUnit.DAYS.toMillis(1));
 
             tx.commit();

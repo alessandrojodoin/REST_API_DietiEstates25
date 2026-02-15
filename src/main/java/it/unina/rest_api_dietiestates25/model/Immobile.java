@@ -23,7 +23,7 @@ public class Immobile {
     private String latitudine;
 
     @OneToMany(mappedBy = "immobile")
-    private Set<FotoImmobile> foto = new HashSet<FotoImmobile>() {
+    private final Set<FotoImmobile> foto = new HashSet<FotoImmobile>() {
     };
 
     @NotNull
@@ -36,33 +36,33 @@ public class Immobile {
     private String provincia;
 
     @OneToMany(mappedBy = "immobile")
-    private Set<Tag> tagDescrittivi = new HashSet<Tag>() {};
+    private final Set<Tag> tagDescrittivi = new HashSet<Tag>() {};
 
 
     public int getId() {return id; }
     public void setId(int id) {this.id = id; }
 
     public String getTipoImmobile() {return tipoImmobile; }
-    public void setTipoImmobile(String nome) {this.tipoImmobile = nome; }
+    //public void setTipoImmobile(String nome) {this.tipoImmobile = nome; }
 
     public String getLongitudine() {return longitudine; }
     public String getLatitudine() {return latitudine; }
 
     public Set<FotoImmobile> getFoto() {return foto; }
-    public void setFoto(Set<FotoImmobile> foto) {this.foto = foto; }
+    //public void setFoto(Set<FotoImmobile> foto) {this.foto = foto; }
 
 
     public String getVia() {return via; }
-    public void setVia(String indirizzo) {this.via = indirizzo; }
+    //public void setVia(String indirizzo) {this.via = indirizzo; }
 
     public String getCitta() {return citta; }
-    public void setCitta(String citta) {this.citta = citta; }
+    //public void setCitta(String citta) {this.citta = citta; }
 
     public String getProvincia() {return provincia; }
-    public void setProvincia(String provincia) {this.provincia = provincia; }
+    //public void setProvincia(String provincia) {this.provincia = provincia; }
 
     public Set<Tag> getTags() {return tagDescrittivi; }
-    public void setTags(Set<Tag> tagDescrittivi) {this.tagDescrittivi = tagDescrittivi; }
+    //public void setTags(Set<Tag> tagDescrittivi) {this.tagDescrittivi = tagDescrittivi; }
 
     public void addTag(Tag tag) {
         tagDescrittivi.add(tag);

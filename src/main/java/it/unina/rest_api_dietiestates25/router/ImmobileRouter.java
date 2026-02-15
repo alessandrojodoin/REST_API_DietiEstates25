@@ -157,8 +157,8 @@ public class ImmobileRouter {
                     throw new IllegalArgumentException("Tipo tag non valido");
             }
         }
-        GeolocationAPIFactory geoFactory= new GeolocationAPIFactory();
-        GeolocationAPI geoAPI = geoFactory.getGeolocationAPI();
+
+        GeolocationAPI geoAPI = GeolocationAPIFactory.getGeolocationAPI();
         try {
             geoAPI.addNearbyServiceTags(immobile);
         }catch(Exception exception){
@@ -337,7 +337,7 @@ public Response getImmobili(@QueryParam("agenteImmobiliare") String agenteUserna
             Cliente cliente= authController.getCliente(clienteUsername);
 
             immobili= listinoController.getImmobileListPerCliente(cliente.getId());
-        }else if(filters != null && filters == true){
+        }else if(filters != null && filters){
             immobili= listinoController.getImmobileListFiltri(minPrice, maxPrice, propertyType, bathrooms, bedrooms,
                                                               areaSize, energyClass, citta, Terrazzo, Balcone,
                                                               Ascensore, Garage, Giardino, PostoAuto, AccessoDisabili);

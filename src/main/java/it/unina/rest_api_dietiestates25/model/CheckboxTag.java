@@ -13,7 +13,7 @@ public class CheckboxTag extends Tag {
     public String getValueType() { return "Boolean";}
 
     public Boolean getValore() {return valore; }
-    public void setValore(boolean valore) {this.valore = valore; }
+    //public void setValore(boolean valore) {this.valore = valore; }
 
     public CheckboxTag(){}
     public CheckboxTag(String nome, boolean valore){

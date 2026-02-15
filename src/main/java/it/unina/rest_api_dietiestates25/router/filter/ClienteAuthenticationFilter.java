@@ -1,5 +1,7 @@
 package it.unina.rest_api_dietiestates25.router.filter;
 
+import it.unina.rest_api_dietiestates25.model.Cliente;
+import it.unina.rest_api_dietiestates25.model.Utente;
 import jakarta.annotation.Priority;
 import jakarta.ws.rs.NotAuthorizedException;
 import jakarta.ws.rs.Priorities;
@@ -36,8 +38,10 @@ public class ClienteAuthenticationFilter implements ContainerRequestFilter {
         }
 
         String token = authorizationHeader.substring("Bearer".length()).trim();
+        AuthController authController = new AuthController();
+        Utente utente = authController.getUtente(AuthController.getUsernameClaim(token));
 
-        if( AuthController.validateToken(token) ){
+        if( AuthController.validateToken(token) && utente instanceof Cliente){
             System.out.println("Token is valid: " + token);
             containerRequestContext.setProperty(
                     "username",

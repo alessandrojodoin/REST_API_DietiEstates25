@@ -9,7 +9,7 @@ import java.util.List;
 
 public class VisiteController {
 
-    private Database database = Database.getInstance();
+    private final Database database = Database.getInstance();
 
     /**
      * Prenota una visita per un immobile.

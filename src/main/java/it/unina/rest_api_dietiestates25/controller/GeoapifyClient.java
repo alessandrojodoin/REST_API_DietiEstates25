@@ -10,15 +10,16 @@ import okhttp3.Response;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Objects;
 
 public class GeoapifyClient implements GeolocationAPI {
 
 
     public void addNearbyServiceTags(Immobile immobile) throws IOException {
 
-        final int radiusMeters = 1000;
 
-        JsonObject responseJson = getNearbyServices(radiusMeters, immobile.getLatitudine(), immobile.getLongitudine());
+
+        JsonObject responseJson = getNearbyServices( immobile.getLatitudine(), immobile.getLongitudine());
 
 
         //Ricerca dei luoghi presenti nella risposta dell'API
@@ -67,7 +68,8 @@ public class GeoapifyClient implements GeolocationAPI {
 
     }
 
-    private JsonObject getNearbyServices(int radiusMeters, String latitude, String longitude) throws IOException {
+    private JsonObject getNearbyServices( String latitude, String longitude) throws IOException {
+        final int radiusMeters = 1000;
 
         String url = "https://api.geoapify.com/v2/places?categories=public_transport,education.school,leisure.park&filter=circle:%s,%s,%d&bias=proximity:%s,%s&limit=20&apiKey=%s";
         url = String.format(url, longitude, latitude, radiusMeters, longitude, latitude, System.getenv("GEOAPIFY_API_KEY"));
@@ -85,12 +87,12 @@ public class GeoapifyClient implements GeolocationAPI {
 
 
         //Conversione del corpo della risposta in JsonObject
-        JsonReader jsonReader = Json.createReader(new StringReader(response.body().string()));
+        JsonReader jsonReader = Json.createReader(new StringReader(Objects.requireNonNull(response.body()).string()));
         JsonObject responseJson = jsonReader.readObject();
         jsonReader.close();
-        response.close();
-
         return responseJson;
+
+
 
     }
 

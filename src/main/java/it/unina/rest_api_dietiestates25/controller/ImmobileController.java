@@ -2,20 +2,17 @@ package it.unina.rest_api_dietiestates25.controller;
 
 import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.model.*;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.hibernate.Session;
 
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
+
 
 
 public class ImmobileController {
 
-private Database database = Database.getInstance();
+private final Database database = Database.getInstance();
 
     //private final Session session = Database.getInstance().getSession();
 
