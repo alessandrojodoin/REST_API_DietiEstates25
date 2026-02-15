@@ -113,6 +113,7 @@ public class VisiteRouter {
             for (Visita v : visite) {
                 arrayBuilder.add(Json.createObjectBuilder()
                         .add("id", v.getId())
+                        .add("clienteId", v.getClienteId())
                         .add("immobileId", v.getImmobileId())
                         .add("agenteId", v.getAgenteId())
                         .add("dataOra", v.getDataOra().toString())

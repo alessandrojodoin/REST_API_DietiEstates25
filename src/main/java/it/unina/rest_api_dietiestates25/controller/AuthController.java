@@ -115,6 +115,13 @@ public class AuthController {
                 .getSingleResultOrNull();
     }
 
+    public Utente getUtente(int userId){
+        Session session = database.getSession();
+        return session.createSelectionQuery("from Utente where id = :id", Utente.class)
+                .setParameter("id", userId)
+                .getSingleResultOrNull();
+    }
+
     public String authenticateUser(String username, String password) throws IllegalArgumentException {
         Session session = database.getSession();
 
@@ -171,5 +178,7 @@ public class AuthController {
 
         session.merge(amministratore);
     }
+
+
 
 }

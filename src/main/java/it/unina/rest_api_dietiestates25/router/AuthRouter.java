@@ -63,6 +63,26 @@ public class AuthRouter {
                 .build();
     }
 
+    @GET
+    @Path("users/{id}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getUsernameById(@PathParam("id") int id){
+
+        database.openSession();
+        Session session = database.getSession();
+
+        Transaction tx = session.beginTransaction();
+
+        AuthController authController = new AuthController();
+        Utente utente = authController.getUtente(id);
+        String username = utente.getUsername();
+
+        tx.commit();
+        database.closeSession();
+        return Response.ok(username).build();
+    }
+
+
     @POST
     @Path("cliente")
     @Consumes(MediaType.APPLICATION_JSON)
