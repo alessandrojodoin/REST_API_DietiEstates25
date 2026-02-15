@@ -4,8 +4,8 @@ import it.unina.rest_api_dietiestates25.model.*;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.cfg.JdbcSettings;
 
 
 @ApplicationScoped
@@ -40,17 +40,17 @@ public class Database {
                         .addAnnotatedClass(FotoImmobile.class)
                         .addAnnotatedClass(AccountSupporto.class)
                         // PostgreSQL
-                        .setProperty(AvailableSettings.JAKARTA_JDBC_URL, System.getenv("DATABASE_URL"))
+                        .setProperty(JdbcSettings.JAKARTA_JDBC_URL, System.getenv("DATABASE_URL"))
                         // Credentials
-                        .setProperty(AvailableSettings.JAKARTA_JDBC_USER, System.getenv("DATABASE_USERNAME"))
-                        .setProperty(AvailableSettings.JAKARTA_JDBC_PASSWORD, System.getenv("DATABASE_PASSWORD"))
+                        .setProperty(JdbcSettings.JAKARTA_JDBC_USER, System.getenv("DATABASE_USERNAME"))
+                        .setProperty(JdbcSettings.JAKARTA_JDBC_PASSWORD, System.getenv("DATABASE_PASSWORD"))
                         // Automatic schema export
                         //.setProperty(AvailableSettings.JAKARTA_HBM2DDL_DATABASE_ACTION,
                           //   Action.SPEC_ACTION_DROP_AND_CREATE)
                         // SQL statement logging
-                        .setProperty(AvailableSettings.SHOW_SQL, true)
-                        .setProperty(AvailableSettings.FORMAT_SQL, true)
-                        .setProperty(AvailableSettings.HIGHLIGHT_SQL, true)
+                        .setProperty(JdbcSettings.SHOW_SQL, true)
+                        .setProperty(JdbcSettings.FORMAT_SQL, true)
+                        .setProperty(JdbcSettings.HIGHLIGHT_SQL, true)
                         // Create a new SessionFactory
                         .buildSessionFactory();
 
@@ -64,14 +64,6 @@ public class Database {
         }
         return database;
     }
-/*
-    public Session getSession() {
-        if(session == null) {
-            session = sessionFactory.openSession();
-        }
-
-        return session;
-    }*/
 
     private final ThreadLocal<Session> sessionThreadLocal = new ThreadLocal<>();
 

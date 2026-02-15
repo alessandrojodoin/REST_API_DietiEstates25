@@ -14,38 +14,12 @@ public class OfferteEsterneController {
         Session session = database.getSession();
 
         Offerta offerta= new Offerta(listino, emailOfferente,nome, cognome, telefono,
-                RisultatoOfferta.InRevisione, cifraInCentesimi);
+                RisultatoOfferta.IN_REVISIONE, cifraInCentesimi);
         session.persist(offerta);
 
         return offerta;
     }
-/*
-    public Offerta getOfferteEsterne(int id){
-        Session session = database.getSession();
-        return session.createSelectionQuery("from Offerta where id = :id and riepilogo is null", Offerta.class)
-                .setParameter("id",id)
-                .getSingleResultOrNull();
 
-
-    }
-
-    public Offerta setOfferteEsterneAccettata(Offerta offerta){
-        Session session = database.getSession();
-        offerta.setRisultatoOfferta(RisultatoOfferta.Accettata);
-        session.merge(offerta);
-
-        return offerta;
-    }
-
-    public Offerta setOfferteEsterneRifiutata(Offerta offerta){
-        Session session = database.getSession();
-
-        offerta.setRisultatoOfferta(RisultatoOfferta.Rifiutata);
-        session.merge(offerta);
-
-        return offerta;
-    }
-*/
     public List<Offerta> getOffertePerImmobile(int immobileId){
         Session session = database.getSession();
 

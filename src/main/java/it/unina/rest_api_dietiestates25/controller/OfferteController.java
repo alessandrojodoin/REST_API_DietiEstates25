@@ -14,7 +14,7 @@ public class OfferteController {
         Session session = database.getSession();
 
         OffertaUtente offertaUtente = new OffertaUtente(listino, riepilogo, emailOfferente,nome, cognome, telefono,
-                RisultatoOfferta.InRevisione, cifraInCentesimi,0);
+                RisultatoOfferta.IN_REVISIONE, cifraInCentesimi,0);
         session.persist(offertaUtente);
 
         return offertaUtente;
@@ -22,7 +22,7 @@ public class OfferteController {
 
     public void createControOfferta(OffertaUtente offertaUtente, int cifraContropropostaInCentesimi){
         Session session = database.getSession();
-        offertaUtente.setRisultatoOfferta(RisultatoOfferta.ContropropostaRicevuta);
+        offertaUtente.setRisultatoOfferta(RisultatoOfferta.CONTROPROPOSTA_RICEVUTA);
         offertaUtente.setCifraContropropostaInCentesimi(cifraContropropostaInCentesimi);
         session.merge(offertaUtente);
 
@@ -47,7 +47,7 @@ public class OfferteController {
 
     public void setOffertaAccettata(Offerta offerta){
         Session session = database.getSession();
-        offerta.setRisultatoOfferta(RisultatoOfferta.Accettata);
+        offerta.setRisultatoOfferta(RisultatoOfferta.ACCETTATA);
         session.merge(offerta);
 
     }
@@ -55,7 +55,7 @@ public class OfferteController {
 
     public void annullaAccettazione(Offerta offerta){
         Session session = database.getSession();
-        offerta.setRisultatoOfferta(RisultatoOfferta.InRevisione);
+        offerta.setRisultatoOfferta(RisultatoOfferta.IN_REVISIONE);
         session.merge(offerta);
 
 
@@ -64,7 +64,7 @@ public class OfferteController {
     public void setOffertaRifiutata(Offerta offerta){
         Session session = database.getSession();
 
-        offerta.setRisultatoOfferta(RisultatoOfferta.Rifiutata);
+        offerta.setRisultatoOfferta(RisultatoOfferta.RIFIUTATA);
         session.merge(offerta);
 
     }

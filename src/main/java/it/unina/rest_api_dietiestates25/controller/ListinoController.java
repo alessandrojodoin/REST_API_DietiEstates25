@@ -208,7 +208,7 @@ public class ListinoController {
     public boolean esisteOffertaAccettata(ListinoImmobile listino){
 
         for( Offerta offerta: listino.getOfferte()){
-            if(offerta.getRisultatoOfferta() == RisultatoOfferta.Accettata){
+            if(offerta.getRisultatoOfferta() == RisultatoOfferta.ACCETTATA){
                 return true;
             }
         }
@@ -216,7 +216,7 @@ public class ListinoController {
         OfferteEsterneController offerteEsterneController = new OfferteEsterneController();
 
         for( Offerta offerta: offerteEsterneController.getOffertePerImmobile(listino.getId())){
-            if(offerta.getRisultatoOfferta() == RisultatoOfferta.Accettata){
+            if(offerta.getRisultatoOfferta() == RisultatoOfferta.ACCETTATA){
                 return true;
             }
         }

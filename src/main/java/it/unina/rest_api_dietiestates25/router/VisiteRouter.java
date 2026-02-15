@@ -77,7 +77,7 @@ public class VisiteRouter {
         } catch (Exception e) {
             tx.commit();
             database.closeSession();
-            e.printStackTrace();
+
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(Json.createObjectBuilder()
                             .add("error", e.getMessage())
@@ -125,7 +125,7 @@ public class VisiteRouter {
         } catch (Exception e) {
             tx.rollback();
             database.closeSession();
-            e.printStackTrace();
+
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(Json.createObjectBuilder().add("error", e.getMessage()).build())
                     .build();
@@ -172,7 +172,7 @@ public class VisiteRouter {
         } catch (Exception e) {
             tx.rollback();
             database.closeSession();
-            e.printStackTrace();
+
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(Json.createObjectBuilder().add("error", e.getMessage()).build())
                     .build();
@@ -200,7 +200,7 @@ public class VisiteRouter {
         } catch (Exception e) {
             tx.rollback();
             database.closeSession();
-            e.printStackTrace();
+
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity(Json.createObjectBuilder().add("error", e.getMessage()).build())
                     .build();
@@ -228,7 +228,7 @@ public class VisiteRouter {
         } catch (Exception e) {
             tx.rollback();
             database.closeSession();
-            e.printStackTrace();
+
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity(Json.createObjectBuilder().add("error", e.getMessage()).build())
                     .build();
