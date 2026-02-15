@@ -47,7 +47,7 @@ public class FotoImmobile {
                 return byteArrayOutputStream.toByteArray();
             }
             catch (IOException e){
-                e.printStackTrace();
+
                 throw new RuntimeException("Error converting image to byte[]");
             }
 
@@ -60,7 +60,7 @@ public class FotoImmobile {
                 return ImageIO.read(byteArrayInputStream);
             }
             catch (IOException e){
-                e.printStackTrace();
+
                 throw new RuntimeException("Error converting byte[] to image");
             }
 

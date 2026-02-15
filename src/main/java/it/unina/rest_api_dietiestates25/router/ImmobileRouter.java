@@ -234,7 +234,7 @@ public class ImmobileRouter {
             database.closeSession();
 
 
-            e.printStackTrace();
+
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
@@ -268,7 +268,7 @@ public class ImmobileRouter {
             tx.commit();
             database.closeSession();
 
-            e.printStackTrace();
+
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
