@@ -4,6 +4,7 @@ package it.unina.rest_api_dietiestates25.router.filter;
 import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.model.AgenteImmobiliare;
 import it.unina.rest_api_dietiestates25.model.Utente;
+import it.unina.rest_api_dietiestates25.service.NotificheService;
 import jakarta.annotation.Priority;
 import jakarta.ws.rs.NotAuthorizedException;
 import jakarta.ws.rs.Priorities;
@@ -15,6 +16,8 @@ import jakarta.ws.rs.ext.Provider;
 import it.unina.rest_api_dietiestates25.controller.AuthController;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -23,11 +26,12 @@ import java.io.IOException;
 @Priority(Priorities.AUTHENTICATION)
 public class AgenteImmobiliareAuthenticationFilter implements ContainerRequestFilter {
     private final Database database = Database.getInstance();
+    private static final Logger logger = LoggerFactory.getLogger(AgenteImmobiliareAuthenticationFilter.class);
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
-        System.out.println("Filtering request");
-        System.out.println("Method: " + containerRequestContext.getMethod());
+        logger.info("Filtering request");
+        logger.info("Method: " + containerRequestContext.getMethod());
 
         database.openSession();
         Session session = database.getSession();
@@ -38,11 +42,11 @@ public class AgenteImmobiliareAuthenticationFilter implements ContainerRequestFi
         // Get the HTTP Authorization header from the request
         String authorizationHeader = containerRequestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
 
-        System.out.println("Authorization header: " + authorizationHeader);
+        logger.info("Authorization header: " + authorizationHeader);
 
         // Check if the HTTP Authorization header is present and formatted correctly
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            System.out.println("Invalid authorizationHeader : " + authorizationHeader);
+            logger.info("Invalid authorizationHeader : " + authorizationHeader);
             tx.commit();
             database.closeSession();
             throw new NotAuthorizedException("Authorization header must be provided");
@@ -53,7 +57,7 @@ public class AgenteImmobiliareAuthenticationFilter implements ContainerRequestFi
         Utente utente = authController.getUtente(AuthController.getUsernameClaim(token));
 
         if( AuthController.validateToken(token) && utente instanceof AgenteImmobiliare){
-            System.out.println("Token is valid: " + token);
+            logger.info("Token is valid: " + token);
             containerRequestContext.setProperty(
                     "username",
                     AuthController.getUsernameClaim(token)
@@ -62,7 +66,7 @@ public class AgenteImmobiliareAuthenticationFilter implements ContainerRequestFi
             database.closeSession();
 
         } else {
-            System.out.println("Token is NOT valid: " + token);
+            logger.info("Token is NOT valid: " + token);
             tx.commit();
             database.closeSession();
             containerRequestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());

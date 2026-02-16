@@ -33,7 +33,7 @@ public class ImmobileRouter {
     private ContainerRequestContext ctx;
 
     private final Database database = Database.getInstance();
-    private static final Logger logger = LoggerFactory.getLogger(NotificheService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ImmobileRouter.class);
 
 
     @GET

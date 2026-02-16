@@ -23,7 +23,7 @@ public class AuthController {
     private static final String ISSUER = "rest_api_dietiestates25";
     private final Database database = Database.getInstance();
     private static final Algorithm algorithm = Algorithm.HMAC256(System.getenv("JWT_SECRET"));
-    private static final Logger logger = LoggerFactory.getLogger(NotificheService.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     public static boolean validateToken(String token){
 
