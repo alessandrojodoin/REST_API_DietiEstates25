@@ -1,6 +1,7 @@
 package it.unina.rest_api_dietiestates25.router.filter;
 
 
+import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.model.AgenteImmobiliare;
 import it.unina.rest_api_dietiestates25.model.Utente;
 import jakarta.annotation.Priority;
@@ -12,6 +13,8 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
 import it.unina.rest_api_dietiestates25.controller.AuthController;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.io.IOException;
 
@@ -19,11 +22,17 @@ import java.io.IOException;
 @RequireAgenteImmobiliareAuthentication
 @Priority(Priorities.AUTHENTICATION)
 public class AgenteImmobiliareAuthenticationFilter implements ContainerRequestFilter {
+    private final Database database = Database.getInstance();
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
         System.out.println("Filtering request");
         System.out.println("Method: " + containerRequestContext.getMethod());
+
+        database.openSession();
+        Session session = database.getSession();
+
+        Transaction tx = session.beginTransaction();
 
 
         // Get the HTTP Authorization header from the request
@@ -34,6 +43,8 @@ public class AgenteImmobiliareAuthenticationFilter implements ContainerRequestFi
         // Check if the HTTP Authorization header is present and formatted correctly
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             System.out.println("Invalid authorizationHeader : " + authorizationHeader);
+            tx.commit();
+            database.closeSession();
             throw new NotAuthorizedException("Authorization header must be provided");
         }
 
@@ -47,9 +58,13 @@ public class AgenteImmobiliareAuthenticationFilter implements ContainerRequestFi
                     "username",
                     AuthController.getUsernameClaim(token)
             );
+            tx.commit();
+            database.closeSession();
 
         } else {
             System.out.println("Token is NOT valid: " + token);
+            tx.commit();
+            database.closeSession();
             containerRequestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
         }
     }

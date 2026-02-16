@@ -32,8 +32,6 @@ public class ImmobileRouter {
     private final Database database = Database.getInstance();
 
 
-
-
     @GET
     @Path("{immobileId}")
     @Produces(MediaType.APPLICATION_JSON)

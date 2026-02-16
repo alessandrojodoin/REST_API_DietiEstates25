@@ -1,5 +1,6 @@
 package it.unina.rest_api_dietiestates25.router.filter;
 
+import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.model.Cliente;
 import it.unina.rest_api_dietiestates25.model.Utente;
 import jakarta.annotation.Priority;
@@ -11,6 +12,8 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
 import it.unina.rest_api_dietiestates25.controller.AuthController;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.io.IOException;
 
@@ -19,11 +22,16 @@ import java.io.IOException;
 @Priority(Priorities.AUTHENTICATION)
 public class ClienteAuthenticationFilter implements ContainerRequestFilter {
 
+    private final Database database = Database.getInstance();
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
         System.out.println("Filtering request");
         System.out.println("Client filtro");
 
+        database.openSession();
+        Session session = database.getSession();
+
+        Transaction tx = session.beginTransaction();
 
 
         // Get the HTTP Authorization header from the request
@@ -47,8 +55,12 @@ public class ClienteAuthenticationFilter implements ContainerRequestFilter {
                     "username",
                     AuthController.getUsernameClaim(token)
             );
+            tx.commit();
+            database.closeSession();
         } else {
             System.out.println("Token is NOT valid: " + token);
+            tx.commit();
+            database.closeSession();
             containerRequestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
         }
     }

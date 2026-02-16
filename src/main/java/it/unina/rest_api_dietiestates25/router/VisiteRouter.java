@@ -1,9 +1,11 @@
 package it.unina.rest_api_dietiestates25.router;
 
+import it.unina.rest_api_dietiestates25.controller.ListinoController;
 import it.unina.rest_api_dietiestates25.controller.VisiteController;
 import it.unina.rest_api_dietiestates25.model.*;
 import it.unina.rest_api_dietiestates25.router.filter.RequireAgenteImmobiliareAuthentication;
 import it.unina.rest_api_dietiestates25.router.filter.RequireClienteAuthentication;
+import it.unina.rest_api_dietiestates25.service.NotificheService;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.ws.rs.Path;
 
@@ -17,6 +19,7 @@ import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.checkerframework.checker.units.qual.A;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -54,13 +57,16 @@ public class VisiteRouter {
             String dataOraStr = jsonPrenotazione.getString("dataOra"); // es. "2026-02-14T15:30"
             LocalDateTime dataOra = LocalDateTime.parse(dataOraStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
-
+            //per recuperare l'agente
+            ListinoController listinoController = new ListinoController();
+            ListinoImmobile listino = listinoController.getListino(immobileId);
 
             // Crea la visita
             Visita visita = visitaController.prenota(cliente, immobileId, dataOra);
 
-            // TODO: invio email all'agente (puoi usare JavaMail o un service esterno)
-            // EmailService.sendEmail(agenteEmail, "Nuova visita prenotata", ...);
+
+            NotificheService notificationService = new NotificheService();
+            notificationService.nuovaPrenotazione(visita, listino.getCreatore().getEmail());
 
             tx.commit();
             database.closeSession();
@@ -78,11 +84,12 @@ public class VisiteRouter {
             tx.commit();
             database.closeSession();
 
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+            return Response.status(Response.Status.BAD_REQUEST)
                     .entity(Json.createObjectBuilder()
-                            .add("error", e.getMessage())
+                            .add("message", e.getMessage())
                             .build())
                     .build();
+
         }
     }
 
@@ -190,11 +197,19 @@ public class VisiteRouter {
 
         try {
             VisiteController visiteController = new VisiteController();
+            AuthController authController = new AuthController();
 
             visiteController.conferma(visitaId);
+            Visita visita= visiteController.getVisita(visitaId);
+            int clienteId= visita.getClienteId();
+            Cliente cliente = (Cliente) authController.getUtente(clienteId);
+
+            NotificheService notificheService= new NotificheService();
+            notificheService.confermaVisita(visita, cliente.getEmail());
 
             tx.commit();
             database.closeSession();
+
 
             return Response.ok(Json.createObjectBuilder().add("message", "Visita confermata").build()).build();
         } catch (Exception e) {
@@ -218,8 +233,15 @@ public class VisiteRouter {
 
         try {
             VisiteController visiteController = new VisiteController();
+            AuthController authController = new AuthController();
 
             visiteController.rifiuta(visitaId);
+            Visita visita= visiteController.getVisita(visitaId);
+            int clienteId= visita.getClienteId();
+            Cliente cliente = (Cliente) authController.getUtente(clienteId);
+
+            NotificheService notificheService= new NotificheService();
+            notificheService.rifiutaVisita(visita, cliente.getEmail());
 
             tx.commit();
             database.closeSession();

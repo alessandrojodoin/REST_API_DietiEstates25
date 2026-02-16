@@ -91,6 +91,13 @@ public class VisiteController {
                 .getResultList();
     }
 
+    public Visita getVisita(int visitaId){
+        Session session = database.getSession();
+        return session.createSelectionQuery("from Visita v where v.id = :id", Visita.class)
+                .setParameter("id", visitaId)
+                .getSingleResultOrNull();
+    }
+
     public void conferma(int visitaId) {
         Session session = database.getSession();
         Visita visita = session.get(Visita.class, visitaId);
