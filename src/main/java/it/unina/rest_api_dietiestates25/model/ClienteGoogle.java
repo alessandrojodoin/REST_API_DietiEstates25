@@ -4,5 +4,5 @@ import jakarta.persistence.Entity;
 
 @Entity
 public class ClienteGoogle extends Cliente{
-    //private google_id
+
 }

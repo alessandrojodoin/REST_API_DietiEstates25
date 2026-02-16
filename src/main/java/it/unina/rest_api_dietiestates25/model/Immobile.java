@@ -43,26 +43,21 @@ public class Immobile {
     public void setId(int id) {this.id = id; }
 
     public String getTipoImmobile() {return tipoImmobile; }
-    //public void setTipoImmobile(String nome) {this.tipoImmobile = nome; }
+
 
     public String getLongitudine() {return longitudine; }
     public String getLatitudine() {return latitudine; }
 
     public Set<FotoImmobile> getFoto() {return foto; }
-    //public void setFoto(Set<FotoImmobile> foto) {this.foto = foto; }
 
 
     public String getVia() {return via; }
-    //public void setVia(String indirizzo) {this.via = indirizzo; }
 
     public String getCitta() {return citta; }
-    //public void setCitta(String citta) {this.citta = citta; }
 
     public String getProvincia() {return provincia; }
-    //public void setProvincia(String provincia) {this.provincia = provincia; }
 
     public Set<Tag> getTags() {return tagDescrittivi; }
-    //public void setTags(Set<Tag> tagDescrittivi) {this.tagDescrittivi = tagDescrittivi; }
 
     public void addTag(Tag tag) {
         tagDescrittivi.add(tag);

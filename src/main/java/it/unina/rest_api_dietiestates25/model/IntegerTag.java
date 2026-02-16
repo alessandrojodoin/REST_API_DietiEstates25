@@ -10,10 +10,12 @@ public class IntegerTag extends Tag {
     @NotNull
     private int valore;
 
+    @Override
     public String getValueType() { return "Integer";}
 
+    @Override
     public Integer getValore() {return valore; }
-    //public void setValore(int valore) {this.valore = valore; }
+
 
     public IntegerTag(){}
     public IntegerTag(String nome, int valore){

@@ -33,11 +33,12 @@ public class AgenteImmobiliare extends Utente {
 
     public void setImmobiliGestiti(Set<ListinoImmobile> immobiliGestiti){this.immobiliGestiti= immobiliGestiti;}
 
+    @Override
     public String getUtenteTypeAsSting(){
         return "AgenteImmobiliare";
     }
 
-
+    @Override
     public String getAgenziaImmobiliare() {
         return agenziaImmobiliare;
     }

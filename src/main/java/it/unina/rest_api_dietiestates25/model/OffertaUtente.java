@@ -41,7 +41,5 @@ public class OffertaUtente extends Offerta {
 
 
 
-    //public void setRiepilogo(RiepilogoAttivita riepilogo) {this.riepilogo = riepilogo;}
-
 
 }

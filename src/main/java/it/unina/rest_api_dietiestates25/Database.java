@@ -13,7 +13,7 @@ public class Database {
 
     private static Database database = null;
     private final SessionFactory sessionFactory;
-    //private Session session;
+
 
 
     private Database() {

@@ -22,6 +22,7 @@ public class Cliente extends Utente {
         setRiepilogo(new RiepilogoAttivita(this));
     }
 
+    @Override
     public String getUtenteTypeAsSting(){
         return "Cliente";
     }

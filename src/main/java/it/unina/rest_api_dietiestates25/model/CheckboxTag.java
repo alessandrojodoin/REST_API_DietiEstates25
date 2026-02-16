@@ -10,10 +10,12 @@ public class CheckboxTag extends Tag {
     @NotNull
     private boolean valore;
 
+    @Override
     public String getValueType() { return "Boolean";}
 
+    @Override
     public Boolean getValore() {return valore; }
-    //public void setValore(boolean valore) {this.valore = valore; }
+
 
     public CheckboxTag(){}
     public CheckboxTag(String nome, boolean valore){

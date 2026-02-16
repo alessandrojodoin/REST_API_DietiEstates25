@@ -16,11 +16,12 @@ public class AmministratoreAgenzia extends Utente {
             this.agenziaImmobiliare = agenziaImmobiliare;
     }
 
-
+    @Override
     public String getUtenteTypeAsSting(){
         return "AmministratoreAgenzia";
     }
 
+    @Override
     public String getAgenziaImmobiliare() {
         return agenziaImmobiliare;
     }

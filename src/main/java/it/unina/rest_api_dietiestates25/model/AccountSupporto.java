@@ -17,11 +17,12 @@ public class AccountSupporto extends Utente {
     }
 
 
+    @Override
     public String getUtenteTypeAsSting(){
         return "AccountSupporto";
     }
 
-
+    @Override
     public String getAgenziaImmobiliare() {
         return agenziaImmobiliare;
     }

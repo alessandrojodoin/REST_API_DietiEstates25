@@ -10,9 +10,10 @@ public class StringTag extends Tag {
     @NotNull
     private String valore;
 
+    @Override
     public String getValore() {return valore; }
-    //public void setValore(String valore) {this.valore = valore; }
 
+    @Override
     public String getValueType() { return "String";}
 
     public StringTag(){}
