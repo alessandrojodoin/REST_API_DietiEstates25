@@ -44,7 +44,7 @@ public class ClienteAuthenticationFilter implements ContainerRequestFilter {
 
         // Check if the HTTP Authorization header is present and formatted correctly
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            logger.info("Invalid authorizationHeader : " + authorizationHeader);
+            logger.info("Invalid authorizationHeader : {}", authorizationHeader);
             throw new NotAuthorizedException("Authorization header must be provided");
         }
 
@@ -53,7 +53,7 @@ public class ClienteAuthenticationFilter implements ContainerRequestFilter {
         Utente utente = authController.getUtente(AuthController.getUsernameClaim(token));
 
         if( AuthController.validateToken(token) && utente instanceof Cliente){
-            logger.info("Token is valid: " + token);
+            logger.info("Token is valid: {}", token);
             containerRequestContext.setProperty(
                     "username",
                     AuthController.getUsernameClaim(token)
@@ -61,7 +61,7 @@ public class ClienteAuthenticationFilter implements ContainerRequestFilter {
             tx.commit();
             database.closeSession();
         } else {
-            logger.info("Token is NOT valid: " + token);
+            logger.info("Token is NOT valid: {}", token);
             tx.commit();
             database.closeSession();
             containerRequestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());

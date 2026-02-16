@@ -40,8 +40,7 @@ public class Main {
 
 
             final HttpServer server = startServer();
-            System.out.printf("Jersey app started with endpoints available at "
-                    + "%s%nHit Ctrl-C to stop it...%n", BASE_URI);
+            logger.info("Jersey app started with endpoints available at {}\nHit Ctrl-C to stop it...", BASE_URI);
             System.in.read();
             server.stop();
 

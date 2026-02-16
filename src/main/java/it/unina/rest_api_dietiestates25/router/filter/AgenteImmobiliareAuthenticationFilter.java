@@ -30,7 +30,7 @@ public class AgenteImmobiliareAuthenticationFilter implements ContainerRequestFi
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
         logger.info("Filtering request");
-        logger.info("Method: " + containerRequestContext.getMethod());
+        logger.info("Method: {}", containerRequestContext.getMethod());
 
         database.openSession();
         Session session = database.getSession();
@@ -45,7 +45,7 @@ public class AgenteImmobiliareAuthenticationFilter implements ContainerRequestFi
 
         // Check if the HTTP Authorization header is present and formatted correctly
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            logger.info("Invalid authorizationHeader : " + authorizationHeader);
+            logger.info("Invalid authorizationHeader : {}", authorizationHeader);
             tx.commit();
             database.closeSession();
             throw new NotAuthorizedException("Authorization header must be provided");
@@ -56,7 +56,7 @@ public class AgenteImmobiliareAuthenticationFilter implements ContainerRequestFi
         Utente utente = authController.getUtente(AuthController.getUsernameClaim(token));
 
         if( AuthController.validateToken(token) && utente instanceof AgenteImmobiliare){
-            logger.info("Token is valid: " + token);
+            logger.info("Token is valid: {}", token);
             containerRequestContext.setProperty(
                     "username",
                     AuthController.getUsernameClaim(token)
@@ -65,7 +65,7 @@ public class AgenteImmobiliareAuthenticationFilter implements ContainerRequestFi
             database.closeSession();
 
         } else {
-            logger.info("Token is NOT valid: " + token);
+            logger.info("Token is NOT valid: {}", token);
             tx.commit();
             database.closeSession();
             containerRequestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());

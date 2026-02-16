@@ -163,7 +163,7 @@ public class ImmobileRouter {
         try {
             geoAPI.addNearbyServiceTags(immobile);
         }catch(Exception exception){
-            logger.info("An error occurred: " + exception);
+            logger.info("An error occurred: {}", exception);
         }
 
         ListinoController listinoController = new ListinoController();
