@@ -1,10 +1,13 @@
 package it.unina.rest_api_dietiestates25.service;
 
 import it.unina.rest_api_dietiestates25.model.Visita;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NotificheService {
 
     private final EmailService emailService = new EmailService();
+    private static final Logger logger = LoggerFactory.getLogger(NotificheService.class);
 
     public void nuovaPrenotazione(Visita visita, String emailAgente) {
         try {
@@ -14,7 +17,7 @@ public class NotificheService {
                     "È stata prenotata una visita per il giorno: " + visita.getDataOra()
             );
         } catch (Exception e) {
-            System.out.println("Error: email");
+            logger.info("Error: email");
         }
     }
 
@@ -26,7 +29,7 @@ public class NotificheService {
                     "La tua visita del " + visita.getDataOra() + " è stata confermata."
             );
         } catch (Exception e) {
-            System.out.println("Error: confirm email");
+            logger.info("Error: confirm email");
         }
     }
 
@@ -38,7 +41,7 @@ public class NotificheService {
                     "La tua visita del " + visita.getDataOra() + " è stata rifiutata."
             );
         } catch (Exception e) {
-            System.out.println("Error: delete email");
+            logger.info("Error: delete email");
         }
     }
 }

@@ -4,12 +4,15 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.model.*;
 
+import it.unina.rest_api_dietiestates25.service.NotificheService;
 import org.hibernate.Session;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.UUID;
@@ -17,13 +20,13 @@ import java.util.concurrent.TimeUnit;
 
 public class AuthController {
 
-
+    private static final String ISSUER = "rest_api_dietiestates25";
     private final Database database = Database.getInstance();
+    private static final Algorithm algorithm = Algorithm.HMAC256(System.getenv("JWT_SECRET"));
+    private static final Logger logger = LoggerFactory.getLogger(NotificheService.class);
 
     public static boolean validateToken(String token){
 
-        final String ISSUER = "rest_api_dietiestates25";
-        final Algorithm algorithm = Algorithm.HMAC256(System.getenv("JWT_SECRET"));
         final JWTVerifier verifier = JWT.require(algorithm)
                 .withIssuer(ISSUER)
                 .build();
@@ -32,7 +35,7 @@ public class AuthController {
             verifier.verify(token);
             return true;
         } catch (JWTVerificationException e) {
-            System.out.println(e.getMessage());
+            logger.info(e.getMessage());
             return false;
         }
     }
@@ -41,15 +44,13 @@ public class AuthController {
     public static String getUsernameClaim(String token) {
         try {
 
-            final String ISSUER = "rest_api_dietiestates25";
-            final Algorithm algorithm = Algorithm.HMAC256(System.getenv("JWT_SECRET"));
             final JWTVerifier verifier = JWT.require(algorithm)
                     .withIssuer(ISSUER)
                     .build();
             DecodedJWT decodedJWT = verifier.verify(token);
             return decodedJWT.getClaim("username").asString();
         } catch (JWTVerificationException e) {
-            System.out.println(e.getMessage());
+            logger.info(e.getMessage());
             return null;
         }
     }
@@ -145,8 +146,6 @@ public class AuthController {
 
     private String createJWT(String username, String userType,  boolean googleLinked, long ttlMillis) {
 
-        final String ISSUER = "rest_api_dietiestates25";
-        final Algorithm algorithm = Algorithm.HMAC256(System.getenv("JWT_SECRET"));
 
 
         return JWT.create()

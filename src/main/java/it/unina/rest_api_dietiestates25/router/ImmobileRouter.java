@@ -5,12 +5,15 @@ import it.unina.rest_api_dietiestates25.controller.*;
 import it.unina.rest_api_dietiestates25.model.*;
 import it.unina.rest_api_dietiestates25.router.filter.RequireAgenteImmobiliareAuthentication;
 import it.unina.rest_api_dietiestates25.router.filter.RequireClienteAuthentication;
+import it.unina.rest_api_dietiestates25.service.NotificheService;
 import jakarta.json.*;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -30,6 +33,7 @@ public class ImmobileRouter {
     private ContainerRequestContext ctx;
 
     private final Database database = Database.getInstance();
+    private static final Logger logger = LoggerFactory.getLogger(NotificheService.class);
 
 
     @GET
@@ -160,7 +164,7 @@ public class ImmobileRouter {
         try {
             geoAPI.addNearbyServiceTags(immobile);
         }catch(Exception exception){
-            System.out.println("An error occurred: " + exception);
+            logger.info("An error occurred: " + exception);
         }
 
         ListinoController listinoController = new ListinoController();

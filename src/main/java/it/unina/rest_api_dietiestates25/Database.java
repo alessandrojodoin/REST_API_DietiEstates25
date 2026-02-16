@@ -6,18 +6,19 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.JdbcSettings;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
 public class Database {
 
     private static Database database = null;
     private final SessionFactory sessionFactory;
-
+    private static final Logger logger = LoggerFactory.getLogger(Database.class);
 
 
     private Database() {
-        System.out.println(System.getenv("DATABASE_URL"));
+        logger.info(System.getenv("DATABASE_URL"));
         sessionFactory =
                 new Configuration()
                         .addAnnotatedClass(Utente.class)
