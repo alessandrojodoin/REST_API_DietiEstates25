@@ -5,7 +5,6 @@ import it.unina.rest_api_dietiestates25.controller.*;
 import it.unina.rest_api_dietiestates25.model.*;
 import it.unina.rest_api_dietiestates25.router.filter.RequireAgenteImmobiliareAuthentication;
 import it.unina.rest_api_dietiestates25.router.filter.RequireClienteAuthentication;
-import it.unina.rest_api_dietiestates25.service.NotificheService;
 import jakarta.json.*;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.container.ContainerRequestContext;

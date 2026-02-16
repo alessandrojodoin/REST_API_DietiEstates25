@@ -4,6 +4,8 @@ import it.unina.rest_api_dietiestates25.router.filter.CORSFilter;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
@@ -12,6 +14,7 @@ public class Main {
 
         // Base URI the Grizzly HTTP server will listen on
         public static final String BASE_URI = "http://0.0.0.0:8080/api/1.0/";
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
         /**
          * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
@@ -31,7 +34,7 @@ public class Main {
 
         public static void main(final String[] args) throws IOException {
 
-            System.out.println("Hello world");
+            logger.info("Hello world");
 
             Database.getInstance();
 

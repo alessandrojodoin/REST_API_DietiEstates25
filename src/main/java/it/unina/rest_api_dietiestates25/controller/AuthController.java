@@ -4,7 +4,6 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.model.*;
 
-import it.unina.rest_api_dietiestates25.service.NotificheService;
 import org.hibernate.Session;
 
 import com.auth0.jwt.JWT;

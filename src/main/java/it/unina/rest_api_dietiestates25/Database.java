@@ -18,7 +18,13 @@ public class Database {
 
 
     private Database() {
-        logger.info(System.getenv("DATABASE_URL"));
+        String dbUrl = System.getenv("DATABASE_URL");
+        if (dbUrl != null) {
+            logger.info("Database URL: {}", dbUrl);
+        } else {
+            logger.warn("DATABASE_URL non è impostato");
+        }
+
         sessionFactory =
                 new Configuration()
                         .addAnnotatedClass(Utente.class)

@@ -3,7 +3,6 @@ package it.unina.rest_api_dietiestates25.router.filter;
 import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.model.Cliente;
 import it.unina.rest_api_dietiestates25.model.Utente;
-import it.unina.rest_api_dietiestates25.service.NotificheService;
 import jakarta.annotation.Priority;
 import jakarta.ws.rs.NotAuthorizedException;
 import jakarta.ws.rs.Priorities;
@@ -41,7 +40,7 @@ public class ClienteAuthenticationFilter implements ContainerRequestFilter {
         // Get the HTTP Authorization header from the request
         String authorizationHeader = containerRequestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
 
-        logger.info("Authorization header: " + authorizationHeader);
+        logger.info("Authorization header: {}", authorizationHeader);
 
         // Check if the HTTP Authorization header is present and formatted correctly
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {

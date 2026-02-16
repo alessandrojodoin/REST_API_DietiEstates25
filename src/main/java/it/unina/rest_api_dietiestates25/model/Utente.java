@@ -2,6 +2,8 @@ package it.unina.rest_api_dietiestates25.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -12,6 +14,7 @@ import java.util.Base64;
 
 @Entity
 public class Utente {
+    private static final Logger logger = LoggerFactory.getLogger(Utente.class);
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -84,7 +87,7 @@ public class Utente {
             byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
             this.hashedPassword = Base64.getEncoder().encodeToString(hash);
         } catch (NoSuchAlgorithmException e) {
-            System.out.println("Password Hashing Failed");
+            logger.info("Password Hashing Failed");
         }
     }
 
@@ -95,7 +98,7 @@ public class Utente {
             byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
             isPasswordCorrect = hashedPassword.equals(Base64.getEncoder().encodeToString(hash));
         } catch (NoSuchAlgorithmException e) {
-            System.out.println("Password Hashing Failed");
+            logger.info("Password Hashing Failed");
         }
         return isPasswordCorrect;
     }
