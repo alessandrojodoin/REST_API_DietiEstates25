@@ -1,7 +1,6 @@
 package it.unina.rest_api_dietiestates25.service;
 
 import it.unina.rest_api_dietiestates25.model.Visita;
-import jakarta.ws.rs.core.Response;
 
 public class NotificheService {
 

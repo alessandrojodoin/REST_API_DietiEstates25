@@ -90,13 +90,13 @@ public class ListinoController {
             Integer areaSize,
             String energyClass,
             String citta,
-            Boolean Terrazzo,
-            Boolean Balcone,
-            Boolean Ascensore,
-            Boolean Garage,
-            Boolean Giardino,
-            Boolean PostoAuto,
-            Boolean AccessoDisabili
+            Boolean terrazzo,
+            Boolean balcone,
+            Boolean ascensore,
+            Boolean garage,
+            Boolean giardino,
+            Boolean postoAuto,
+            Boolean accessoDisabili
     ) {
 
         Session session = database.getSession();
@@ -136,13 +136,13 @@ public class ListinoController {
 
             // -------- BOOLEAN TAG --------
 
-            addBooleanTagFilter(hql, params, "Terrazzo", Terrazzo);
-            addBooleanTagFilter(hql, params, "Balcone", Balcone);
-            addBooleanTagFilter(hql, params, "Ascensore", Ascensore);
-            addBooleanTagFilter(hql, params, "Garage", Garage);
-            addBooleanTagFilter(hql, params, "Giardino", Giardino);
-            addBooleanTagFilter(hql, params, "PostoAuto", PostoAuto);
-            addBooleanTagFilter(hql, params, "AccessoDisabili", AccessoDisabili);
+            addBooleanTagFilter(hql, params, "terrazzo", terrazzo);
+            addBooleanTagFilter(hql, params, "balcone", balcone);
+            addBooleanTagFilter(hql, params, "ascensore", ascensore);
+            addBooleanTagFilter(hql, params, "garage", garage);
+            addBooleanTagFilter(hql, params, "giardino", giardino);
+            addBooleanTagFilter(hql, params, "postoAuto", postoAuto);
+            addBooleanTagFilter(hql, params, "accessoDisabili", accessoDisabili);
 
             // -------- INTEGER TAG --------
 

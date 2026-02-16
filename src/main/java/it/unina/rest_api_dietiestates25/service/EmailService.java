@@ -19,6 +19,7 @@ public class EmailService {
         prop.put("mail.smtp.port", "587");
 
         Session session = Session.getInstance(prop, new Authenticator() {
+            @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(email, password);
             }

@@ -168,12 +168,12 @@ public class AuthController {
 
 
 
-    public void modificaAmministratore(String old_username, String new_username, String password){
+    public void modificaAmministratore(String oldUsername, String newUsername, String password){
 
         Session session = database.getSession();
 
-        AmministratoreAgenzia amministratore= this.getAmministratore(old_username);
-        amministratore.setUsername(new_username);
+        AmministratoreAgenzia amministratore= this.getAmministratore(oldUsername);
+        amministratore.setUsername(newUsername);
         amministratore.setPassword(password);
 
         session.merge(amministratore);

@@ -37,13 +37,7 @@ public class OffertaRouter {
 
         OfferteController offertaController= new OfferteController();
         OffertaUtente offertaUtente = offertaController.getOffertaUtente(offerteId);
-/*
-        if (risultato != null) {
-            offertaJsonBuilder.add("risultatoOfferta", risultato.toString());
-        } else {
-            offertaJsonBuilder.add("risultatoOfferta", JsonValue.NULL);
-        }
-*/
+
         JsonObject jsonResponse = Json.createObjectBuilder()
                 .add("id", offertaUtente.getId())
                 .add("emailOfferente", offertaUtente.getEmailOfferente())
@@ -155,7 +149,6 @@ public class OffertaRouter {
         Transaction tx = session.beginTransaction();
 
         OfferteController offerteController= new OfferteController();
-        //ImmobileController immobileController= new ImmobileController();
         AuthController authController = new AuthController();
         ListinoController listinoController= new ListinoController();
 

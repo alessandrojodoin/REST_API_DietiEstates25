@@ -307,7 +307,7 @@ public class AuthRouter {
         AuthController authController = new AuthController();
         authController.modificaAmministratore(
             amministratoreUsername,
-            userCredentials.getString("new_username"),
+            userCredentials.getString("newUsername"),
             userCredentials.getString("password")
         );
 

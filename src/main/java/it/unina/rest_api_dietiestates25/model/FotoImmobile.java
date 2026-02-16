@@ -1,6 +1,7 @@
 package it.unina.rest_api_dietiestates25.model;
 
 import jakarta.persistence.*;
+import jakarta.persistence.PersistenceException;
 import jakarta.validation.constraints.NotNull;
 
 import javax.imageio.ImageIO;
@@ -48,7 +49,8 @@ public class FotoImmobile {
             }
             catch (IOException e){
 
-                throw new RuntimeException("Error converting image to byte[]");
+                throw new PersistenceException("Errore durante la conversione...", e);
+
             }
 
         }
@@ -61,7 +63,8 @@ public class FotoImmobile {
             }
             catch (IOException e){
 
-                throw new RuntimeException("Error converting byte[] to image");
+                throw new PersistenceException("Errore durante la conversione...", e);
+
             }
 
 
