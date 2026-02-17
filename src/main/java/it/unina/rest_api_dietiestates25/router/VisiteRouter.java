@@ -126,6 +126,7 @@ public class VisiteRouter {
                         .add("dataOra", v.getDataOra().toString())
                         .add("stato", v.getStato().toString())
                         .add("creataIl", v.getCreataIl().toString())
+                        .add("modeVisita", v.getModeVisita())
                 );
             }
 
@@ -173,6 +174,7 @@ public class VisiteRouter {
                         .add("dataOra", v.getDataOra().toString())
                         .add("stato", v.getStato().toString())
                         .add("creataIl", v.getCreataIl().toString())
+                        .add("modeVisita", v.getModeVisita())
                 );
             }
 

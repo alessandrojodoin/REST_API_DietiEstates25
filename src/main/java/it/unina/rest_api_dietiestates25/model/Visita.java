@@ -22,6 +22,8 @@ public class Visita {
     private Instant creataIl;
 
 
+    private String modeVisita;
+
     public Visita(){}
 
     public Visita(int immobileId, int clienteId, int agenteId, Instant dataOra, StatoVisita stato, String modeVisita) {
@@ -35,7 +37,10 @@ public class Visita {
     }
 
 
-    private String modeVisita;
+
+    public String getModeVisita() {
+        return modeVisita;
+    }
 
     public int getId() {
         return id;
