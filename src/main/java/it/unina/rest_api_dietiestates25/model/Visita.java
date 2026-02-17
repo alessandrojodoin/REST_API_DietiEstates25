@@ -2,7 +2,7 @@ package it.unina.rest_api_dietiestates25.model;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 public class Visita {
@@ -14,12 +14,28 @@ public class Visita {
     private int clienteId;
     private int agenteId;
 
-    private LocalDateTime dataOra;
+    private Instant dataOra;
 
     @Enumerated(EnumType.STRING)
     private StatoVisita stato;  // RICHIESTA, CONFERMATA, RIFIUTATA
 
-    private LocalDateTime creataIl;
+    private Instant creataIl;
+
+
+    public Visita(){}
+
+    public Visita(int immobileId, int clienteId, int agenteId, Instant dataOra, StatoVisita stato, String modeVisita) {
+        this.immobileId = immobileId;
+        this.clienteId = clienteId;
+        this.agenteId = agenteId;
+        this.dataOra = dataOra;
+        this.stato = stato;
+        this.creataIl = Instant.now();
+        this.modeVisita = modeVisita;
+    }
+
+
+    private String modeVisita;
 
     public int getId() {
         return id;
@@ -33,33 +49,21 @@ public class Visita {
         return immobileId;
     }
 
-    public void setImmobileId(int immobileId) {
-        this.immobileId = immobileId;
-    }
 
     public int getClienteId() {
         return clienteId;
     }
 
-    public void setClienteId(int clienteId) {
-        this.clienteId = clienteId;
-    }
 
     public int getAgenteId() {
         return agenteId;
     }
 
-    public void setAgenteId(int agenteId) {
-        this.agenteId = agenteId;
-    }
 
-    public LocalDateTime getDataOra() {
+    public Instant getDataOra() {
         return dataOra;
     }
 
-    public void setDataOra(LocalDateTime dataOra) {
-        this.dataOra = dataOra;
-    }
 
     public StatoVisita getStato() {
         return stato;
@@ -69,11 +73,8 @@ public class Visita {
         this.stato = stato;
     }
 
-    public LocalDateTime getCreataIl() {
+    public Instant getCreataIl() {
         return creataIl;
     }
 
-    public void setCreataIl(LocalDateTime creataIl) {
-        this.creataIl = creataIl;
-    }
 }

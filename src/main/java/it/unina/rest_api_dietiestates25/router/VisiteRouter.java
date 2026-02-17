@@ -22,7 +22,9 @@ import jakarta.ws.rs.core.Response;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -54,14 +56,17 @@ public class VisiteRouter {
 
             int immobileId = jsonPrenotazione.getInt("immobileId");
             String dataOraStr = jsonPrenotazione.getString("dataOra"); // es. "2026-02-14T15:30"
-            LocalDateTime dataOra = LocalDateTime.parse(dataOraStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            LocalDateTime ldt = LocalDateTime.parse(dataOraStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            Instant dataOra = ldt.atZone(ZoneId.of("Europe/Rome")).toInstant();
+
+            String modeVisita = jsonPrenotazione.getString("modeVisita");
 
             //per recuperare l'agente
             ListinoController listinoController = new ListinoController();
             ListinoImmobile listino = listinoController.getListino(immobileId);
 
             // Crea la visita
-            Visita visita = visitaController.prenota(cliente, immobileId, dataOra);
+            Visita visita = visitaController.prenota(cliente, immobileId, dataOra, modeVisita);
 
 
             NotificheService notificationService = new NotificheService();

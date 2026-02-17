@@ -4,7 +4,10 @@ import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.model.*;
 import org.hibernate.Session;
 
-import java.time.LocalDateTime;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public class VisiteController {
@@ -15,7 +18,7 @@ public class VisiteController {
      * Prenota una visita per un immobile.
      * Controlla fascia oraria, limite 2 settimane e disponibilità slot.
      */
-    public Visita prenota(Cliente cliente, int immobileId, LocalDateTime dataOra) {
+    public Visita prenota(Cliente cliente, int immobileId, Instant dataOra, String modeVisita) {
         Session session = database.getSession();
 
         // Recupera il listino associato all'immobile
@@ -32,11 +35,12 @@ public class VisiteController {
         int agenteId = listino.getCreatore().getId();
 
         // Controllo data entro 2 settimane
-        if (dataOra.isAfter(LocalDateTime.now().plusWeeks(2)))
+        if (dataOra.isAfter(Instant.now().plus(Duration.ofDays(14))))
             throw new IllegalArgumentException("La visita deve essere prenotata entro 2 settimane");
 
-        // Controllo fascia oraria: 9-12 o 15-19
-        int ora = dataOra.getHour();
+        // Controllo fascia oraria
+        ZonedDateTime zdt = dataOra.atZone(ZoneId.of("Europe/Rome"));
+        int ora = zdt.getHour();
         if (!((ora >= 9 && ora < 13) || (ora >= 14 && ora < 19)))
             throw new IllegalArgumentException("Orario della visita non valido. Fasce disponibili: 9-12, 15-19");
 
@@ -44,14 +48,8 @@ public class VisiteController {
         if (!isSlotDisponibile(agenteId, dataOra, session))
             throw new IllegalArgumentException("Slot già prenotato");
 
-        // Crea la visita
-        Visita visita = new Visita();
-        visita.setImmobileId(immobileId);
-        visita.setClienteId(cliente.getId());
-        visita.setAgenteId(agenteId);
-        visita.setDataOra(dataOra);
-        visita.setStato(StatoVisita.RICHIESTA);
-        visita.setCreataIl(LocalDateTime.now());
+
+        Visita visita = new Visita(immobileId, cliente.getId(), agenteId, dataOra, StatoVisita.RICHIESTA, modeVisita);
 
         session.persist(visita);
         return visita;
@@ -60,7 +58,7 @@ public class VisiteController {
     /**
      * Controlla se lo slot del giorno/ora è disponibile per l'agente.
      */
-    public boolean isSlotDisponibile(int agenteId, LocalDateTime dataOra, Session session) {
+    public boolean isSlotDisponibile(int agenteId, Instant dataOra, Session session) {
         String hql = "select count(v) from Visita v " +
                 "where v.agenteId = :agente " +
                 "and v.dataOra = :data " +
