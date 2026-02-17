@@ -80,6 +80,18 @@ public class ListinoController {
         }
     }
 
+    private void addOtherTags(StringBuilder hql,
+                              Map<String, Object> params,
+                              String tagName, String value){
+        if (value != null) {
+
+            String paramName = "tag_" + tagName;
+
+            hql.append(" AND EXISTS (" + "SELECT t.id FROM Tag t " + "WHERE t.immobile = i " + "AND t.nome = :").append(paramName).append(") ");
+
+            params.put(paramName, tagName);
+        }
+    }
 
     public List<ListinoImmobile> getImmobileListFiltri(
             Integer minPrice,
@@ -129,11 +141,8 @@ public class ListinoController {
                 params.put("propertyType", propertyType);
             }
 
-            if (energyClass != null) {
-                hql.append(" AND i.energyClass = :energyClass ");
-                params.put("energyClass", energyClass);
-            }
 
+            addOtherTags(hql, params, "energyClass", energyClass);
             // -------- BOOLEAN TAG --------
 
             addBooleanTagFilter(hql, params, "terrazzo", terrazzo);

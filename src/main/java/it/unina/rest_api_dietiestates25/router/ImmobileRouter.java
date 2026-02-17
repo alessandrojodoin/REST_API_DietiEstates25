@@ -309,11 +309,10 @@ public class ImmobileRouter {
     }
 
 @GET
-@RequireAgenteImmobiliareAuthentication
 @Produces(MediaType.APPLICATION_JSON)
 public Response getImmobili(@QueryParam("agenteImmobiliare") String agenteUsername, @QueryParam("cliente") String clienteUsername, @QueryParam("filters") Boolean filters,
                             @QueryParam("minPrice") Integer minPrice, @QueryParam("maxPrice") Integer maxPrice, @QueryParam("propertyType") String propertyType, @QueryParam("bathrooms") Integer bathrooms,
-                            @QueryParam("bedrooms") Integer bedrooms, @QueryParam("areaSize") Integer areaSize, @QueryParam("extraFeatures") Boolean extraFeatures,
+                            @QueryParam("bedrooms") Integer bedrooms, @QueryParam("areaSize") Integer areaSize,
                             @QueryParam("energyClass") String energyClass, @QueryParam("citta") String citta, @QueryParam("terrazzo") Boolean terrazzo,
                             @QueryParam("balcone") Boolean balcone, @QueryParam("ascensore") Boolean ascensore, @QueryParam("garage") Boolean garage,
                             @QueryParam("giardino") Boolean giardino, @QueryParam("postoAuto") Boolean postoAuto, @QueryParam("accessoDisabili") Boolean accessoDisabili
