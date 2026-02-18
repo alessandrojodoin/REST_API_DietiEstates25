@@ -96,7 +96,7 @@ public class ListinoController {
     public List<ListinoImmobile> getImmobileListFiltri(
             Integer minPrice,
             Integer maxPrice,
-            String propertyType,
+            String tipologiaContratto,
             Integer bathrooms,
             Integer bedrooms,
             Integer areaSize,
@@ -136,9 +136,9 @@ public class ListinoController {
                 params.put("citta", citta);
             }
 
-            if (propertyType != null) {
-                hql.append(" AND i.tipoImmobile = :propertyType ");
-                params.put("propertyType", propertyType);
+            if (tipologiaContratto != null) {
+                hql.append(" AND l.tipologiaContratto = :tipologiaContratto ");
+                params.put("tipologiaContratto", tipologiaContratto);
             }
 
 
