@@ -4,6 +4,9 @@ import it.unina.rest_api_dietiestates25.model.Visita;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
 public class NotificheService {
 
     private final EmailService emailService = new EmailService();
@@ -11,11 +14,32 @@ public class NotificheService {
 
     public void nuovaPrenotazione(Visita visita, String emailAgente) {
         try {
-            emailService.send(
-                    emailAgente,
-                    "Nuova visita prenotata",
-                    "È stata prenotata una visita per il giorno: " + visita.getDataOra()
-            );
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+                    .withZone(ZoneId.systemDefault());
+
+            String dataFormattata = formatter.format(visita.getDataOra());
+
+
+            if(visita.getModeVisita().equals("In Videochiamata")){
+                emailService.send(
+                        emailAgente,
+                        "Nuova visita prenotata",
+                        "È stata prenotata una visita per il giorno: " + dataFormattata +
+                                ". Apri la sezione 'prenotazioni' nella dashboard sul sito DietiEstates25 per " +
+                                "confermare/rifiutare la richiesta.\n" +
+                                "Eventualmente, contatta il cliente per concordare una piattaforma di videochiamata."
+                );
+            }else{
+                emailService.send(
+                        emailAgente,
+                        "Nuova visita prenotata",
+                        "È stata prenotata una visita per il giorno: " + dataFormattata +
+                                ". Apri la sezione 'prenotazioni' nella dashboard sul sito DietiEstates25 per " +
+                                "confermare/rifiutare la richiesta."
+                );
+            }
+
+
         } catch (Exception e) {
             logger.info("Error: email");
         }
