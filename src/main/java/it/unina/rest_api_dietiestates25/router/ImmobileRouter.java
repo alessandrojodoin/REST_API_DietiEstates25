@@ -399,6 +399,7 @@ public Response getImmobili(@QueryParam("agenteImmobiliare") String agenteUserna
                 .add("prezzo", listino.getPrezzo())
                 .add("speseCondominiali", listino.getSpeseCondominiali())
                 .add("agenteImmobiliareId", listino.getCreatore().getId())
+                .add("creatore", listino.getCreatore().getUsername())
                 .add("isVenduto", listino.isVenduto())
                 .add("esisteOffertaAccettata", listinoController.esisteOffertaAccettata(listino))
                 .add("istanteCreazione", listino.getIstanteCreazione().toEpochMilli())
