@@ -6,8 +6,14 @@ import jakarta.transaction.Transactional;
 import org.hibernate.Session;
 
 
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.MemoryCacheImageOutputStream;
 import java.awt.image.BufferedImage;
-
+import java.io.ByteArrayOutputStream;
+import java.util.Iterator;
 
 
 public class ImmobileController {
@@ -88,14 +94,34 @@ private final Database database = Database.getInstance();
 
     }
 
-    public void addImage(Immobile immobile, BufferedImage image){
+    public void addImage(Immobile immobile, BufferedImage bufferedImage) {
         Session session = database.getSession();
-        FotoImmobile fotoImmobile = new FotoImmobile(image, immobile);
-        immobile.addFoto(fotoImmobile);
-        session.persist(fotoImmobile);
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
+            Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpg");
+            ImageWriter writer = writers.next();
+
+            ImageWriteParam param = writer.getDefaultWriteParam();
+            param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+            param.setCompressionQuality(0.7f); // 70% qualità
+
+            writer.setOutput(new MemoryCacheImageOutputStream(outputStream));
+            writer.write(null, new IIOImage(bufferedImage, null, null), param);
+            writer.dispose();
+
+            byte[] compressedImage = outputStream.toByteArray();
+
+            FotoImmobile foto = new FotoImmobile(compressedImage, immobile);
+            immobile.addFoto(foto);
+
+            session.persist(foto);
+            session.merge(immobile);
+        } catch (Exception e) {
+            throw new RuntimeException("Errore compressione immagine", e);
+        }
     }
 
 
 
-}
+        }

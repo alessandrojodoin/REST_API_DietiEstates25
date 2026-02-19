@@ -24,8 +24,14 @@ public class Main {
         public static HttpServer startServer() {
             // create a resource config that scans for JAX-RS resources and providers
             // in it.unina.webtech package
-            final ResourceConfig rc = new ResourceConfig().packages("it.unina.rest_api_dietiestates25");
+            final ResourceConfig rc = new ResourceConfig()
+                    .packages("it.unina.rest_api_dietiestates25");
+
+                // REGISTRA IL SUPPORTO MULTIPART
+            rc.register(org.glassfish.jersey.media.multipart.MultiPartFeature.class);
+
             rc.register(new CORSFilter());
+
             // create and start a new instance of grizzly http server
             // exposing the Jersey application at BASE_URI
             return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);

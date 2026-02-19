@@ -118,6 +118,12 @@
             <artifactId>slf4j-simple</artifactId> <!-- o logback-classic se vuoi più funzionalità -->
             <version>2.0.9</version>
         </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-multipart</artifactId>
+            <version>3.1.2</version> <!-- o la versione compatibile con il tuo Jersey -->
+        </dependency>
+
 
 
         <!-- https://mvnrepository.com/artifact/com.auth0/java-jwt -->

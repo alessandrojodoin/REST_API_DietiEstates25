@@ -1,22 +1,18 @@
 package it.unina.rest_api_dietiestates25.model;
 
 import jakarta.persistence.*;
-import jakarta.persistence.PersistenceException;
 import jakarta.validation.constraints.NotNull;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 @Entity
 public class FotoImmobile {
 
 
+    @NotNull
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] image;
 
-    @NotNull @Convert(converter = ImageConverter.class)
-    private BufferedImage image;
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -27,47 +23,21 @@ public class FotoImmobile {
     public FotoImmobile() {
     }
 
-    public BufferedImage getImage() {return image;}
 
-    public FotoImmobile(BufferedImage image, Immobile immobile) {
+
+    public FotoImmobile(byte[] image, Immobile immobile) {
         this.image = image;
         this.immobile = immobile;
     }
 
     public int getId() {return id;}
 
-    @Converter(autoApply = true)
-    public static class ImageConverter
-            implements AttributeConverter<BufferedImage, byte[]> {
-        @Override
-        public byte[] convertToDatabaseColumn(BufferedImage image){
-
-            try{
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                ImageIO.write(image, "png", byteArrayOutputStream );
-                return byteArrayOutputStream.toByteArray();
-            }
-            catch (IOException e){
-
-                throw new PersistenceException("Errore durante la conversione...", e);
-
-            }
-
-        }
-
-        @Override
-        public BufferedImage convertToEntityAttribute(byte[] imageByteArray) {
-            try{
-                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(imageByteArray);
-                return ImageIO.read(byteArrayInputStream);
-            }
-            catch (IOException e){
-
-                throw new PersistenceException("Errore durante la conversione...", e);
-
-            }
-
-
-        }
+    public byte[] getImage() {
+        return image;
     }
+
+    public Immobile getImmobile() {
+        return immobile;
+    }
+
 }

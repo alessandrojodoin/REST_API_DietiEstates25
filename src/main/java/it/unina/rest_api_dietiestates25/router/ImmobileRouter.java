@@ -9,6 +9,8 @@ import jakarta.json.*;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.*;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.slf4j.Logger;
@@ -16,8 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -205,74 +206,62 @@ public class ImmobileRouter {
 
     @GET
     @Path("{immobileId}/image/{imageId}")
-    @Produces("image/png")
-    public Response getImage(@PathParam("imageId") int imageId, @PathParam("immobileId") int immobileId) {
+    @Produces("image/jpeg")
+    public Response getImage(@PathParam("imageId") int imageId,
+                             @PathParam("immobileId") int immobileId) {
 
         database.openSession();
         Session session = database.getSession();
-
         Transaction tx = session.beginTransaction();
 
-        try{
+        try {
             ImmobileController immobileController = new ImmobileController();
+            FotoImmobile foto = immobileController.getImage(immobileId, imageId);
 
-            BufferedImage image = immobileController.getImage(immobileId, imageId).getImage();
-
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            ImageIO.write(image, "png", byteArrayOutputStream);
-            byte[] imageData = byteArrayOutputStream.toByteArray();
+            byte[] imageData = foto.getImage();
 
             tx.commit();
             database.closeSession();
-
-
 
             return Response.ok(imageData).build();
-        }
-        catch(Exception e){
 
-            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
             database.closeSession();
-
-
-
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
 
     @POST
-    @RequireAgenteImmobiliareAuthentication
     @Path("{immobileId}/image")
-    //@Consumes("image/png")
-    public Response postImage(byte [] image, @PathParam("immobileId") int immobileId) {
-
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @RequireAgenteImmobiliareAuthentication
+    public Response postImage(@FormDataParam("file") InputStream uploadedInputStream,
+                              @FormDataParam("file") FormDataContentDisposition fileDetail,
+                              @PathParam("immobileId") int immobileId) {
         database.openSession();
         Session session = database.getSession();
-
         Transaction tx = session.beginTransaction();
 
-        try{
+        try {
             ImmobileController immobileController = new ImmobileController();
+            BufferedImage bufferedImage = ImageIO.read(uploadedInputStream);
 
-            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(image);
-            BufferedImage bufferedImage = ImageIO.read(byteArrayInputStream);
             Immobile immobile = immobileController.getImmobile(immobileId);
             immobileController.addImage(immobile, bufferedImage);
-
 
             tx.commit();
             database.closeSession();
 
             return Response.ok().build();
-        }
-        catch(Exception e){
-            tx.commit();
+
+        } catch (Exception e) {
+            tx.rollback();
             database.closeSession();
-
-
             throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @GET
     @Path("{immobileId}/imageIds")
