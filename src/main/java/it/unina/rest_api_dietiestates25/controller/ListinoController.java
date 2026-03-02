@@ -5,6 +5,8 @@ import it.unina.rest_api_dietiestates25.model.*;
 import org.hibernate.Session;
 
 import org.hibernate.query.Query;
+
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -206,6 +208,18 @@ public class ListinoController {
                 .getResultList();
     }
 
+
+    public Instant getIstanteVisualizzazione(ListinoImmobile listino, Cliente cliente){
+        Session session = database.getSession();
+
+        return session.createSelectionQuery("select V.istanteVisualizzazione from VisualizzazioneImmobile V "
+                        + "where V.cliente = :cliente"
+                            + "and V.listino = :listino", Instant.class)
+                .setParameter("cliente", cliente)
+                .setParameter("listino", listino)
+                .getSingleResultOrNull();
+
+    }
 
     public void setImmobileToVenduto(int listinoId){
         Session session = database.getSession();
