@@ -49,24 +49,24 @@ public class VisiteRouter {
         try {
             VisiteController visitaController = new VisiteController();
             AuthController authController = new AuthController();
+            ListinoController listinoController = new ListinoController();
 
             // Recupera il cliente autenticato
             String username = (String) ctx.getProperty("username");
             Cliente cliente = authController.getCliente(username);
 
             int immobileId = jsonPrenotazione.getInt("immobileId");
+            ListinoImmobile listino = listinoController.getListino(immobileId);
+
             String dataOraStr = jsonPrenotazione.getString("dataOra"); // es. "2026-02-14T15:30"
             LocalDateTime ldt = LocalDateTime.parse(dataOraStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
             Instant dataOra = ldt.atZone(ZoneId.of("Europe/Rome")).toInstant();
 
             String modeVisita = jsonPrenotazione.getString("modeVisita");
 
-            //per recuperare l'agente
-            ListinoController listinoController = new ListinoController();
-            ListinoImmobile listino = listinoController.getListino(immobileId);
 
             // Crea la visita
-            Visita visita = visitaController.prenota(cliente, immobileId, dataOra, modeVisita);
+            Visita visita = visitaController.prenota(cliente, listino, dataOra, modeVisita);
 
 
             NotificheService notificationService = new NotificheService();
@@ -120,9 +120,9 @@ public class VisiteRouter {
             for (Visita v : visite) {
                 arrayBuilder.add(Json.createObjectBuilder()
                         .add("id", v.getId())
-                        .add("clienteId", v.getClienteId())
-                        .add("immobileId", v.getImmobileId())
-                        .add("agenteId", v.getAgenteId())
+                        .add("clienteId", v.getCliente().getId())
+                        .add("immobileId", v.getListino().getId())
+                        .add("agenteId", v.getAgente().getId())
                         .add("dataOra", v.getDataOra().toString())
                         .add("stato", v.getStato().toString())
                         .add("creataIl", v.getCreataIl().toString())
@@ -169,8 +169,8 @@ public class VisiteRouter {
             for (Visita v : visite) {
                 arrayBuilder.add(Json.createObjectBuilder()
                         .add("id", v.getId())
-                        .add("immobileId", v.getImmobileId())
-                        .add("clienteId", v.getClienteId())
+                        .add("clienteId", v.getCliente().getId())
+                        .add("immobileId", v.getListino().getId())
                         .add("dataOra", v.getDataOra().toString())
                         .add("stato", v.getStato().toString())
                         .add("creataIl", v.getCreataIl().toString())
@@ -203,12 +203,10 @@ public class VisiteRouter {
 
         try {
             VisiteController visiteController = new VisiteController();
-            AuthController authController = new AuthController();
 
             visiteController.conferma(visitaId);
             Visita visita= visiteController.getVisita(visitaId);
-            int clienteId= visita.getClienteId();
-            Cliente cliente = (Cliente) authController.getUtente(clienteId);
+            Cliente cliente = visita.getCliente();
 
             NotificheService notificheService= new NotificheService();
             notificheService.confermaVisita(visita, cliente.getEmail());
@@ -239,12 +237,10 @@ public class VisiteRouter {
 
         try {
             VisiteController visiteController = new VisiteController();
-            AuthController authController = new AuthController();
 
             visiteController.rifiuta(visitaId);
             Visita visita= visiteController.getVisita(visitaId);
-            int clienteId= visita.getClienteId();
-            Cliente cliente = (Cliente) authController.getUtente(clienteId);
+            Cliente cliente = visita.getCliente();
 
             NotificheService notificheService= new NotificheService();
             notificheService.rifiutaVisita(visita, cliente.getEmail());

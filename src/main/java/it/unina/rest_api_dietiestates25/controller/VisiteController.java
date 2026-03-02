@@ -18,19 +18,11 @@ public class VisiteController {
      * Prenota una visita per un immobile.
      * Controlla fascia oraria, limite 2 settimane e disponibilità slot.
      */
-    public Visita prenota(Cliente cliente, int immobileId, Instant dataOra, String modeVisita) {
+    public Visita prenota(Cliente cliente, ListinoImmobile listino, Instant dataOra, String modeVisita) {
         Session session = database.getSession();
 
-        // Recupera il listino associato all'immobile
-        ListinoImmobile listino = session.createSelectionQuery(
-                        "from ListinoImmobile l where l.immobile.id = :id",
-                        ListinoImmobile.class
-                )
-                .setParameter("id", immobileId)
-                .getSingleResultOrNull();
-
         if (listino == null)
-            throw new IllegalArgumentException("Listino non trovato per immobileId: " + immobileId);
+            throw new IllegalArgumentException("Listino non trovato");
 
         int agenteId = listino.getCreatore().getId();
 
@@ -49,7 +41,7 @@ public class VisiteController {
             throw new IllegalArgumentException("Slot già prenotato");
 
 
-        Visita visita = new Visita(immobileId, cliente.getId(), agenteId, dataOra, StatoVisita.RICHIESTA, modeVisita);
+        Visita visita = new Visita(listino, cliente, listino.getCreatore(), dataOra, StatoVisita.RICHIESTA, modeVisita);
 
         session.persist(visita);
         return visita;
