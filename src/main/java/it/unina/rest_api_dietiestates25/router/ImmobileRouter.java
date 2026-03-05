@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -342,7 +343,13 @@ public Response getImmobili(@QueryParam("agenteImmobiliare") String agenteUserna
 
     JsonArrayBuilder immobiliJsonArrayBuilder = Json.createArrayBuilder();
 
+        Instant istanteVisualizzazione;
+
+
     for(ListinoImmobile listino: immobili){
+        AuthController authController= new AuthController();
+        Cliente cliente= authController.getCliente(clienteUsername);
+        istanteVisualizzazione = listinoController.getIstanteVisualizzazione(listino, cliente);
 
         JsonObject indirizzoJson = Json.createObjectBuilder()
                 .add("via", listino.getImmobile().getVia())
@@ -356,7 +363,10 @@ public Response getImmobili(@QueryParam("agenteImmobiliare") String agenteUserna
                 .add("longitudine", listino.getImmobile().getLongitudine())
                 .add("latitudine", listino.getImmobile().getLatitudine())
                 .add("fotoNumber", listino.getImmobile().getFotoNumber())
-                .add("indirizzo", indirizzoJson);
+                .add("indirizzo", indirizzoJson)
+                .add("istanteVisualizzazione", istanteVisualizzazione != null
+                        ? istanteVisualizzazione.toString()
+                        : "");
 
 
         JsonArrayBuilder tagJsonArrayBuilder = Json.createArrayBuilder();

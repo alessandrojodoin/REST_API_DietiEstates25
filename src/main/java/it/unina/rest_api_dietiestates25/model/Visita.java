@@ -10,9 +10,18 @@ public class Visita {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private int immobileId;
-    private int clienteId;
-    private int agenteId;
+
+    @ManyToOne()
+    private ListinoImmobile listino;
+
+
+    @ManyToOne()
+    private Cliente cliente;
+
+
+    @ManyToOne()
+    private AgenteImmobiliare agente;
+
 
     private Instant dataOra;
 
@@ -26,16 +35,27 @@ public class Visita {
 
     public Visita(){}
 
-    public Visita(int immobileId, int clienteId, int agenteId, Instant dataOra, StatoVisita stato, String modeVisita) {
-        this.immobileId = immobileId;
-        this.clienteId = clienteId;
-        this.agenteId = agenteId;
+    public Visita(ListinoImmobile listino, Cliente cliente, AgenteImmobiliare agente, Instant dataOra, StatoVisita stato, String modeVisita) {
+        this.listino = listino;
+        this.cliente = cliente;
+        this.agente = agente;
         this.dataOra = dataOra;
         this.stato = stato;
         this.creataIl = Instant.now();
         this.modeVisita = modeVisita;
     }
 
+    public ListinoImmobile getListino() {
+        return listino;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public AgenteImmobiliare getAgente() {
+        return agente;
+    }
 
 
     public String getModeVisita() {
@@ -50,19 +70,6 @@ public class Visita {
         this.id = id;
     }
 
-    public int getImmobileId() {
-        return immobileId;
-    }
-
-
-    public int getClienteId() {
-        return clienteId;
-    }
-
-
-    public int getAgenteId() {
-        return agenteId;
-    }
 
 
     public Instant getDataOra() {
