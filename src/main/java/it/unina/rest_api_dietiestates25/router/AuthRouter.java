@@ -108,63 +108,6 @@ public class AuthRouter {
         return Response.ok().build();
     }
 
-    @POST
-    @Path("google-auth")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response authenticateGoogle(JsonObject googleIdToken, @HeaderParam("Authorization") String authHeader) {
-
-
-        database.openSession();
-        Session session = database.getSession();
-
-        Transaction tx = session.beginTransaction();
-
-        String token = authHeader.replace("Bearer ", "");
-        String username = AuthController.getUsernameClaim(token);
-
-        if(username == null) {
-            database.closeSession();
-            return Response.status(Response.Status.UNAUTHORIZED).entity("Invalid JWT").build();
-        }
-
-        String clientId = System.getenv("GOOGLE_SIGNIN_CLIENT_ID");
-        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
-                .setAudience(Collections.singletonList(clientId))
-                .build();
-
-        GoogleIdToken idToken;
-        try {
-            idToken = verifier.verify(googleIdToken.getString("idTokenString"));
-        } catch(Exception e) {
-            database.closeSession();
-            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid ID token").build();
-        }
-
-        if(idToken != null) {
-            Payload payload = idToken.getPayload();
-            String email = payload.getEmail();
-
-            AgenteImmobiliare agente = new AuthController().getAgenteImmobiliare(username);
-
-            if(agente != null) {
-                agente.setGoogleLinked(true);
-                agente.setGoogleEmail(email);
-                session.merge(agente);
-            }
-
-            // rigenera JWT con googleLinked = true
-            assert agente != null;
-            String newJwt = new AuthController().createJwtWithGoogleLinked(username, agente.getUtenteTypeAsSting(), TimeUnit.DAYS.toMillis(1));
-
-            tx.commit();
-            database.closeSession();
-            return Response.ok(newJwt).build();
-        } else {
-            database.closeSession();
-            return Response.status(Response.Status.UNAUTHORIZED).entity("Invalid ID token").build();
-        }
-    }
 
 
     @POST

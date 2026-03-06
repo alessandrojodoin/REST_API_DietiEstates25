@@ -21,12 +21,20 @@ public class AuthController {
 
     private static final String ISSUER = "rest_api_dietiestates25";
     private final Database database = Database.getInstance();
-    private static final Algorithm algorithm = Algorithm.HMAC256(System.getenv("JWT_SECRET"));
+    private final Algorithm algorithm;
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+
+    public AuthController(){
+         algorithm = Algorithm.HMAC256(System.getenv("JWT_SECRET"));
+    }
+    public AuthController(Algorithm algorithm){
+        this.algorithm = algorithm;
+    }
 
     public static boolean validateToken(String token){
 
-        final JWTVerifier verifier = JWT.require(algorithm)
+        AuthController authController= new AuthController();
+        final JWTVerifier verifier = JWT.require(authController.algorithm)
                 .withIssuer(ISSUER)
                 .build();
         try {
@@ -42,8 +50,8 @@ public class AuthController {
 
     public static String getUsernameClaim(String token) {
         try {
-
-            final JWTVerifier verifier = JWT.require(algorithm)
+            AuthController authController= new AuthController();
+            final JWTVerifier verifier = JWT.require(authController.algorithm)
                     .withIssuer(ISSUER)
                     .build();
             DecodedJWT decodedJWT = verifier.verify(token);
@@ -123,7 +131,15 @@ public class AuthController {
     }
 
     public String authenticateUser(String username, String password) throws IllegalArgumentException {
+
+        if(database == null){
+            throw new IllegalArgumentException("Authentication failed");
+        }
+
         Session session = database.getSession();
+        if(session == null){
+            throw new IllegalArgumentException("Authentication failed");
+        }
 
         Utente utente =
                 session.createSelectionQuery("from Utente where username like :username", Utente.class)
@@ -133,17 +149,12 @@ public class AuthController {
             throw new IllegalArgumentException("Authentication failed");
         }
 
-        boolean googleLinked = false;
 
-        if (utente instanceof AgenteImmobiliare) {
-            AgenteImmobiliare agente = (AgenteImmobiliare) utente;
-            googleLinked = agente.isGoogleLinked();
-        }
 
-        return createJWT(username, utente.getUtenteTypeAsSting(), googleLinked, TimeUnit.DAYS.toMillis(1));
+        return createJWT(username, utente.getUtenteTypeAsSting(), TimeUnit.DAYS.toMillis(1));
     }
 
-    private String createJWT(String username, String userType,  boolean googleLinked, long ttlMillis) {
+    private String createJWT(String username, String userType, long ttlMillis) {
 
 
 
@@ -151,7 +162,6 @@ public class AuthController {
                 .withIssuer(ISSUER)
                 .withClaim("username", username)
                 .withClaim("userType", userType)
-                .withClaim("googleLinked", googleLinked)
                 .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + ttlMillis))
                 .withJWTId(UUID.randomUUID().toString())
@@ -159,11 +169,6 @@ public class AuthController {
 
 
     }
-
-    public String createJwtWithGoogleLinked(String username, String userType, long ttlMillis) {
-        return createJWT(username, userType, true, ttlMillis);
-    }
-
 
 
     public void modificaAmministratore(String oldUsername, String newUsername, String password){
