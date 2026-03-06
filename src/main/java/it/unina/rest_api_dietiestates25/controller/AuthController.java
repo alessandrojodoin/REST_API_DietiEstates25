@@ -20,14 +20,16 @@ import java.util.concurrent.TimeUnit;
 public class AuthController {
 
     private static final String ISSUER = "rest_api_dietiestates25";
-    private final Database database = Database.getInstance();
+    private final Database database;
     private final Algorithm algorithm;
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     public AuthController(){
+         database = Database.getInstance();
          algorithm = Algorithm.HMAC256(System.getenv("JWT_SECRET"));
     }
-    public AuthController(Algorithm algorithm){
+    public AuthController(Database database, Algorithm algorithm){
+        this.database = database;
         this.algorithm = algorithm;
     }
 

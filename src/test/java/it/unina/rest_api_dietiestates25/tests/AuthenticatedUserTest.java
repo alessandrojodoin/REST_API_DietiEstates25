@@ -34,7 +34,7 @@ public class AuthenticatedUserTest {
                 assertThrows(IllegalArgumentException.class,
                         () -> authController.authenticateUser(null, password));
 
-        assertEquals("Username or password null", ex.getMessage());
+        assertEquals("Authentication failed", ex.getMessage());
     }
 
     @Test
@@ -45,7 +45,7 @@ public class AuthenticatedUserTest {
                 assertThrows(IllegalArgumentException.class,
                         () -> authController.authenticateUser(username, null));
 
-        assertEquals("Username or password null", ex.getMessage());
+        assertEquals("Authentication failed", ex.getMessage());
     }
 
 
@@ -73,7 +73,8 @@ public class AuthenticatedUserTest {
 
 
     @Test
-    public void testUsernameInvalido(){
+    void testUsernameInvalido() {
+
         String username = "utenteInesistente";
         String password = "password";
 
@@ -85,7 +86,7 @@ public class AuthenticatedUserTest {
         when(query.setParameter(anyString(), any()))
                 .thenReturn(query);
 
-        //  Simuliamo che il DB NON trovi l'utente
+        //  Nessun utente trovato
         when(query.getSingleResultOrNull())
                 .thenReturn(null);
 
@@ -95,9 +96,9 @@ public class AuthenticatedUserTest {
 
         assertEquals("Authentication failed", ex.getMessage());
     }
-
     @Test
-    public void testPasswordInvalida(){
+    void testPasswordInvalida() {
+
         String username = "utenteEsistente";
         String password = "passwordSbagliata";
 
@@ -109,13 +110,13 @@ public class AuthenticatedUserTest {
         when(query.setParameter(anyString(), any()))
                 .thenReturn(query);
 
-        //  Creiamo un utente mock
+        //  Utente trovato
         Utente utenteMock = mock(Utente.class);
 
         when(query.getSingleResultOrNull())
                 .thenReturn(utenteMock);
 
-        // Password sbagliata
+        //  Password sbagliata
         when(utenteMock.verifyPassword(password))
                 .thenReturn(false);
 
@@ -127,16 +128,37 @@ public class AuthenticatedUserTest {
     }
 
     @Test
-    public void testPasswordAndUsenameValidi(){
+    void testPasswordAndUsenameValidi(){
+
         String username = "mioUsername";
         String password = "miaPassword";
-        AuthController authController =
-                new AuthController(Algorithm.HMAC256("test-jwt"));
 
-        String jwt = authController.authenticateUser(username, password);
+        when(database.getSession()).thenReturn(session);
+
+        // mock della query
+        when(session.createSelectionQuery(anyString(), eq(Utente.class)))
+                .thenReturn(query);
+
+        when(query.setParameter(anyString(), any()))
+                .thenReturn(query);
+
+        //  Simuliamo utente trovato
+        Utente utenteMock = mock(Utente.class);
+
+        when(query.getSingleResultOrNull())
+                .thenReturn(utenteMock);
+
+        when(utenteMock.verifyPassword(password))
+                .thenReturn(true);
+
+        when(utenteMock.getUtenteTypeAsSting())
+                .thenReturn("UTENTE");
+
+        AuthController controller =
+                new AuthController(database, Algorithm.HMAC256("test-jwt"));
+
+        String jwt = controller.authenticateUser(username, password);
 
         assertNotNull(jwt);
-
-
     }
 }
