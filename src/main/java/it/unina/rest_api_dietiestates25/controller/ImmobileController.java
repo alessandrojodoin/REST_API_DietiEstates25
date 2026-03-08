@@ -13,6 +13,8 @@ import javax.imageio.ImageWriter;
 import javax.imageio.stream.MemoryCacheImageOutputStream;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Iterator;
 
 
@@ -117,8 +119,8 @@ private final Database database = Database.getInstance();
 
             session.persist(foto);
             session.merge(immobile);
-        } catch (Exception e) {
-            throw new RuntimeException("Errore compressione immagine", e);
+        } catch (IOException e) {
+            throw new UncheckedIOException("Errore compressione immagine", e);
         }
     }
 

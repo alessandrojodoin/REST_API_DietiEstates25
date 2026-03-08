@@ -30,6 +30,7 @@ public class IsSlotDisponibileTest {
 
     @Test
     void testAgenteIdLessThanZero() {
+        Instant now = Instant.now();
 
         when(database.getSession()).thenReturn(session);
 
@@ -44,7 +45,7 @@ public class IsSlotDisponibileTest {
 
 
         assertThrows(IllegalArgumentException.class,
-                () -> controller.isSlotDisponibile(0, Instant.now()));
+                () -> controller.isSlotDisponibile(0, now));
 
     }
 
@@ -52,6 +53,7 @@ public class IsSlotDisponibileTest {
     void testAgenteIdNonValido() {
 
         int agenteId = 1;
+        Instant now = Instant.now();
 
         when(database.getSession()).thenReturn(session);
 
@@ -65,7 +67,7 @@ public class IsSlotDisponibileTest {
                 .thenReturn(0L);
 
         assertThrows(IllegalArgumentException.class,
-                () -> controller.isSlotDisponibile(agenteId, Instant.now()));
+                () -> controller.isSlotDisponibile(agenteId, now));
 
     }
     @Test

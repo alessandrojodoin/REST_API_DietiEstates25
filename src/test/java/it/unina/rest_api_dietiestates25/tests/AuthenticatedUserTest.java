@@ -27,7 +27,7 @@ public class AuthenticatedUserTest {
     AuthController authController;
 
     @Test
-    public void testUsernameNull(){
+    void testUsernameNull(){
         String password = "mioSegreto";
 
         IllegalArgumentException ex =
@@ -38,7 +38,7 @@ public class AuthenticatedUserTest {
     }
 
     @Test
-    public void testPasswordNull(){
+    void testPasswordNull(){
         String username = "mioUsername";
 
         IllegalArgumentException ex =
@@ -50,7 +50,7 @@ public class AuthenticatedUserTest {
 
 
     @Test
-    public void testPasswordVuota(){
+    void testPasswordVuota(){
         String username = "mioUsername";
 
         IllegalArgumentException ex =
@@ -61,7 +61,7 @@ public class AuthenticatedUserTest {
     }
 
     @Test
-    public void testUsenameVuota(){
+    void testUsenameVuota(){
         String password = "mioSegreto";
 
         IllegalArgumentException ex =

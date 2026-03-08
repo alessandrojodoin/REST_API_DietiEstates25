@@ -25,15 +25,15 @@ public class PrenotaTest {
     VisiteController visiteController;
 
     @Test
-    public void testListinoIsNull() {
+    void testListinoIsNull() {
         Cliente clienteMock = mock(Cliente.class);
+        Instant now = Instant.now();
 
         assertThrows(IllegalArgumentException.class,
-                () -> visiteController.prenota(clienteMock, null, Instant.now(), "In Presenza"));
+                () -> visiteController.prenota(clienteMock, null, now, "In Presenza"));
     }
-
     @Test
-    public void testDataOltreDueSettimane() {
+    void testDataOltreDueSettimane() {
 
         Cliente clienteMock = mock(Cliente.class);
         ListinoImmobile listinoMock = mock(ListinoImmobile.class);
@@ -49,7 +49,7 @@ public class PrenotaTest {
     }
 
     @Test
-    public void testOrarioNonValido() {
+    void testOrarioNonValido() {
 
         Cliente clienteMock = mock(Cliente.class);
         ListinoImmobile listinoMock = mock(ListinoImmobile.class);
@@ -70,7 +70,7 @@ public class PrenotaTest {
     }
 
     @Test
-    public void testSlotOccupato() {
+    void testSlotOccupato() {
 
         Cliente clienteMock = mock(Cliente.class);
         ListinoImmobile listinoMock = mock(ListinoImmobile.class);
@@ -95,7 +95,7 @@ public class PrenotaTest {
     }
 
     @Test
-    public void testTuttoValido() {
+    void testTuttoValido() {
 
         Cliente clienteMock = mock(Cliente.class);
         ListinoImmobile listinoMock = mock(ListinoImmobile.class);

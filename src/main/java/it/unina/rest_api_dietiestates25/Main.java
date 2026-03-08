@@ -7,7 +7,6 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.net.URI;
 
 public class Main {
@@ -38,7 +37,7 @@ public class Main {
         }
 
 
-        public static void main(final String[] args) throws IOException {
+        public static void main(final String[] args)  {
 
             logger.info("Hello world");
 
