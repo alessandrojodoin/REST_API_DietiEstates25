@@ -14,7 +14,22 @@ import java.util.HashMap;
 
 public class ListinoController {
 
-    private final Database database = Database.getInstance();
+
+
+    private final Database database;
+    private final AuthController authController;
+
+    // Costruttore di default
+    public ListinoController() {
+        this.database = Database.getInstance();
+        this.authController = new AuthController();
+    }
+
+    // Costruttore per test
+    public ListinoController(Database database, AuthController authController) {
+        this.database = database;
+        this.authController = authController;
+    }
 
 
     public void createListino(Immobile immobile, String nome, String descrizione, String tipologiaContratto, int speseCondominiali, int prezzo, AgenteImmobiliare creatore){
@@ -174,10 +189,22 @@ public class ListinoController {
     public void aggiungiVisualizzazione(int listinoId, String username){
         Session session = database.getSession();
 
+        if(listinoId <= 0){
+            throw new IllegalArgumentException("Listino non trovato");
+        }
+        if(username == null || username.equals("")){
+            throw new IllegalArgumentException("Utente non trovato");
+        }
         ListinoImmobile listino= getListino(listinoId);
+        if(listino == null){
+            throw new NullPointerException("Immobile non trovato");
+        }
 
-        AuthController authController= new AuthController();
-        Cliente cliente= authController.getCliente(username);
+
+        Cliente cliente= this.authController.getCliente(username);
+        if(cliente == null){
+            throw new IllegalArgumentException("Utente non trovato");
+        }
 
         RiepilogoAttivita riepilogo= cliente.getRiepilogo();
         VisualizzazioneImmobile newVisualizzazione = riepilogo.findVisualizzazione(listino);

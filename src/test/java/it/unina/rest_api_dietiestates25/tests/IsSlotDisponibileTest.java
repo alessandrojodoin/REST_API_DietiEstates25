@@ -1,4 +1,5 @@
 package it.unina.rest_api_dietiestates25.tests;
+import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.controller.VisiteController;
 import org.hibernate.query.SelectionQuery;
 import org.junit.jupiter.api.Test;
@@ -9,20 +10,50 @@ import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.hibernate.Session;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-
+@ExtendWith(MockitoExtension.class)
 public class IsSlotDisponibileTest {
 
+    @Mock
+    Database database;
     @Mock Session session;
 
     @Mock
     SelectionQuery<Long> queryMock;
 
+    @InjectMocks
+    VisiteController controller;
+
+    @Test
+    void testAgenteIdLessThanZero() {
+
+        when(database.getSession()).thenReturn(session);
+
+        when(session.createSelectionQuery(anyString(), eq(Long.class)))
+                .thenReturn(queryMock);
+
+        when(queryMock.setParameter(anyString(), any()))
+                .thenReturn(queryMock);
+
+        when(queryMock.getSingleResult())
+                .thenReturn(0L);
+
+
+        assertThrows(IllegalArgumentException.class,
+                () -> controller.isSlotDisponibile(0, Instant.now()));
+
+    }
+
     @Test
     void testAgenteIdNonValido() {
 
-        VisiteController controller = new VisiteController();
+        int agenteId = 1;
+
+        when(database.getSession()).thenReturn(session);
 
         when(session.createSelectionQuery(anyString(), eq(Long.class)))
                 .thenReturn(queryMock);
@@ -33,16 +64,13 @@ public class IsSlotDisponibileTest {
         when(queryMock.getSingleResult())
                 .thenReturn(0L);
 
-        boolean result = controller.isSlotDisponibile(-1, Instant.now(), session);
+        assertThrows(IllegalArgumentException.class,
+                () -> controller.isSlotDisponibile(agenteId, Instant.now()));
 
-        assertTrue(result);
     }
-
     @Test
-    void testCountZero() {
-
-        VisiteController controller = new VisiteController();
-
+    void testSlotDisponibile() {
+        when(database.getSession()).thenReturn(session);
 
         when(session.createSelectionQuery(anyString(), eq(Long.class)))
                 .thenReturn(queryMock);
@@ -53,16 +81,14 @@ public class IsSlotDisponibileTest {
         when(queryMock.getSingleResult())
                 .thenReturn(0L);
 
-        boolean result = controller.isSlotDisponibile(1, Instant.now(), session);
+        boolean result = controller.isSlotDisponibile(1, Instant.now());
 
         assertTrue(result);
     }
 
     @Test
-    void testCountGreaterThanZero() {
-
-        VisiteController controller = new VisiteController();
-
+    void testSlotOccupato() {
+        when(database.getSession()).thenReturn(session);
 
         when(session.createSelectionQuery(anyString(), eq(Long.class)))
                 .thenReturn(queryMock);
@@ -73,38 +99,15 @@ public class IsSlotDisponibileTest {
         when(queryMock.getSingleResult())
                 .thenReturn(3L);
 
-        boolean result = controller.isSlotDisponibile(1, Instant.now(), session);
+        boolean result = controller.isSlotDisponibile(1, Instant.now());
 
         assertFalse(result);
     }
 
     @Test
-    void testQueryException() {
-
-        VisiteController controller = new VisiteController();
-
-        when(session.createSelectionQuery(anyString(), eq(Long.class)))
-                .thenThrow(RuntimeException.class);
-
-        assertThrows(RuntimeException.class,
-                () -> controller.isSlotDisponibile(1, Instant.now(), session));
-    }
-
-    @Test
-    void testSessionNull() {
-
-        VisiteController controller = new VisiteController();
-
-        assertThrows(NullPointerException.class,
-                () -> controller.isSlotDisponibile(1, Instant.now(), null));
-    }
-
-    @Test
     void testDataOraNull() {
 
-        VisiteController controller = new VisiteController();
-
         assertThrows(NullPointerException.class,
-                () -> controller.isSlotDisponibile(1, null, session));
+                () -> controller.isSlotDisponibile(1, null));
     }
 }

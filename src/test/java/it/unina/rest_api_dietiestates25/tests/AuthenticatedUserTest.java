@@ -142,7 +142,6 @@ public class AuthenticatedUserTest {
         when(query.setParameter(anyString(), any()))
                 .thenReturn(query);
 
-        //  Simuliamo utente trovato
         Utente utenteMock = mock(Utente.class);
 
         when(query.getSingleResultOrNull())

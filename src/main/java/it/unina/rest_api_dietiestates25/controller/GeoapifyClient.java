@@ -17,8 +17,6 @@ public class GeoapifyClient implements GeolocationAPI {
 
     public void addNearbyServiceTags(Immobile immobile) throws IOException {
 
-
-
         JsonObject responseJson = getNearbyServices( immobile.getLatitudine(), immobile.getLongitudine());
 
 
@@ -63,12 +61,11 @@ public class GeoapifyClient implements GeolocationAPI {
 
         //...
 
-
-
-
     }
 
     private JsonObject getNearbyServices( String latitude, String longitude) throws IOException {
+
+
         final int radiusMeters = 1000;
 
         String url = "https://api.geoapify.com/v2/places?categories=public_transport,education.school,leisure.park&filter=circle:%s,%s,%d&bias=proximity:%s,%s&limit=20&apiKey=%s";
@@ -84,15 +81,11 @@ public class GeoapifyClient implements GeolocationAPI {
                 .build();
         Response response = client.newCall(request).execute();
 
-
-
         //Conversione del corpo della risposta in JsonObject
         JsonReader jsonReader = Json.createReader(new StringReader(Objects.requireNonNull(response.body()).string()));
         JsonObject responseJson = jsonReader.readObject();
         jsonReader.close();
         return responseJson;
-
-
 
     }
 

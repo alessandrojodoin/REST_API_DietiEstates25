@@ -12,7 +12,13 @@ import java.util.List;
 
 public class VisiteController {
 
-    private final Database database = Database.getInstance();
+    private final Database database;
+    public VisiteController(){
+        database = Database.getInstance();
+    }
+    public VisiteController(Database database){
+        this.database = database;
+    }
 
     /**
      * Prenota una visita per un immobile.
@@ -37,7 +43,7 @@ public class VisiteController {
             throw new IllegalArgumentException("Orario della visita non valido. Fasce disponibili: 9-12, 15-19");
 
         // Controllo disponibilità slot
-        if (!isSlotDisponibile(agenteId, dataOra, session))
+        if (!isSlotDisponibile(agenteId, dataOra))
             throw new IllegalArgumentException("Slot già prenotato");
 
 
@@ -50,7 +56,17 @@ public class VisiteController {
     /**
      * Controlla se lo slot del giorno/ora è disponibile per l'agente.
      */
-    public boolean isSlotDisponibile(int agenteId, Instant dataOra, Session session) {
+    public boolean isSlotDisponibile(int agenteId, Instant dataOra) {
+        Session session = database.getSession();
+
+        if(dataOra == null){
+            throw new NullPointerException("Data inserita non valida.");
+        }
+
+        if(agenteId <= 0){
+            throw new IllegalArgumentException("Agente Immobiliare non trovato.");
+        }
+
         String hql = "select count(v) from Visita v " +
                 "where v.agenteId = :agente " +
                 "and v.dataOra = :data " +
@@ -61,6 +77,7 @@ public class VisiteController {
                 .setParameter("data", dataOra)
                 .setParameter("rifiutata", StatoVisita.RIFIUTATA)
                 .getSingleResult();
+
 
         return count.intValue() == 0;
 

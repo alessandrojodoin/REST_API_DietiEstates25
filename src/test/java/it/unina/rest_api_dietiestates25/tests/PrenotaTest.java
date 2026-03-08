@@ -5,6 +5,10 @@ import it.unina.rest_api_dietiestates25.model.Cliente;
 import it.unina.rest_api_dietiestates25.model.ListinoImmobile;
 import it.unina.rest_api_dietiestates25.model.Visita;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,16 +17,19 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+
+@ExtendWith(MockitoExtension.class)
 public class PrenotaTest {
 
-    VisiteController visiteController = spy(new VisiteController());
+    @InjectMocks
+    VisiteController visiteController;
 
     @Test
     public void testListinoIsNull() {
         Cliente clienteMock = mock(Cliente.class);
 
         assertThrows(IllegalArgumentException.class,
-                () -> visiteController.prenota(clienteMock, null, Instant.now(), "VISITA"));
+                () -> visiteController.prenota(clienteMock, null, Instant.now(), "In Presenza"));
     }
 
     @Test
@@ -35,10 +42,10 @@ public class PrenotaTest {
         when(listinoMock.getCreatore()).thenReturn(agenteMock);
         when(agenteMock.getId()).thenReturn(1);
 
-        Instant data = Instant.now().plus(Duration.ofDays(20));
+        Instant data = Instant.now().plus(Duration.ofDays(15));
 
         assertThrows(IllegalArgumentException.class,
-                () -> visiteController.prenota(clienteMock, listinoMock, data, "VISITA"));
+                () -> visiteController.prenota(clienteMock, listinoMock, data, "In Videochiamata"));
     }
 
     @Test
@@ -54,12 +61,12 @@ public class PrenotaTest {
         Instant data = LocalDateTime
                 .now()
                 .plusDays(1)
-                .withHour(22)
+                .withHour(20)
                 .atZone(ZoneId.of("Europe/Rome"))
                 .toInstant();
 
         assertThrows(IllegalArgumentException.class,
-                () -> visiteController.prenota(clienteMock, listinoMock, data, "VISITA"));
+                () -> visiteController.prenota(clienteMock, listinoMock, data, "In Videochiamata"));
     }
 
     @Test
@@ -81,10 +88,10 @@ public class PrenotaTest {
 
         doReturn(false)
                 .when(visiteController)
-                .isSlotDisponibile(anyInt(), any(), any());
+                .isSlotDisponibile(anyInt(), any());
 
         assertThrows(IllegalArgumentException.class,
-                () -> visiteController.prenota(clienteMock, listinoMock, dataValida, "VISITA"));
+                () -> visiteController.prenota(clienteMock, listinoMock, dataValida, "In Presenza"));
     }
 
     @Test
@@ -106,9 +113,9 @@ public class PrenotaTest {
 
         doReturn(true)
                 .when(visiteController)
-                .isSlotDisponibile(anyInt(), any(), any());
+                .isSlotDisponibile(anyInt(), any());
 
-        Visita visita = visiteController.prenota(clienteMock, listinoMock, dataValida, "VISITA");
+        Visita visita = visiteController.prenota(clienteMock, listinoMock, dataValida, "In Presenza");
 
         assertNotNull(visita);
     }
