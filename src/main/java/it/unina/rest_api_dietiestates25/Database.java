@@ -4,12 +4,12 @@ import it.unina.rest_api_dietiestates25.model.*;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.JdbcSettings;
 import org.hibernate.tool.schema.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.hibernate.cfg.SchemaToolingSettings;
 
 @ApplicationScoped
 public class Database {
@@ -54,7 +54,7 @@ public class Database {
                         .setProperty(JdbcSettings.JAKARTA_JDBC_USER, System.getenv("DATABASE_USERNAME"))
                         .setProperty(JdbcSettings.JAKARTA_JDBC_PASSWORD, System.getenv("DATABASE_PASSWORD"))
                         // Automatic schema export
-                        .setProperty(AvailableSettings.JAKARTA_HBM2DDL_DATABASE_ACTION,
+                        .setProperty(SchemaToolingSettings.JAKARTA_HBM2DDL_DATABASE_ACTION,
                              Action.SPEC_ACTION_DROP_AND_CREATE)
                         // SQL statement logging
                         .setProperty(JdbcSettings.SHOW_SQL, true)

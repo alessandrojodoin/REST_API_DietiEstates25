@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
-public class AggiungiVisualizzazioneTest {
+class AggiungiVisualizzazioneTest {
 
     @Mock
     private Database databaseMock;

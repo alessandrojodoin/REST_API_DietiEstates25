@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 @ExtendWith(MockitoExtension.class)
-public class PrenotaTest {
+class PrenotaTest {
 
     @InjectMocks
     VisiteController visiteController;
