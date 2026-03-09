@@ -66,6 +66,11 @@ public class VisiteController {
             throw new IllegalArgumentException("Agente Immobiliare non trovato.");
         }
 
+        AuthController authController = new AuthController();
+        if(authController.getUtente(agenteId) == null){
+            throw new IllegalArgumentException("Utente non trovato.");
+        }
+
         String hql = "select count(v) from Visita v " +
                 "where v.agenteId = :agente " +
                 "and v.dataOra = :data " +

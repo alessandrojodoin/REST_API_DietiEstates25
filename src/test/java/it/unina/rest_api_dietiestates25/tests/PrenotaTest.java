@@ -1,12 +1,18 @@
 package it.unina.rest_api_dietiestates25.tests;
+import it.unina.rest_api_dietiestates25.Database;
+import it.unina.rest_api_dietiestates25.controller.AuthController;
 import it.unina.rest_api_dietiestates25.controller.VisiteController;
 import it.unina.rest_api_dietiestates25.model.AgenteImmobiliare;
 import it.unina.rest_api_dietiestates25.model.Cliente;
 import it.unina.rest_api_dietiestates25.model.ListinoImmobile;
 import it.unina.rest_api_dietiestates25.model.Visita;
+import org.hibernate.Session;
+import org.hibernate.query.SelectionQuery;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -21,8 +27,21 @@ import java.time.ZoneId;
 @ExtendWith(MockitoExtension.class)
 class PrenotaTest {
 
+    @Mock
+    Database database;
+    @Mock
+    Session session;
+
+    @Mock
+    AuthController authController;
+
+    @Mock
+    SelectionQuery<Long> queryMock;
+
+    @Spy
     @InjectMocks
     VisiteController visiteController;
+
 
     @Test
     void testListinoIsNull() {
@@ -100,6 +119,8 @@ class PrenotaTest {
         Cliente clienteMock = mock(Cliente.class);
         ListinoImmobile listinoMock = mock(ListinoImmobile.class);
         AgenteImmobiliare agenteMock = mock(AgenteImmobiliare.class);
+
+        when(database.getSession()).thenReturn(session);
 
         when(listinoMock.getCreatore()).thenReturn(agenteMock);
         when(agenteMock.getId()).thenReturn(1);
