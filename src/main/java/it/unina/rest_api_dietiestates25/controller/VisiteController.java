@@ -46,7 +46,6 @@ public class VisiteController {
         if (!isSlotDisponibile(agenteId, dataOra))
             throw new IllegalArgumentException("Slot già prenotato");
 
-
         Visita visita = new Visita(listino, cliente, listino.getCreatore(), dataOra, StatoVisita.RICHIESTA, modeVisita);
 
         session.persist(visita);

@@ -43,7 +43,6 @@ class IsSlotDisponibileTest {
         when(queryMock.getSingleResult())
                 .thenReturn(0L);
 
-
         assertThrows(IllegalArgumentException.class,
                 () -> controller.isSlotDisponibile(0, now));
 

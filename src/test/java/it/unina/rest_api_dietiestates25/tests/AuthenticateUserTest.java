@@ -17,7 +17,7 @@ import org.hibernate.query.Query;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class AuthenticatedUserTest {
+class AuthenticateUserTest {
     @Mock Database database;
     @Mock Session session;
     @Mock
