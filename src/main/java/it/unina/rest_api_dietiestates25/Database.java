@@ -55,7 +55,7 @@ public class Database {
                         .setProperty(JdbcSettings.JAKARTA_JDBC_PASSWORD, System.getenv("DATABASE_PASSWORD"))
                         // Automatic schema export
                         .setProperty(SchemaToolingSettings.JAKARTA_HBM2DDL_DATABASE_ACTION,
-                             Action.SPEC_ACTION_DROP_AND_CREATE)
+                             Action.UPDATE)
                         // SQL statement logging
                         .setProperty(JdbcSettings.SHOW_SQL, true)
                         .setProperty(JdbcSettings.FORMAT_SQL, true)

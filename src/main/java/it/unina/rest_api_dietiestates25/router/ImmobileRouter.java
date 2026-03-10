@@ -343,13 +343,15 @@ public Response getImmobili(@QueryParam("agenteImmobiliare") String agenteUserna
 
     JsonArrayBuilder immobiliJsonArrayBuilder = Json.createArrayBuilder();
 
-        Instant istanteVisualizzazione;
-
+    Instant istanteVisualizzazione = null;
 
     for(ListinoImmobile listino: immobili){
-        AuthController authController= new AuthController();
-        Cliente cliente= authController.getCliente(clienteUsername);
-        istanteVisualizzazione = listinoController.getIstanteVisualizzazione(listino, cliente);
+
+        if(clienteUsername != null){
+            AuthController authController = new AuthController();
+            Cliente cliente = authController.getCliente(clienteUsername);
+            istanteVisualizzazione = listinoController.getIstanteVisualizzazione(listino, cliente);
+        }
 
         JsonObject indirizzoJson = Json.createObjectBuilder()
                 .add("via", listino.getImmobile().getVia())

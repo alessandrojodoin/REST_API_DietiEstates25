@@ -240,8 +240,8 @@ public class ListinoController {
         Session session = database.getSession();
 
         return session.createSelectionQuery("select V.istanteVisualizzazione from VisualizzazioneImmobile V "
-                        + "where V.cliente = :cliente"
-                            + "and V.listino = :listino", Instant.class)
+                        + "where V.cliente = :cliente "
+                            + "and V.immobile = :listino", Instant.class)
                 .setParameter("cliente", cliente)
                 .setParameter("listino", listino)
                 .getSingleResultOrNull();
