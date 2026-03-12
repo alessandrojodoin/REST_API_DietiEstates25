@@ -74,6 +74,10 @@ public class Offerta {
         return cifraInCentesimi;
     }
 
+    public void setCifraInCentesimi(int cifraInCentesimi) {
+        this.cifraInCentesimi = cifraInCentesimi;
+    }
+
 
     public Instant getIstanteCreazione() {
         return istanteCreazione;

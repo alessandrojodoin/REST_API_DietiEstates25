@@ -23,7 +23,7 @@ public class OfferteController {
     public void createControOfferta(OffertaUtente offertaUtente, int cifraContropropostaInCentesimi){
         Session session = database.getSession();
         offertaUtente.setRisultatoOfferta(RisultatoOfferta.CONTROPROPOSTA_RICEVUTA);
-        offertaUtente.setCifraContropropostaInCentesimi(cifraContropropostaInCentesimi);
+        offertaUtente.setCifraInCentesimi(cifraContropropostaInCentesimi);
         session.merge(offertaUtente);
 
     }

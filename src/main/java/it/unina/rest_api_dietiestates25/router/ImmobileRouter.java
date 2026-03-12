@@ -453,7 +453,7 @@ public Response getImmobili(@QueryParam("agenteImmobiliare") String agenteUserna
     @POST
     @Path("{immobileId}/venduto")
     @Produces(MediaType.TEXT_PLAIN)
-    @RequireClienteAuthentication
+    @RequireAgenteImmobiliareAuthentication
     public Response setImmobileToVenduto(@PathParam("immobileId") int immobileId){
         database.openSession();
         Session session = database.getSession();
