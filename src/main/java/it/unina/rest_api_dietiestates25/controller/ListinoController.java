@@ -75,7 +75,12 @@ public class ListinoController {
             String paramNameName = "tagName_" + safeTag;
             String paramNameValue = "tagValue_" + safeTag;
 
-            hql.append(" AND EXISTS (" + "SELECT t.id FROM IntegerTag t " + "WHERE t.immobile = i " + "AND t.nome = :").append(paramNameName).append(" AND t.valore >= :").append(paramNameValue).append(") ");
+            hql.append(" AND EXISTS (")
+                    .append("SELECT t.id FROM IntegerTag t ")
+                    .append("WHERE t.immobile = i ")
+                    .append("AND t.nome = :").append(paramNameName).append(" ")
+                    .append("AND cast(t.valore as integer) >= :").append(paramNameValue)
+                    .append(") ");
 
             params.put(paramNameName, tagName);
             params.put(paramNameValue, value);
@@ -215,7 +220,7 @@ public class ListinoController {
         }
         ListinoImmobile listino= getListino(listinoId);
         if(listino == null){
-            throw new NullPointerException("Immobile non trovato");
+            throw new IllegalArgumentException("Immobile non trovato");
         }
 
 
