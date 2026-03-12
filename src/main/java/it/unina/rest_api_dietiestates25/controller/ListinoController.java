@@ -104,11 +104,11 @@ public class ListinoController {
                     .append("SELECT t.id FROM CheckboxTag t ")
                     .append("WHERE t.immobile = i ")
                     .append("AND t.nome = :").append(paramName).append(" ")
-                    .append("AND t.valore = :").append(paramValue)
+                    .append("AND cast(t.valore as boolean) = :").append(paramValue)
                     .append(") ");
 
             params.put(paramName, tagName);
-            params.put(paramValue, value.toString());
+            params.put(paramValue, value);
         }
     }
 
@@ -122,7 +122,7 @@ public class ListinoController {
             String paramName = "tag_" + safeTag;
             String paramNameValue = "tagValue_" + safeTag;
             hql.append(" AND EXISTS (")
-                    .append("SELECT t.id FROM Tag t ")
+                    .append("SELECT t.id FROM StringTag t ")
                     .append("WHERE t.immobile = i ")
                     .append("AND t.nome = :").append(paramName).append(" ")
                     .append("AND t.valore = :").append(paramNameValue)
