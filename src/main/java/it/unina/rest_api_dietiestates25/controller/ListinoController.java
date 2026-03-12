@@ -101,14 +101,14 @@ public class ListinoController {
 
 
             hql.append(" AND EXISTS (")
-                    .append("SELECT t.id FROM Tag t ")
+                    .append("SELECT t.id FROM CheckboxTag t ")
                     .append("WHERE t.immobile = i ")
                     .append("AND t.nome = :").append(paramName).append(" ")
                     .append("AND t.valore = :").append(paramValue)
                     .append(") ");
 
             params.put(paramName, tagName);
-            params.put(paramValue, value);
+            params.put(paramValue, value.toString());
         }
     }
 
