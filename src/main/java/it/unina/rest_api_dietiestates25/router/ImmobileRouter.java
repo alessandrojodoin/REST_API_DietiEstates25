@@ -332,10 +332,7 @@ public Response getImmobili(@QueryParam("agenteImmobiliare") String agenteUserna
             immobili= listinoController.getImmobileListFiltri(minPrice, maxPrice, tipologiaContratto, bathrooms, bedrooms,
                                                               areaSize, energyClass, citta, terrazzo, balcone,
                                                               ascensore, garage, giardino, postoAuto, accessoDisabili);
-
-
         }
-
 
         else{
             immobili= listinoController.getImmobileList();
@@ -405,14 +402,10 @@ public Response getImmobili(@QueryParam("agenteImmobiliare") String agenteUserna
                 .add("esisteOffertaAccettata", listinoController.esisteOffertaAccettata(listino))
                 .add("istanteCreazione", listino.getIstanteCreazione().toEpochMilli())
                 .add("immobile", immobileJsonBuilder.build())
-
                 .build();
 
-
         immobiliJsonArrayBuilder.add(jsonResponse);
-
     }
-
 
     tx.commit();
     database.closeSession();

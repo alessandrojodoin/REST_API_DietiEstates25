@@ -54,7 +54,6 @@ class IsSlotDisponibileTest {
 
         assertThrows(IllegalArgumentException.class,
                 () -> controller.isSlotDisponibile(0, now));
-
     }
 
     @Test
@@ -87,10 +86,8 @@ class IsSlotDisponibileTest {
             assertThrows(IllegalArgumentException.class,
                     () -> controller.isSlotDisponibile(agenteId, now));
         }
-
-
-
     }
+
     @Test
     void testSlotDisponibile() {
         when(database.getSession()).thenReturn(session);
@@ -119,10 +116,6 @@ class IsSlotDisponibileTest {
 
             assertTrue(result);
         }
-
-
-
-
     }
 
     @Test
@@ -137,7 +130,6 @@ class IsSlotDisponibileTest {
 
         when(queryMock.getSingleResult())
                 .thenReturn(3L);
-
 
         try (MockedStatic<Database> mockedDb = mockStatic(Database.class);
              MockedConstruction<AuthController> mockedAuth =

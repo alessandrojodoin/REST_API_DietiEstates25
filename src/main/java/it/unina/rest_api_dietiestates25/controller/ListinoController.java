@@ -70,9 +70,10 @@ public class ListinoController {
                                      Integer value) {
 
         if (value != null) {
+            String safeTag = tagName.replaceAll("\\s+", "_");
 
-            String paramNameName = "tagName_" + tagName;
-            String paramNameValue = "tagValue_" + tagName;
+            String paramNameName = "tagName_" + safeTag;
+            String paramNameValue = "tagValue_" + safeTag;
 
             hql.append(" AND EXISTS (" + "SELECT t.id FROM IntegerTag t " + "WHERE t.immobile = i " + "AND t.nome = :").append(paramNameName).append(" AND t.valore >= :").append(paramNameValue).append(") ");
 
@@ -88,12 +89,21 @@ public class ListinoController {
                                      Boolean value) {
 
         if (value != null && value) {
+            String safeTag = tagName.replaceAll("\\s+", "_");
 
-            String paramName = "tag_" + tagName;
+            String paramName = "tag_" + safeTag;
+            String paramValue = "tagValue_"+ safeTag;
 
-            hql.append(" AND EXISTS (" + "SELECT t.id FROM Tag t " + "WHERE t.immobile = i " + "AND t.nome = :").append(paramName).append(") ");
+
+            hql.append(" AND EXISTS (")
+                    .append("SELECT t.id FROM Tag t ")
+                    .append("WHERE t.immobile = i ")
+                    .append("AND t.nome = :").append(paramName).append(" ")
+                    .append("AND t.valore = :").append(paramValue)
+                    .append(") ");
 
             params.put(paramName, tagName);
+            params.put(paramValue, value);
         }
     }
 
@@ -102,11 +112,19 @@ public class ListinoController {
                               String tagName, String value){
         if (value != null) {
 
-            String paramName = "tag_" + tagName;
+            String safeTag = tagName.replaceAll("\\s+", "_");
 
-            hql.append(" AND EXISTS (" + "SELECT t.id FROM Tag t " + "WHERE t.immobile = i " + "AND t.nome = :").append(paramName).append(") ");
+            String paramName = "tag_" + safeTag;
+            String paramNameValue = "tagValue_" + safeTag;
+            hql.append(" AND EXISTS (")
+                    .append("SELECT t.id FROM Tag t ")
+                    .append("WHERE t.immobile = i ")
+                    .append("AND t.nome = :").append(paramName).append(" ")
+                    .append("AND t.valore = :").append(paramNameValue)
+                    .append(") ");
 
             params.put(paramName, tagName);
+            params.put(paramNameValue, value);
         }
     }
 

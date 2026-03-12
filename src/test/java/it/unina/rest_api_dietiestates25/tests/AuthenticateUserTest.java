@@ -71,7 +71,6 @@ class AuthenticateUserTest {
         assertEquals("Authentication failed", ex.getMessage());
     }
 
-
     @Test
     void testUsernameInvalido() {
 
