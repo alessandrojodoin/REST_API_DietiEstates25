@@ -303,9 +303,8 @@ public class ImmobileRouter {
 public Response getImmobili(@QueryParam("agenteImmobiliare") String agenteUsername, @QueryParam("cliente") String clienteUsername, @QueryParam("filters") Boolean filters,
                             @QueryParam("minPrice") Integer minPrice, @QueryParam("maxPrice") Integer maxPrice, @QueryParam("tipologiaContratto") String tipologiaContratto, @QueryParam("bathrooms") Integer bathrooms,
                             @QueryParam("bedrooms") Integer bedrooms, @QueryParam("areaSize") Integer areaSize,
-                            @QueryParam("energyClass") String energyClass, @QueryParam("citta") String citta, @QueryParam("terrazzo") Boolean terrazzo,
-                            @QueryParam("balcone") Boolean balcone, @QueryParam("ascensore") Boolean ascensore, @QueryParam("garage") Boolean garage,
-                            @QueryParam("giardino") Boolean giardino, @QueryParam("postoAuto") Boolean postoAuto, @QueryParam("accessoDisabili") Boolean accessoDisabili
+                            @QueryParam("energyClass") String energyClass, @QueryParam("citta") String citta, @QueryParam("terrazzo") Integer terrazzo,
+                            @QueryParam("balcone") Integer balcone, @QueryParam("ascensore") Boolean ascensore, @QueryParam("garage") Boolean garage, @QueryParam("postoAuto") Boolean postoAuto, @QueryParam("accessoDisabili") Boolean accessoDisabili
                             ){
 
     database.openSession();
@@ -331,7 +330,7 @@ public Response getImmobili(@QueryParam("agenteImmobiliare") String agenteUserna
         else if(filters != null && filters){
             immobili= listinoController.getImmobileListFiltri(minPrice, maxPrice, tipologiaContratto, bathrooms, bedrooms,
                                                               areaSize, energyClass, citta, terrazzo, balcone,
-                                                              ascensore, garage, giardino, postoAuto, accessoDisabili);
+                                                              ascensore, garage, postoAuto, accessoDisabili);
         }
 
         else{

@@ -165,11 +165,10 @@ public class ListinoController {
             Integer areaSize,
             String energyClass,
             String citta,
-            Boolean terrazzo,
-            Boolean balcone,
+            Integer terrazzo,
+            Integer balcone,
             Boolean ascensore,
             Boolean garage,
-            Boolean giardino,
             Boolean postoAuto,
             Boolean accessoDisabili
     ) {
@@ -195,8 +194,8 @@ public class ListinoController {
             }
 
             if (citta != null) {
-                hql.append(" AND i.citta = :citta ");
-                params.put("citta", citta);
+                hql.append(" AND lower(i.citta) = :citta ");
+                params.put("citta", citta.toLowerCase());
             }
 
             if (tipologiaContratto != null) {
@@ -208,8 +207,8 @@ public class ListinoController {
             addOtherTags(hql, params, "classe", energyClass);
             // -------- BOOLEAN TAG --------
 
-            addBooleanTagFilter(hql, params, "terrazzo", terrazzo);
-            addBooleanTagFilter(hql, params, "balcone", balcone);
+            addIntegerTagFilter(hql, params, "numero di terrazzi", terrazzo);
+            addIntegerTagFilter(hql, params, "numero di balconi", balcone);
             addBooleanTagFilter(hql, params, "ascensore", ascensore);
             addBooleanTagFilter(hql, params, "garage", garage);
             addBooleanTagFilter(hql, params, "posto auto", postoAuto);
@@ -219,7 +218,7 @@ public class ListinoController {
 
             addIntegerTagFilter(hql, params, "bagni", bathrooms);
             addIntegerTagFilter(hql, params, "locali", bedrooms);
-            addFloatTagFilter(hql, params, "superficie", (float) areaSize);
+            addFloatTagFilter(hql, params, "superficie", areaSize != null ? (float) areaSize : null);
 
             Query<ListinoImmobile> query =
                     session.createQuery(hql.toString(), ListinoImmobile.class);
