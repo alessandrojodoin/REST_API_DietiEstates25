@@ -87,6 +87,29 @@ public class ListinoController {
         }
     }
 
+    private void addFloatTagFilter(StringBuilder hql,
+                                     Map<String, Object> params,
+                                     String tagName,
+                                     Float value) {
+
+        if (value != null) {
+            String safeTag = tagName.replaceAll("\\s+", "_");
+
+            String paramNameName = "tagName_" + safeTag;
+            String paramNameValue = "tagValue_" + safeTag;
+
+            hql.append(" AND EXISTS (")
+                    .append("SELECT t.id FROM FloatTag t ")
+                    .append("WHERE t.immobile = i ")
+                    .append("AND t.nome = :").append(paramNameName).append(" ")
+                    .append("AND cast(t.valore as float) >= :").append(paramNameValue)
+                    .append(") ");
+
+            params.put(paramNameName, tagName);
+            params.put(paramNameValue, value);
+        }
+    }
+
 
     private void addBooleanTagFilter(StringBuilder hql,
                                      Map<String, Object> params,
@@ -182,22 +205,21 @@ public class ListinoController {
             }
 
 
-            addOtherTags(hql, params, "energyClass", energyClass);
+            addOtherTags(hql, params, "classe", energyClass);
             // -------- BOOLEAN TAG --------
 
             addBooleanTagFilter(hql, params, "terrazzo", terrazzo);
             addBooleanTagFilter(hql, params, "balcone", balcone);
             addBooleanTagFilter(hql, params, "ascensore", ascensore);
             addBooleanTagFilter(hql, params, "garage", garage);
-            addBooleanTagFilter(hql, params, "giardino", giardino);
-            addBooleanTagFilter(hql, params, "postoAuto", postoAuto);
-            addBooleanTagFilter(hql, params, "accessoDisabili", accessoDisabili);
+            addBooleanTagFilter(hql, params, "posto auto", postoAuto);
+            addBooleanTagFilter(hql, params, "accesso disabili", accessoDisabili);
 
             // -------- INTEGER TAG --------
 
-            addIntegerTagFilter(hql, params, "Bagni", bathrooms);
-            addIntegerTagFilter(hql, params, "Camere", bedrooms);
-            addIntegerTagFilter(hql, params, "Superficie", areaSize);
+            addIntegerTagFilter(hql, params, "bagni", bathrooms);
+            addIntegerTagFilter(hql, params, "locali", bedrooms);
+            addFloatTagFilter(hql, params, "superficie", (float) areaSize);
 
             Query<ListinoImmobile> query =
                     session.createQuery(hql.toString(), ListinoImmobile.class);
