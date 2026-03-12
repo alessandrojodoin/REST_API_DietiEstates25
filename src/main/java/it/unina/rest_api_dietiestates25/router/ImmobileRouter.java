@@ -361,10 +361,12 @@ public Response getImmobili(@QueryParam("agenteImmobiliare") String agenteUserna
                 .add("longitudine", listino.getImmobile().getLongitudine())
                 .add("latitudine", listino.getImmobile().getLatitudine())
                 .add("fotoNumber", listino.getImmobile().getFotoNumber())
-                .add("indirizzo", indirizzoJson)
-                .add("istanteVisualizzazione", istanteVisualizzazione != null
-                        ? istanteVisualizzazione.toString()
-                        : "");
+                .add("indirizzo", indirizzoJson);
+
+                if(istanteVisualizzazione != null){
+                    immobileJsonBuilder.add("istanteVisualizzazione", istanteVisualizzazione.toEpochMilli());
+                }
+
 
 
         JsonArrayBuilder tagJsonArrayBuilder = Json.createArrayBuilder();
