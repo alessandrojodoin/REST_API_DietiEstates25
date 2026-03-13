@@ -88,7 +88,7 @@ class AggiungiVisualizzazioneTest {
     @Test
     void testListinoIdInvalido() {
         when(queryMock.getSingleResultOrNull()).thenReturn(null); // listino non trovato
-        assertThrows(NullPointerException.class,
+        assertThrows(IllegalArgumentException.class,
                 () -> listinoController.aggiungiVisualizzazione(999, "luigi"));
     }
 
