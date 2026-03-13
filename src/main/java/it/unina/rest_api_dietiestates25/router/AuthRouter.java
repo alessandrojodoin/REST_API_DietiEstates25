@@ -192,7 +192,7 @@ public class AuthRouter {
         AuthController authController = new AuthController();
         authController.createAmministratore(
                 userCredentials.getString("username"),
-                "mail",
+                userCredentials.getString("email"),
                 "nome",
                 "cognome",
                 "admin",
