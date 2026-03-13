@@ -72,7 +72,7 @@ public class VisiteController {
         }
 
         String hql = "select count(v) from Visita v " +
-                "where v.agenteId = :agente " +
+                "where v.agente.id = :agente " +
                 "and v.dataOra = :data " +
                 "and v.stato <> :rifiutata";
 
@@ -90,14 +90,14 @@ public class VisiteController {
 
     public List<Visita> getVisitePerCliente(int clienteId) {
         Session session = database.getSession();
-        return session.createSelectionQuery("from Visita v where v.clienteId = :id", Visita.class)
+        return session.createSelectionQuery("from Visita v where v.cliente.id = :id", Visita.class)
                 .setParameter("id", clienteId)
                 .getResultList();
     }
 
     public List<Visita> getVisitePerAgente(int agenteId) {
         Session session = database.getSession();
-        return session.createSelectionQuery("from Visita v where v.agenteId = :id", Visita.class)
+        return session.createSelectionQuery("from Visita v where v.agente.id = :id", Visita.class)
                 .setParameter("id", agenteId)
                 .getResultList();
     }
