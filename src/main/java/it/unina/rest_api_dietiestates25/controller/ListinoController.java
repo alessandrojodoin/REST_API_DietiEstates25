@@ -244,7 +244,6 @@ public class ListinoController {
             throw new IllegalArgumentException("Immobile non trovato");
         }
 
-
         Cliente cliente= this.authController.getCliente(username);
         if(cliente == null){
             throw new IllegalArgumentException("Utente non trovato");

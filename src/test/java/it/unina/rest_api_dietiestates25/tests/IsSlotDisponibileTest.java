@@ -3,7 +3,6 @@ import it.unina.rest_api_dietiestates25.Database;
 import it.unina.rest_api_dietiestates25.controller.AuthController;
 import it.unina.rest_api_dietiestates25.controller.VisiteController;
 import it.unina.rest_api_dietiestates25.model.AgenteImmobiliare;
-import it.unina.rest_api_dietiestates25.model.Utente;
 import org.hibernate.query.SelectionQuery;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.*;
@@ -26,10 +25,8 @@ class IsSlotDisponibileTest {
     @Mock
     Database database;
     @Mock Session session;
-
     @Mock
     SelectionQuery<Long> queryMock;
-
 
     @Mock
     AuthController authController;
@@ -63,13 +60,10 @@ class IsSlotDisponibileTest {
         Instant now = Instant.now();
 
         lenient().when(database.getSession()).thenReturn(session);
-
         lenient().when(session.createSelectionQuery(anyString(), eq(Long.class)))
                 .thenReturn(queryMock);
-
         lenient().when(queryMock.setParameter(anyString(), any()))
                 .thenReturn(queryMock);
-
         lenient().when(queryMock.getSingleResult())
                 .thenReturn(0L);
 
@@ -100,7 +94,6 @@ class IsSlotDisponibileTest {
 
         when(queryMock.getSingleResult())
                 .thenReturn(0L);
-
 
         try (MockedStatic<Database> mockedDb = mockStatic(Database.class);
              MockedConstruction<AuthController> mockedAuth =
@@ -145,7 +138,6 @@ class IsSlotDisponibileTest {
 
             assertFalse(result);
         }
-
     }
 
     @Test

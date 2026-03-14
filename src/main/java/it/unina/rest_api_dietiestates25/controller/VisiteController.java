@@ -82,9 +82,7 @@ public class VisiteController {
                 .setParameter("rifiutata", StatoVisita.RIFIUTATA)
                 .getSingleResult();
 
-
         return count.intValue() == 0;
-
     }
 
 

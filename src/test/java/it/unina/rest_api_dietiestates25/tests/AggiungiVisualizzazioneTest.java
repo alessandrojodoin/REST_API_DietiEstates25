@@ -24,25 +24,18 @@ class AggiungiVisualizzazioneTest {
 
     @Mock
     private Database databaseMock;
-
     @Mock
     private AuthController authControllerMock;
-
     @Mock
     private Session sessionMock;
-
     @Mock
     private Cliente clienteMock;
-
     @Mock
     private RiepilogoAttivita riepilogoMock;
-
     @Mock
     private ListinoImmobile listinoMock;
-
     @Mock
     private Query<ListinoImmobile> queryMock;
-
     @InjectMocks
     private ListinoController listinoController;
 

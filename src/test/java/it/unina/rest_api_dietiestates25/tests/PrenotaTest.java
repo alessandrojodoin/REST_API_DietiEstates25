@@ -42,7 +42,6 @@ class PrenotaTest {
     @InjectMocks
     VisiteController visiteController;
 
-
     @Test
     void testListinoIsNull() {
         Cliente clienteMock = mock(Cliente.class);

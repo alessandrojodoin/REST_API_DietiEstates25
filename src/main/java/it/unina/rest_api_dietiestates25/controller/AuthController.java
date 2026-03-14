@@ -151,8 +151,6 @@ public class AuthController {
             throw new IllegalArgumentException("Authentication failed");
         }
 
-
-
         return createJWT(username, utente.getUtenteTypeAsSting(), TimeUnit.DAYS.toMillis(1));
     }
 

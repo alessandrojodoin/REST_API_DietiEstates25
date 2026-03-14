@@ -22,7 +22,6 @@ class AuthenticateUserTest {
     @Mock Session session;
     @Mock
     Query<Utente> query;
-
     @InjectMocks
     AuthController authController;
 
@@ -47,7 +46,6 @@ class AuthenticateUserTest {
 
         assertEquals("Authentication failed", ex.getMessage());
     }
-
 
     @Test
     void testPasswordVuota(){
