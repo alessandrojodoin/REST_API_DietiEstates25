@@ -94,18 +94,29 @@ public class AuthRouter {
 
         Transaction tx = session.beginTransaction();
 
-        AuthController authController = new AuthController();
-        authController.createCliente
-                (userCredentials.getString("username"),
-                userCredentials.getString("email"),
-                userCredentials.getString("nome"),
-                userCredentials.getString("cognome"),
-                userCredentials.getString("password"),
-                userCredentials.getString("numeroTelefonico"));
+      try{
+          AuthController authController = new AuthController();
+          authController.createCliente
+                  (userCredentials.getString("username"),
+                          userCredentials.getString("email"),
+                          userCredentials.getString("nome"),
+                          userCredentials.getString("cognome"),
+                          userCredentials.getString("password"),
+                          userCredentials.getString("numeroTelefonico"));
 
-        tx.commit();
-        database.closeSession();
-        return Response.ok().build();
+          tx.commit();
+          database.closeSession();
+          return Response.ok().build();
+      }catch(Exception e){
+          tx.rollback();
+          database.closeSession();
+          return Response
+                  .status(500)
+                  .entity("Username o email già esistenti")
+                  .build();
+
+      }
+
     }
 
 
@@ -120,20 +131,31 @@ public class AuthRouter {
 
         Transaction tx = session.beginTransaction();
 
-        AuthController authController = new AuthController();
-        authController.createAgenteImmobiliare(
-                userCredentials.getString("username"),
-                userCredentials.getString("email"),
-                userCredentials.getString("nome"),
-                userCredentials.getString("cognome"),
-                userCredentials.getString("password"),
-                userCredentials.getString("numeroTelefonico"),
-                userCredentials.getString("agenziaImmobiliare")
-        );
-        tx.commit();
-        database.closeSession();
+        try{
+            AuthController authController = new AuthController();
+            authController.createAgenteImmobiliare(
+                    userCredentials.getString("username"),
+                    userCredentials.getString("email"),
+                    userCredentials.getString("nome"),
+                    userCredentials.getString("cognome"),
+                    userCredentials.getString("password"),
+                    userCredentials.getString("numeroTelefonico"),
+                    userCredentials.getString("agenziaImmobiliare")
+            );
+            tx.commit();
+            database.closeSession();
 
-        return Response.ok().build();
+            return Response.ok().build();
+        }
+        catch(Exception e){
+            tx.rollback();
+            database.closeSession();
+            return Response
+                    .status(500)
+                    .entity("Username o email già esistenti")
+                    .build();
+
+        }
     }
 
     @GET
@@ -189,21 +211,31 @@ public class AuthRouter {
         Transaction tx = session.beginTransaction();
 
 
-        AuthController authController = new AuthController();
-        authController.createAmministratore(
-                userCredentials.getString("username"),
-                userCredentials.getString("email"),
-                "nome",
-                "cognome",
-                "admin",
-                "numeroTelefonico",
-                userCredentials.getString("agenziaImmobiliare")
-        );
+       try {
+           AuthController authController = new AuthController();
+           authController.createAmministratore(
+                   userCredentials.getString("username"),
+                   userCredentials.getString("email"),
+                   "nome",
+                   "cognome",
+                   "admin",
+                   "numeroTelefonico",
+                   userCredentials.getString("agenziaImmobiliare")
+           );
 
+           tx.commit();
+           database.closeSession();
+           return Response.ok().build();
+       }
+        catch(Exception e){
+            tx.rollback();
+            database.closeSession();
+            return Response
+                    .status(500)
+                    .entity("Username o email già esistenti")
+                    .build();
 
-        tx.commit();
-        database.closeSession();
-        return Response.ok().build();
+        }
     }
 
 
@@ -218,20 +250,31 @@ public class AuthRouter {
         Transaction tx = session.beginTransaction();
 
 
-        AuthController authController = new AuthController();
-        authController.createAmministratoreSupporto(
-                userCredentials.getString("username"),
-                userCredentials.getString("email"),
-                userCredentials.getString("nome"),
-                userCredentials.getString("cognome"),
-                userCredentials.getString("password"),
-                userCredentials.getString("numeroTelefonico"),
-                userCredentials.getString("agenziaImmobiliare")
-        );
+       try{
+           AuthController authController = new AuthController();
+           authController.createAmministratoreSupporto(
+                   userCredentials.getString("username"),
+                   userCredentials.getString("email"),
+                   userCredentials.getString("nome"),
+                   userCredentials.getString("cognome"),
+                   userCredentials.getString("password"),
+                   userCredentials.getString("numeroTelefonico"),
+                   userCredentials.getString("agenziaImmobiliare")
+           );
 
-        tx.commit();
-        database.closeSession();
-        return Response.ok().build();
+           tx.commit();
+           database.closeSession();
+           return Response.ok().build();
+       }
+        catch(Exception e){
+            tx.rollback();
+            database.closeSession();
+            return Response
+                    .status(500)
+                    .entity("Username o email già esistenti")
+                    .build();
+
+        }
     }
 
 
