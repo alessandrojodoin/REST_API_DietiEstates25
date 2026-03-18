@@ -1,2 +1,3 @@
 for /f "delims=" %%i in (.env) do set %%i
-mvn exec:java
+call mvn clean compile
+call mvn exec:java

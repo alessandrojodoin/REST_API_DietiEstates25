@@ -36,7 +36,7 @@ private final Database database = Database.getInstance();
         Session session = database.getSession();
         IntegerTag tag= new IntegerTag(nome, valore);
         immobile.addTag(tag);
-        session.persist(tag);
+            session.persist(tag);
         session.merge(immobile);
 
     }
